@@ -4,6 +4,10 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "build": "lerna run --stream build",
+    "clean": "lerna run --stream clean"
+  },
   "devDependencies": {
     "lerna": "^8.0.1",
     "typescript": "^5.3.3"

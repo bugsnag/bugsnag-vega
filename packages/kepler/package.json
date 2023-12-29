@@ -1,0 +1,24 @@
+{
+  "name": "@bugsnag/kepler",
+  "version": "0.0.0",
+  "description": "BugSnag error reporter for Kepler applications",
+  "author": "BugSnag",
+  "homepage": "https://www.bugsnag.com/",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bugsnag/bugsnag-kepler.git"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "bugs": {
+    "url": "https://github.com/bugsnag/bugsnag-kepler/issues"
+  },
+  "type": "module",
+  "main": "dist/kepler.js",
+  "files": [
+    "dist"
+  ]
+}
