@@ -12,8 +12,8 @@ const paths = {
 const moduleNameMapper = Object.fromEntries(
   Object.entries(paths)
     .map(([name, directories]) => [
-        `^${name}$`,
-        directories.map(directory => directory.replace('./', '<rootDir>/'))
+      `^${name}$`,
+      directories.map(directory => directory.replace('./', '<rootDir>/'))
     ])
 )
 
