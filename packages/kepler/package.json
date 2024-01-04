@@ -13,8 +13,11 @@
     "url": "https://github.com/bugsnag/bugsnag-kepler/issues"
   },
   "type": "module",
-  "main": "lib/kepler.js",
+  "main": "lib/notifier.js",
   "files": [
     "lib"
-  ]
+  ],
+  "dependencies": {
+    "@bugsnag/core": "^7.19.0"
+  }
 }
