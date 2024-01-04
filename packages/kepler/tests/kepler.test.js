@@ -1,4 +1,4 @@
-import kepler from '../lib/kepler'
+const kepler = require('..')
 
 describe('kepler', () => {
   it('returns a string', () => {
