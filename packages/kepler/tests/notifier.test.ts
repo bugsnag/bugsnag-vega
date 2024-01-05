@@ -1,4 +1,4 @@
-const Bugsnag = require('..')
+import Bugsnag from '..'
 
 describe('kepler notifier', () => {
   describe('isStarted', () => {
