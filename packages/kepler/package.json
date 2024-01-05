@@ -14,8 +14,10 @@
   },
   "type": "module",
   "main": "lib/notifier.js",
+  "types": "types/bugsnag.d.ts",
   "files": [
-    "lib"
+    "lib",
+    "types"
   ],
   "dependencies": {
     "@bugsnag/core": "^7.19.0",
