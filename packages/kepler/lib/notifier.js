@@ -6,7 +6,7 @@ const Client = require('@bugsnag/core/client')
 const Event = require('@bugsnag/core/event')
 const Session = require('@bugsnag/core/session')
 const Breadcrumb = require('@bugsnag/core/breadcrumb')
-const { schema } = require('@bugsnag/core/config')
+const { schema } = require('./config')
 
 const Bugsnag = {
   _client: null,
