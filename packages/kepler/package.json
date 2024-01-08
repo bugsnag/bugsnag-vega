@@ -21,6 +21,7 @@
   ],
   "dependencies": {
     "@bugsnag/core": "^7.19.0",
+    "@bugsnag/delivery-fetch": "^7.20.0",
     "iserror": "^0.0.2"
   }
 }
