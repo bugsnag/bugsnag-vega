@@ -3,6 +3,11 @@ import type KeplerBugsnagStatic from '..'
 describe('kepler notifier', () => {
   let Bugsnag: typeof KeplerBugsnagStatic
 
+  beforeAll(() => {
+    jest.spyOn(console, 'debug').mockImplementation(() => {})
+    jest.spyOn(console, 'warn').mockImplementation(() => {})
+  })
+
   beforeEach(() => {
     jest.isolateModules(() => {
       Bugsnag = require('..')
