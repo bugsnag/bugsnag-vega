@@ -44,9 +44,11 @@ Object.keys(Client.prototype).forEach((m) => {
   Bugsnag[m] = function () {
     if (!Bugsnag._client) return console.error(`Bugsnag.${m}() was called before Bugsnag.start()`)
     Bugsnag._client._depth += 1
-    const ret = Bugsnag._client[m].apply(Bugsnag._client, arguments)
-    Bugsnag._client._depth -= 1
-    return ret
+    try {
+      return Bugsnag._client[m].apply(Bugsnag._client, arguments)
+    } finally {
+      Bugsnag._client._depth -= 1
+    }
   }
 })
 
