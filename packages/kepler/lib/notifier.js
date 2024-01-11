@@ -1,6 +1,7 @@
 import { version } from '../package.json'
 import { Client } from '@bugsnag/core'
 import { schema } from './config'
+import delivery from '@bugsnag/delivery-fetch'
 
 const name = 'Bugsnag Kepler'
 const url = 'https://github.com/bugsnag/bugsnag-kepler'
@@ -17,6 +18,8 @@ export const Bugsnag = {
 
     // configure a client with user supplied options
     const bugsnag = new Client(opts, schema, internalPlugins, { name, version, url })
+
+    bugsnag._setDelivery(delivery)
 
     bugsnag._logger.debug('Loaded!')
     bugsnag.leaveBreadcrumb('Bugsnag loaded', {}, 'state')
