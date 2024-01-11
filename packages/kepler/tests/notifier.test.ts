@@ -10,7 +10,7 @@ describe('kepler notifier', () => {
 
   beforeEach(() => {
     jest.isolateModules(() => {
-      Bugsnag = require('..')
+      Bugsnag = require('../lib/notifier').default
     })
   })
 

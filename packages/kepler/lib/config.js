@@ -1,10 +1,11 @@
-const { schema } = require('@bugsnag/core/config')
+import { schema as coreSchema } from '@bugsnag/core/config'
+
 const iserror = require('iserror')
 
-module.exports.schema = {
-  ...schema,
+export const schema = {
+  ...coreSchema,
   logger: {
-    ...schema.logger,
+    ...coreSchema.logger,
     defaultValue: () => getPrefixedConsole()
   }
 }
@@ -28,3 +29,5 @@ const getPrefixedConsole = () => {
     return accum
   }, {})
 }
+
+export default schema
