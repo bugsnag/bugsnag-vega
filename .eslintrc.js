@@ -1,6 +1,6 @@
 const ruleOverrides = {
   // Disable preferring Promise-based async tests
-  'jest/no-test-callback': 'off',
+  'jest/no-done-callback': 'off',
 
   // Let TypeScript inference work without being verbose
   '@typescript-eslint/explicit-function-return-type': 'off',
@@ -30,11 +30,17 @@ const ruleOverrides = {
   '@typescript-eslint/no-implied-eval': 'off',
   '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'off',
   '@typescript-eslint/prefer-includes': 'off',
-  '@typescript-eslint/no-for-in-array': 'off'
+  '@typescript-eslint/no-for-in-array': 'off',
+
+  // Allow require statements that are not at the top level of a file
+  '@typescript-eslint/no-var-requires': 'off'
 }
 
 module.exports = {
-  parserOptions: { ecmaVersion: 2018 },
+  root: true,
+  parserOptions: {
+    sourceType: 'module'
+  },
   overrides: [
     // linting for js files
     {
@@ -44,7 +50,7 @@ module.exports = {
     // Linting for tests
     {
       files: ['**/*.test.ts'],
-      env: { jest: true, browser: true },
+      env: { jest: true },
       plugins: ['eslint-plugin-jest'],
       extends: ['standard-with-typescript', 'plugin:jest/recommended'],
       rules: {

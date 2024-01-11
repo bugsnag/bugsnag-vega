@@ -1,14 +1,12 @@
+import { version } from '../package.json'
+import { Client } from '@bugsnag/core'
+import { schema } from './config'
+import delivery from '@bugsnag/delivery-fetch'
+
 const name = 'Bugsnag Kepler'
-const { version } = require('../package.json')
 const url = 'https://github.com/bugsnag/bugsnag-kepler'
 
-const Client = require('@bugsnag/core/client')
-const Event = require('@bugsnag/core/event')
-const Session = require('@bugsnag/core/session')
-const Breadcrumb = require('@bugsnag/core/breadcrumb')
-const { schema } = require('./config')
-
-const Bugsnag = {
+export const Bugsnag = {
   _client: null,
   createClient: (opts) => {
     // handle very simple use case where user supplies just the api key as a string
@@ -20,6 +18,8 @@ const Bugsnag = {
 
     // configure a client with user supplied options
     const bugsnag = new Client(opts, schema, internalPlugins, { name, version, url })
+
+    bugsnag._setDelivery(delivery)
 
     bugsnag._logger.debug('Loaded!')
     bugsnag.leaveBreadcrumb('Bugsnag loaded', {}, 'state')
@@ -39,7 +39,7 @@ const Bugsnag = {
   }
 }
 
-Object.keys(Client.prototype).forEach((m) => {
+Object.getOwnPropertyNames(Client.prototype).forEach((m) => {
   if (/^_/.test(m)) return
   Bugsnag[m] = function () {
     if (!Bugsnag._client) return console.error(`Bugsnag.${m}() was called before Bugsnag.start()`)
@@ -52,12 +52,4 @@ Object.keys(Client.prototype).forEach((m) => {
   }
 })
 
-module.exports = Bugsnag
-
-module.exports.Client = Client
-module.exports.Event = Event
-module.exports.Session = Session
-module.exports.Breadcrumb = Breadcrumb
-
-// Export a "default" property for compatibility with ESM imports
-module.exports.default = Bugsnag
+export default Bugsnag

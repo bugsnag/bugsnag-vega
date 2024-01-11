@@ -1,5 +1,3 @@
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-
 module.exports = {
   collectCoverageFrom: [
     '**/packages/*/**/*.js',
@@ -14,7 +12,10 @@ module.exports = {
       displayName: 'kepler',
       roots: ['<rootDir>/packages/kepler'],
       testMatch: ['<rootDir>/packages/kepler/**/*.test.ts'],
-      preset: 'ts-jest'
+      preset: 'react-native',
+      transformIgnorePatterns: [
+        'node_modules/(?!(jest-)?react-native|@bugsnag/delivery-fetch)/'
+      ]
     }
   ]
 }
