@@ -1,8 +1,10 @@
+/** @type {import('ts-jest').JestConfigWithTsJest} */
+
 module.exports = {
   collectCoverageFrom: [
     '**/packages/*/**/*.js',
-    '!**/*.test.js',
-    '!**/*.test-*.js'
+    '!**/*.test.ts',
+    '!**/*.test-*.ts'
   ],
   coverageReporters: [
     'json-summary', 'json', 'lcov', 'text', 'clover'
@@ -11,7 +13,8 @@ module.exports = {
     {
       displayName: 'kepler',
       roots: ['<rootDir>/packages/kepler'],
-      testMatch: ['<rootDir>/packages/kepler/**/*.test.js']
+      testMatch: ['<rootDir>/packages/kepler/**/*.test.ts'],
+      preset: 'ts-jest'
     }
   ]
 }
