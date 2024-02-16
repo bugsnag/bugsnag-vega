@@ -5,6 +5,13 @@ auth:
 uplinks:
   npmjs:
     url: https://registry.npmjs.org/
+  amzn:
+    url: https://k-artifactory-external.labcollab.net/artifactory/api/npm/kepler-npm-prod-local/
+    auth:
+      type: bearer
+      token_env: AMZN_AUTHENTICATION
+log:
+  level: trace
 packages:
   '@bugsnag/safe-json-stringify':
     access: $anonymous
@@ -12,12 +19,18 @@ packages:
   '@bugsnag/cuid':
     access: $anonymous
     proxy: npmjs
-  'bugsnag-expo-cli':
+  '@bugsnag/kepler':
+    access: $anonymous
+    publish: $anonymous
+  '@bugsnag/kepler-*':
     access: $anonymous
     publish: $anonymous
   '@bugsnag/*':
     access: $anonymous
-    publish: $anonymous
+    proxy: npmjs
+  '@amzn/*':
+    access: $anonymous
+    proxy: amzn
   '@*/*':
     access: $anonymous
     proxy: npmjs

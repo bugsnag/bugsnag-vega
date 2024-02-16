@@ -1,17 +1,18 @@
-#ifndef SAMPLETURBOMODULE_H
-#define SAMPLETURBOMODULE_H
+#ifndef BUGSNAG_KEPLER_NATIVE_H
+#define BUGSNAG_KEPLER_NATIVE_H
 
 #include "Kepler/turbomodule/KeplerTurboModule.h"
 #define TM_API_NAMESPACE com::amazon::kepler::turbomodule
 
-namespace myApp {
+namespace bugsnag {
     class BugsnagKeplerNative: public TM_API_NAMESPACE::KeplerTurboModule {
     public:
         BugsnagKeplerNative();
 
         void aggregateMethods(TM_API_NAMESPACE::MethodAggregator<TM_API_NAMESPACE::KeplerTurboModule>& methodAggregator) const noexcept;
 
-        void configure(utils::json::JsonContainer config);
+        utils::json::JsonContainer configure(utils::json::JsonContainer config);
     };
 }
-#endif  // SAMPLETURBOMODULE_H
+
+#endif // BUGSNAG_KEPLER_NATIVE_H

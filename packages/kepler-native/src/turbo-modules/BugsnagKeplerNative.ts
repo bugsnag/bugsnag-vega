@@ -10,9 +10,13 @@ interface BugsnagConfiguration {
   launchDurationMillis?: number
 }
 
+interface BugsnagNativeConfiguration {
+
+}
+
 export interface BugsnagKeplerNative extends KeplerTurboModule {
   // Exported methods.
-  configure: (configuration: BugsnagConfiguration) => void
+  configure: (configuration: BugsnagConfiguration) => BugsnagNativeConfiguration
 }
 
 // prettier-ignore
