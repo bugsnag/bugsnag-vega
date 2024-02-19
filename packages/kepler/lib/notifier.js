@@ -2,6 +2,9 @@ import { version } from '../package.json'
 import { Client } from '@bugsnag/core'
 import { schema } from './config'
 import delivery from '@bugsnag/delivery-fetch'
+import BugsnagPluginReact from '@bugsnag/plugin-react'
+import createBugsnagGlobalErrorHandlerPlugin from '@bugsnag/plugin-react-native-global-error-handler'
+import React from 'react'
 
 const name = 'Bugsnag Kepler'
 const url = 'https://github.com/bugsnag/bugsnag-kepler'
@@ -13,8 +16,10 @@ export const Bugsnag = {
     if (typeof opts === 'string') opts = { apiKey: opts }
     if (!opts) opts = {}
 
-    // TODO: Add plugin-react
-    const internalPlugins = []
+    const internalPlugins = [
+      createBugsnagGlobalErrorHandlerPlugin(),
+      new BugsnagPluginReact(React)
+    ]
 
     // configure a client with user supplied options
     const bugsnag = new Client(opts, schema, internalPlugins, { name, version, url })
