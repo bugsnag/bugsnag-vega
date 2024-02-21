@@ -5,6 +5,9 @@ name: Node CI
 
 on: [push]
 
+env:
+  AMZN_AUTHENTICATION: ${{ secrets.AMZN_AUTHENTICATION }}
+
 jobs:
   linting:
     runs-on: ubuntu-latest
@@ -12,10 +15,12 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: 16
           cache: 'npm'
-          
-      - run: npm ci
+
+      - run: npm install -g verdaccio@5.29.0
+      - run: npm run local-npm:start &
+      - run: rm -f package-lock.json && npm install --registry 'http://0.0.0.0:5539'
       - run: npm run test:lint
 
   unit_tests:
@@ -24,8 +29,10 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: 16
           cache: 'npm'
 
-      - run: npm ci
+      - run: npm install -g verdaccio@5.29.0
+      - run: npm run local-npm:start &
+      - run: rm -f package-lock.json && npm install --registry 'http://0.0.0.0:5539'
       - run: npm run test:unit
