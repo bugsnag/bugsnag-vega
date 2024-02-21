@@ -1,14 +1,15 @@
-import { Client, Config } from '@bugsnag/core'
+import { type Client, type Config } from '@bugsnag/core'
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface KeplerConfig extends Config {}
 
 interface KeplerBugsnagStatic extends Client {
-  start(apiKeyOrOpts: string | KeplerConfig): Client
-  isStarted(): boolean
+  start: (apiKeyOrOpts: string | KeplerConfig) => Client
+  isStarted: () => boolean
 }
 
 declare const Bugsnag: KeplerBugsnagStatic
 
 export default Bugsnag
 export * from '@bugsnag/core'
-export { KeplerConfig }
+export type { KeplerConfig }
