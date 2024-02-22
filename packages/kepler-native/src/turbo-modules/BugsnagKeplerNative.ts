@@ -1,5 +1,5 @@
-import type { KeplerTurboModule } from '@amzn/keplerscript-turbomodule-api'
-import { TurboModuleRegistry } from '@amzn/keplerscript-turbomodule-api'
+import type {KeplerTurboModule} from '@amzn/keplerscript-turbomodule-api'
+import {TurboModuleRegistry} from '@amzn/keplerscript-turbomodule-api'
 
 interface BugsnagConfiguration {
   apiKey: string
@@ -8,17 +8,19 @@ interface BugsnagConfiguration {
   launchDurationMillis?: number
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface BugsnagNativeConfiguration {
-
+  appVersion?: string
 }
 
 export interface BugsnagKeplerNative extends KeplerTurboModule {
   // Exported methods.
   configure: (configuration: BugsnagConfiguration) => BugsnagNativeConfiguration
+  readTextFile: (path: string) => string | null
+  writeTextFile: (path: string, content: string) => boolean
+  nativeCrash:() => void
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+// prettier-ignore
 export default TurboModuleRegistry.getEnforcing<BugsnagKeplerNative>(
-  'BugsnagKeplerNative'
+  'BugsnagKeplerNative',
 ) as BugsnagKeplerNative

@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -e
+
 if [[ "$VERSION_IDENTIFIER" == "" ]]; then
   export VERSION_IDENTIFIER="0.0.0"
 fi
