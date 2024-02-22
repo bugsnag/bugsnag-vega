@@ -38,6 +38,7 @@ const ruleOverrides = {
 
 module.exports = {
   root: true,
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     sourceType: 'module'
   },
@@ -47,12 +48,28 @@ module.exports = {
       files: ['*.js'],
       extends: ['standard']
     },
+    // linting for ts files
+    {
+      files: ['*.ts'],
+      extends: [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/recommended'
+      ],
+      plugins: ['@typescript-eslint'],
+      parserOptions: {
+        project: 'tsconfig.json'
+      }
+    },
     // Linting for tests
     {
       files: ['**/*.test.ts'],
       env: { jest: true },
-      plugins: ['eslint-plugin-jest'],
-      extends: ['standard-with-typescript', 'plugin:jest/recommended'],
+      extends: [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:jest/recommended'
+      ],
+      plugins: ['@typescript-eslint', 'eslint-plugin-jest'],
       rules: {
         ...ruleOverrides
       }

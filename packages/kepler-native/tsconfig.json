@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": [
+    "src/**/*", "tst/**/*"
+  ],
+  "exclude": [
+    "node_modules", "babel.config.js", "metro.config.js"
+  ],
+  "compilerOptions": {
+    "outDir": "./dist"
+  }
+}
