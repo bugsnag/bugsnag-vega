@@ -62,3 +62,6 @@ verdaccio-config.yml
 
 # vscode
 .vscode
+
+# maze runner output
+maze_output
