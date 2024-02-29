@@ -4,9 +4,8 @@
  * PROPRIETARY/CONFIDENTIAL.  USE IS SUBJECT TO LICENSE TERMS.
  */
 
-import { RootTagContext } from '@amzn/react-native-kepler';
 import React, { useContext, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { RootTagContext, StyleSheet, Text, View } from 'react-native';
 import { commandRunner } from './commandRunner';
 
 export const App = () => {
