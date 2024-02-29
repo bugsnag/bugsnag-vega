@@ -1,1 +1,1 @@
-export * as HandledJsError from './HandledJSError'
+export * as HandledJsErrorScenario from './HandledJsErrorScenario'
