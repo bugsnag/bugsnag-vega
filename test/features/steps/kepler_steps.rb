@@ -11,11 +11,14 @@ When('I execute the command {string}') do |command|
 end
 
 def execute_command(action, scenario_name = '')
-  address = case Maze::Helper.get_current_platform
-              when 'android'
-                'localhost:9339'
+  address = if Maze.config.farm == :bb
+              if Maze.config.aws_public_ip
+                Maze.public_address
               else
-                'bs-local.com:9339'
+                'local:9339'
+              end
+            else
+              'bs-local.com:9339'
             end
 
   command = {
