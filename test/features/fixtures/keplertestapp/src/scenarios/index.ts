@@ -1,1 +1,1 @@
-export * as HandledJsErrorScenario from './HandledJsErrorScenario'
+export { default as HandledJsErrorScenario } from './HandledJsErrorScenario';
