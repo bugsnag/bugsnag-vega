@@ -4,12 +4,19 @@
  * PROPRIETARY/CONFIDENTIAL.  USE IS SUBJECT TO LICENSE TERMS.
  */
 
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import { RootTagContext } from '@amzn/react-native-kepler';
+import React, { useContext, useEffect } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { commandRunner } from './commandRunner';
 
 export const App = () => {
+  const rootTag = useContext(RootTagContext)
 
   const styles = getStyles();
+
+  useEffect(() => {
+    commandRunner(rootTag)
+  }, [])
 
   return (
       <View style={styles.background}>
