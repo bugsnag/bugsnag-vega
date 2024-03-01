@@ -4,6 +4,7 @@ import * as Scenarios from '../scenarios'
 
 type ScenarioName = keyof typeof Scenarios
 
+// @ts-expect-error globalThis has no index signature
 const isTurboModuleEnabled = () => global.__turboModuleProxy != null
 
 export async function runScenario (rootTag: number, scenarioName: string, apiKey: string, notify: string, sessions: string) {
