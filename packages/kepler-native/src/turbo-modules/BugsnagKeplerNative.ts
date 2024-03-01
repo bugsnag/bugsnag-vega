@@ -3,20 +3,23 @@ import {TurboModuleRegistry} from '@amzn/keplerscript-turbomodule-api'
 
 interface BugsnagConfiguration {
   apiKey: string
-  type: string
   appVersion?: string
-  launchDurationMillis?: number
 }
 
-interface BugsnagNativeConfiguration {
-  appVersion?: string
+interface DirEntry {
+  name: string
+  isFile: boolean
+  isDirectory: boolean
 }
 
 export interface BugsnagKeplerNative extends KeplerTurboModule {
   // Exported methods.
-  configure: (configuration: BugsnagConfiguration) => BugsnagNativeConfiguration
+  configure: (configuration: BugsnagConfiguration) => void
   readTextFile: (path: string) => string | null
   writeTextFile: (path: string, content: string) => boolean
+  listDirectory: (dir: string) => DirEntry[]
+  deleteFile: (path: string) => boolean
+  markLaunchCompleted: () => void
   nativeCrash:() => void
 }
 

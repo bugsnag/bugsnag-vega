@@ -15,6 +15,8 @@ namespace bugsnag {
 
         std::string readTextFile(std::string filename);
         bool writeTextFile(std::string filename, std::string content);
+        std::vector<utils::json::JsonContainer> listDirectory(std::string dir);
+        bool deleteFile(std::string path);
 
         void nativeCrash();
 

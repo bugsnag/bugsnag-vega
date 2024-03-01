@@ -3,6 +3,10 @@
 #include "BugsnagKeplerNative.h"
 #include "utils/signal_handler.h"
 
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
@@ -48,6 +52,26 @@ bool BugsnagKeplerNative::writeTextFile(std::string filename, std::string conten
 
     close(fd);
     return content.length() == bytes;
+}
+
+std::vector<utils::json::JsonContainer> BugsnagKeplerNative::listDirectory(std::string dir) {
+    std::vector<utils::json::JsonContainer> entries;
+    for (auto const& dir_entry : std::filesystem::directory_iterator{dir}) {
+        auto json_entry = utils::json::JsonContainer::createJsonObject();
+        json_entry.insert("name", dir_entry.path().filename());
+        json_entry.insert("isFile", dir_entry.is_regular_file());
+        json_entry.insert("isDirectory", dir_entry.is_directory());
+
+        entries.push_back(json_entry);
+    }
+
+    return entries;
+}
+
+bool BugsnagKeplerNative::deleteFile(std::string path) {
+    std::error_code ec;
+    std::filesystem::remove(std::filesystem::path{path}, ec);
+    return !ec;
 }
 
 utils::json::JsonContainer BugsnagKeplerNative::configure(utils::json::JsonContainer config) {
