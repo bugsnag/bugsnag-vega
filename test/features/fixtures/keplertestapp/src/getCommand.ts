@@ -20,9 +20,12 @@ export async function getCommand (mazeAddress = 'bs-local.com:9339', allowedRetr
 
    return {
         action: 'run-scenario',
-        scenario_name: 'TestScenario1',
-        api_key: '1234',
-        endpoint: '/test'
+        scenario_name: 'HandledJsErrorScenario',
+        api_key: 'abcdef1234567890abcdef1234567890',
+        endpoints: {
+            notify: '10.0.2.2:9339/notify',
+            sessions: '10.0.2.2:9339/sessions'
+        }
     }
 
     let retries = 0

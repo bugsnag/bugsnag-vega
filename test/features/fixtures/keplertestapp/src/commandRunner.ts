@@ -1,6 +1,6 @@
 import { Command } from "../types"
+import { runScenario } from "./commands/runScenario"
 import { getCommand } from "./getCommand"
-import { runScenario } from "./runScenario"
 
 export async function commandRunner (rootTag: number) {
     let command: Command
@@ -18,7 +18,8 @@ export async function commandRunner (rootTag: number) {
                 rootTag,
                 command.scenario_name,
                 command.api_key,
-                command.endpoint
+                command.endpoints.notify,
+                command.endpoints.sessions
             )
             break;
         default:
