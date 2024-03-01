@@ -18,8 +18,8 @@ export async function commandRunner (rootTag: number) {
                 rootTag,
                 command.scenario_name,
                 command.api_key,
-                command.endpoints.notify,
-                command.endpoints.sessions
+                command.notify_endpoint,
+                command.sessions_endpoint
             )
             break;
         default:

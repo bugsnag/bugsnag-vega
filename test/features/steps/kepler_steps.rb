@@ -1,5 +1,5 @@
 When('I launch the app') do
-  Maze::Runner.run_command("kepler device launch-app -d Simulator -a com.bugsnag.fixtures.keplertestapp.main")   
+  Maze::Runner.run_command("kepler device launch-app -d Simulator -a com.bugsnag.fixtures.keplertestapp.main")
 end
 
 When('I run {string}') do |scenario_name|
@@ -11,20 +11,13 @@ When('I execute the command {string}') do |command|
 end
 
 def execute_command(action, scenario_name = '')
-  address = if Maze.config.farm == :bb
-              if Maze.config.aws_public_ip
-                Maze.public_address
-              else
-                'local:9339'
-              end
-            else
-              'bs-local.com:9339'
-            end
+  address = '10.0.2.2:9339'
 
   command = {
     action: action,
     scenario_name: scenario_name,
-    endpoint: "http://#{address}/traces",
+    notify_endpoint: "http://#{address}/notify",
+    sessions_endpoint: "http://#{address}/sessions",
     api_key: $api_key,
   }
 

@@ -2,24 +2,25 @@ import Bugsnag from '@bugsnag/kepler'
 import React, { useEffect } from 'react'
 import { StyleSheet, Text, View } from "react-native"
 
-export default {
-    config: {},
-    App: () => {
-        const styles = getStyles()
+const config = {}
 
-        useEffect(() => {
-            Bugsnag.notify(new Error('HandledJSError'))
-        }, [])
+const App = () => {
+    const styles = getStyles()
 
-        return (
-            <View style={styles.background}>
-                <View style={styles.headerContainer}>
-                    <Text style={styles.headerText}>HandledJsErrorScenario</Text>
-                </View>
+    useEffect(() => {
+        Bugsnag.notify(new Error('HandledJSError'))
+    }, [])
+
+    return (
+        <View style={styles.background}>
+            <View style={styles.headerContainer}>
+                <Text style={styles.headerText}>HandledJsErrorScenario</Text>
             </View>
-        )
-    }
+        </View>
+    )
 }
+
+export default { App, config }
 
 const getStyles = () =>
     StyleSheet.create({

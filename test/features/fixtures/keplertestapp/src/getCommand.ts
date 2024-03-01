@@ -12,26 +12,16 @@ function delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
 }
 
-export async function getCommand (mazeAddress = 'bs-local.com:9339', allowedRetries = DEFAULT_RETRY_COUNT): Promise<Command> {
+export async function getCommand (mazeAddress = '10.0.2.2:9339', allowedRetries = DEFAULT_RETRY_COUNT): Promise<Command> {
     // poll the server for the next command to run
     const mazeUrl = `http://${mazeAddress}/command`
 
-    console.error('getCommand entered!')
-
-   return {
-        action: 'run-scenario',
-        scenario_name: 'HandledJsErrorScenario',
-        api_key: 'abcdef1234567890abcdef1234567890',
-        endpoints: {
-            notify: '10.0.2.2:9339/notify',
-            sessions: '10.0.2.2:9339/sessions'
-        }
-    }
+    console.error('[Bugsnag] getCommand entered!')
 
     let retries = 0
     while (retries++ < allowedRetries) {
         try {
-            console.error('Fetching command from maze')
+            console.log('[Bugsnag] Fetching command from maze')
             const response = await fetch(mazeUrl)
             const command: Command = await response.json()
             if (response.ok) {
@@ -42,10 +32,10 @@ export async function getCommand (mazeAddress = 'bs-local.com:9339', allowedRetr
                 console.error('Error while receiving command')
             }
         } catch (err) {
-            console.error(`[BugsnagPerformance] Error fetching command from maze runner: ${getErrorMessage(err)}`)
+            console.error(`[Bugsnag] Error fetching command from maze runner: ${getErrorMessage(err)}`)
         }
       await delay(INTERVAL)
     }
 
-      throw new Error('Retry limit exceeded, giving up...')
+    throw new Error('Retry limit exceeded, giving up...')
 }
