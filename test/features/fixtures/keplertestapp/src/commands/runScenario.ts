@@ -28,7 +28,6 @@ export async function runScenario(rootTag: number, scenarioName: string, apiKey:
 
     console.log(`[Bugsnag] Mounting App`)
     try {
-        // @ts-expect-error
         AppRegistry.registerComponent(scenarioName, () => scenario.App)
         AppRegistry.runApplication(scenarioName, appParams)
     } catch (err) {

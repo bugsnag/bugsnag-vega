@@ -16,7 +16,7 @@ export async function getCommand (mazeAddress = '10.0.2.2:9339', allowedRetries 
     // poll the server for the next command to run
     const mazeUrl = `http://${mazeAddress}/command`
 
-    console.error('[Bugsnag] getCommand entered!')
+    console.log('[Bugsnag] getCommand entered!')
 
     let retries = 0
     while (retries++ < allowedRetries) {
@@ -29,10 +29,10 @@ export async function getCommand (mazeAddress = '10.0.2.2:9339', allowedRetries 
                     return command!
                 }
             } else {
-                console.error('Error while receiving command')
+                console.log('[Bugsnag] Error while receiving command')
             }
         } catch (err) {
-            console.error(`[Bugsnag] Error fetching command from maze runner: ${getErrorMessage(err)}`)
+            console.log(`[Bugsnag] Error fetching command from maze runner: ${getErrorMessage(err)}`)
         }
       await delay(INTERVAL)
     }
