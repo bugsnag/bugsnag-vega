@@ -13,3 +13,13 @@ AfterAll do
   # stop the simulator
   Maze::Runner.run_command("kepler device simulator stop")
 end
+
+Maze.hooks.before do
+  # launch the app
+  Maze::Runner.run_command("kepler device launch-app -d Simulator -a com.bugsnag.fixtures.keplertestapp.main")
+end
+
+Maze.hooks.after do
+  # terminate the app
+  Maze::Runner.run_command("kepler device terminate-app -d Simulator -a com.bugsnag.fixtures.keplertestapp.main")
+end

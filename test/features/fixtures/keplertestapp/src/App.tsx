@@ -4,12 +4,18 @@
  * PROPRIETARY/CONFIDENTIAL.  USE IS SUBJECT TO LICENSE TERMS.
  */
 
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, { useContext, useEffect } from 'react';
+import { RootTagContext, StyleSheet, Text, View } from 'react-native';
+import { commandRunner } from './commandRunner';
 
 export const App = () => {
+  const rootTag = useContext(RootTagContext)
 
   const styles = getStyles();
+
+  useEffect(() => {
+    commandRunner(rootTag)
+  }, [])
 
   return (
       <View style={styles.background}>
