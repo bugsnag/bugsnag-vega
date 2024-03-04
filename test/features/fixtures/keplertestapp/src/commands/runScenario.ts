@@ -4,9 +4,6 @@ import * as Scenarios from '../scenarios'
 
 type ScenarioName = keyof typeof Scenarios
 
-// @ts-expect-error
-const isTurboModuleEnabled = () => global.__turboModuleProxy != null
-
 export async function runScenario(rootTag: number, scenarioName: string, apiKey: string, notify: string, sessions: string) {
     console.log(`[Bugsnag] Launching scenario: ${scenarioName}`)
 
@@ -20,12 +17,7 @@ export async function runScenario(rootTag: number, scenarioName: string, apiKey:
     console.log(`[Bugsnag] Calling Bugsnag.start with config: ${JSON.stringify(config)}`)
     Busgnag.start(config)
 
-    const appParams: any = { rootTag }
-    if (isTurboModuleEnabled()) {
-        appParams.fabric = true
-        appParams.initialProps = { concurrentRoot: true }
-    }
-
+    const appParams = { rootTag, fabric: true, concurrentRoot: true }
     console.log(`[Bugsnag] Mounting App`)
     try {
         AppRegistry.registerComponent(scenarioName, () => scenario.App)
