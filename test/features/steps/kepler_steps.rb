@@ -1,7 +1,3 @@
-When('I launch the app') do
-  Maze::Runner.run_command("kepler device launch-app -d Simulator -a com.bugsnag.fixtures.keplertestapp.main")
-end
-
 When('I run {string}') do |scenario_name|
   execute_command 'run-scenario', scenario_name
 end
