@@ -31,7 +31,7 @@ export async function commandRunner (rootTag: number) {
             console.log("[Bugsnag] noop - clearing command uuid")
             // immediately loop around
             commandRunner(rootTag)
-            break;
+            break
         case 'run-scenario':
             runScenario(
                 rootTag,
@@ -40,9 +40,12 @@ export async function commandRunner (rootTag: number) {
                 command.notify_endpoint,
                 command.sessions_endpoint
             )
+            break
         default:
             console.log('[Bugsnag] No command received')
-            delay(COMMAND_INTERVAL)
-            commandRunner(rootTag)
     }
+
+    // loop commandRunner
+    delay(COMMAND_INTERVAL)
+    commandRunner(rootTag)
 }
