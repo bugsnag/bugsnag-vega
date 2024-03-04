@@ -41,6 +41,7 @@ export async function commandRunner (rootTag: number) {
                 command.sessions_endpoint
             )
         default:
+            console.log('[Bugsnag] No command received')
             delay(COMMAND_INTERVAL)
             commandRunner(rootTag)
     }
