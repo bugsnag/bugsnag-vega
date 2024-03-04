@@ -1,60 +1,37 @@
-import { Command } from "../types"
 import { runScenario } from "./commands/runScenario"
 import { getCommand } from "./getCommand"
-import { AsyncStorage } from "@amzn/react-native-kepler"
+import delay from "./utils/delay"
+import { clearLastCommandUUID, getLastCommandUUID, setLastCommandUUID } from "./utils/storage"
 
-const lastCommandKey: string = "lastCommandUUID"
-var lastCommandUuid: string | null
+const COMMAND_INTERVAL = 500
 
-async function setLastCommandUUID(uuid: string) {
-    try {
-        await AsyncStorage.setItem(lastCommandKey, uuid)
-    } catch (error) {
-        throw new Error('[Bugsnag] Could not save last command uuid in storage')
-    }
-}
-
-async function getLastCommandUUID(){
-    try {
-        const value = await AsyncStorage.getItem(lastCommandKey)
-        return value
-    } catch (error) {
-        throw new Error('[Bugsnag] Could not read last command uuid from storage')
-    }
-}
-
-async function clearLastCommandUUID() {
-    try {
-        await AsyncStorage.removeItem(lastCommandKey)
-    } catch (error) {
-        throw new Error('[Bugsnag] Could not remove last command uuid from storage')
-    }
-}
+let lastCommandUuid: string | null
 
 export async function commandRunner (rootTag: number) {
-    let command: Command
+    const command = await getCommand()
 
-    // TODO run in a loop?
+    // Populate last command uuid on first run
+    if (lastCommandUuid === null) {
+        lastCommandUuid = await getLastCommandUUID()
+    }
 
-    // if environment variables specify a scenario to launch, use that
-    if (false) {
-
-    } else {
-        command = await getCommand()
+    if (command.uuid === lastCommandUuid) {
+        // Bail out if we're trying to run the same command again
+        delay(COMMAND_INTERVAL)
+        commandRunner(rootTag)
     }
 
     lastCommandUuid = command.uuid
     await setLastCommandUUID(lastCommandUuid)
 
-    if (command.action === "noop") {
-        lastCommandUuid = null
-        clearLastCommandUUID()
-        console.log("[Bugsnag] noop - clearing command uuid")
-        // immediately loop around
-        //continue
-    }
-
     switch (command.action) {
+        case 'noop':
+            lastCommandUuid = null
+            clearLastCommandUUID()
+            console.log("[Bugsnag] noop - clearing command uuid")
+            // immediately loop around
+            commandRunner(rootTag)
+            break;
         case 'run-scenario':
             runScenario(
                 rootTag,
@@ -63,8 +40,8 @@ export async function commandRunner (rootTag: number) {
                 command.notify_endpoint,
                 command.sessions_endpoint
             )
-            break;
         default:
-            // do nothing
+            delay(COMMAND_INTERVAL)
+            commandRunner(rootTag)
     }
 }

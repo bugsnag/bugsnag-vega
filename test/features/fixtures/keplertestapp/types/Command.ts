@@ -5,4 +5,5 @@ export interface Command {
     notify_endpoint: string
     sessions_endpoint: string
     uuid: string
+    run_uuid: string
 }

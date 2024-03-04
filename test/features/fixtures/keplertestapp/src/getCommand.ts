@@ -1,4 +1,5 @@
 import type { Command } from "../types"
+import delay from './utils/delay'
 
 const DEFAULT_RETRY_COUNT = 20
 const INTERVAL = 500
@@ -6,10 +7,6 @@ const INTERVAL = 500
 function getErrorMessage(error: unknown) {
     if (error instanceof Error) return error.message
     return String(error)
-  }
-
-function delay(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
 }
 
 export async function getCommand (mazeAddress = '10.0.2.2:9339', allowedRetries = DEFAULT_RETRY_COUNT): Promise<Command> {
