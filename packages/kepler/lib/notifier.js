@@ -4,6 +4,7 @@ import { schema } from './config'
 import delivery from '@bugsnag/delivery-fetch'
 import BugsnagPluginReact from '@bugsnag/plugin-react'
 import createBugsnagGlobalErrorHandlerPlugin from '@bugsnag/plugin-react-native-global-error-handler'
+import unhandledRejectionPlugin from '@bugsnag/plugin-react-native-unhandled-rejection'
 import React from 'react'
 
 const name = 'Bugsnag Kepler'
@@ -18,6 +19,7 @@ export const Bugsnag = {
 
     const internalPlugins = [
       createBugsnagGlobalErrorHandlerPlugin(),
+      unhandledRejectionPlugin,
       new BugsnagPluginReact(React)
     ]
 
