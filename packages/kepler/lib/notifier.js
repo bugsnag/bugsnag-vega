@@ -1,5 +1,5 @@
 import { version } from '../package.json'
-import { Client } from '@bugsnag/core'
+import { Client, Event } from '@bugsnag/core'
 import { schema } from './config'
 import delivery from '@bugsnag/delivery-fetch'
 import BugsnagPluginReact from '@bugsnag/plugin-react'
@@ -9,6 +9,8 @@ import React from 'react'
 
 const name = 'Bugsnag Kepler'
 const url = 'https://github.com/bugsnag/bugsnag-kepler'
+
+Event.__type = 'reactnativejs'
 
 export const Bugsnag = {
   _client: null,
