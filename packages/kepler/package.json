@@ -24,6 +24,7 @@
     "@bugsnag/delivery-fetch": "^7.20.0",
     "@bugsnag/plugin-react": "^7.19.0",
     "@bugsnag/plugin-react-native-global-error-handler": "^7.22.3",
+    "@bugsnag/plugin-react-native-unhandled-rejection": "^7.19.0",
     "iserror": "^0.0.2"
   }
 }

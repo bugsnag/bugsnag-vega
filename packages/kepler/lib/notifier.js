@@ -1,13 +1,16 @@
 import { version } from '../package.json'
-import { Client } from '@bugsnag/core'
+import { Client, Event } from '@bugsnag/core'
 import { schema } from './config'
 import delivery from '@bugsnag/delivery-fetch'
 import BugsnagPluginReact from '@bugsnag/plugin-react'
 import createBugsnagGlobalErrorHandlerPlugin from '@bugsnag/plugin-react-native-global-error-handler'
+import unhandledRejectionPlugin from '@bugsnag/plugin-react-native-unhandled-rejection'
 import React from 'react'
 
 const name = 'Bugsnag Kepler'
 const url = 'https://github.com/bugsnag/bugsnag-kepler'
+
+Event.__type = 'reactnativejs'
 
 export const Bugsnag = {
   _client: null,
@@ -18,6 +21,7 @@ export const Bugsnag = {
 
     const internalPlugins = [
       createBugsnagGlobalErrorHandlerPlugin(),
+      unhandledRejectionPlugin,
       new BugsnagPluginReact(React)
     ]
 
