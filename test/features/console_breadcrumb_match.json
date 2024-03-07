@@ -1,0 +1,9 @@
+{
+    "type": "log",
+    "name": "Console output",
+    "timestamp": "^\\d{4}\\-\\d{2}\\-\\d{2}T\\d{2}:\\d{2}:[\\d\\.]+Z?$",
+    "metaData": {
+      "[0]": "my console log",
+      "severity": "log"
+    }
+}

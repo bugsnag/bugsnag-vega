@@ -7,6 +7,7 @@ if [[ "$AMZN_AUTHENTICATION" == "" ]]; then
 fi
 
 projectRoot="`dirname $0`/../../.."
+rm -rf "$projectRoot/.verdaccio/@bugsnag"
 pushd "$projectRoot"
 
 # start the verdaccio server

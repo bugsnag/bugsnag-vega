@@ -1,7 +1,9 @@
 {
   "name": "@bugsnag/keplertestapp",
   "version": "0.0.1",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "clean": "rm -rf node_modules buildinfo.json dist",
     "start": "npx react-native start",
@@ -13,6 +15,8 @@
   },
   "dependencies": {
     "@amzn/react-native-kepler": "~2.0.0",
+    "@bugsnag/kepler": "^0.0.0",
+    "@bugsnag/kepler-native": "^0.0.0",
     "react": "18.2.0",
     "react-native": "0.72.0"
   },
@@ -21,9 +25,9 @@
     "@babel/core": "^7.20.0",
     "@babel/runtime": "^7.20.0",
     "@babel/traverse": "7.22.8",
+    "@react-native-community/cli": "11.3.2",
     "@react-native/eslint-config": "0.72.2",
     "@react-native/metro-config": "^0.72.6",
-    "@react-native-community/cli": "11.3.2",
     "@testing-library/react-native": "^7.2.0",
     "@types/jest": "^28.0.0",
     "@types/react": "^18.0.24",
@@ -43,7 +47,9 @@
   "kepler": {
     "projectType": "application",
     "appName": "keplertestapp",
-    "targets": ["tv"],
+    "targets": [
+      "tv"
+    ],
     "api": 0.1
   }
 }
