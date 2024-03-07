@@ -1,4 +1,5 @@
 import { runScenario } from "./commands/runScenario"
+import { startBugsnag } from "./commands/startBugsnag"
 import { getCommand } from "./getCommand"
 import delay from "./utils/delay"
 import { clearLastCommandUUID, getLastCommandUUID, setLastCommandUUID } from "./utils/storage"
@@ -31,6 +32,14 @@ export async function commandRunner (rootTag: number) {
             console.log("[Bugsnag] noop - clearing command uuid")
             // immediately loop around
             commandRunner(rootTag)
+            break
+        case 'start-bugsnag':
+            startBugsnag(
+                command.scenario_name,
+                command.api_key,
+                command.notify_endpoint,
+                command.sessions_endpoint
+            )
             break
         case 'run-scenario':
             runScenario(

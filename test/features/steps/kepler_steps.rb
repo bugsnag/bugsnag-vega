@@ -2,12 +2,29 @@ When('I run {string}') do |scenario_name|
   execute_command 'run-scenario', scenario_name
 end
 
+When('I start bugsnag for {string}') do |scenario_name|
+  execute_command 'start-bugsnag', scenario_name
+end
+
 When('I execute the command {string}') do |command|
   execute_command(command)
 end
 
+When('I configure the endpoints to {string}') do |address|
+  $address = address
+end
+
+When('I configure the endpoints to default') do
+  $address = nil
+end
+
+When('I restart the test fixture') do
+  Maze::Runner.run_command("kepler device terminate-app -d Simulator -a com.bugsnag.fixtures.keplertestapp.main")
+  Maze::Runner.run_command("kepler device launch-app -d Simulator -a com.bugsnag.fixtures.keplertestapp.main")
+end
+
 def execute_command(action, scenario_name = '')
-  address = '10.0.2.2:9339'
+  address = $address ? $address : '10.0.2.2:9339'
 
   command = {
     action: action,

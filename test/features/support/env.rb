@@ -23,3 +23,7 @@ Maze.hooks.after do
   # terminate the app
   Maze::Runner.run_command("kepler device terminate-app -d Simulator -a com.bugsnag.fixtures.keplertestapp.main")
 end
+
+Before do
+  $address = nil
+end
