@@ -1,4 +1,5 @@
 #include "turbo-modules/BugsnagKeplerNative.h"
+#include "turbo-modules/BugsnagFileIO.h"
 
 #include <Kepler/turbomodule/KeplerTurboModuleRegistration.h>
 
@@ -7,5 +8,6 @@ __attribute__((visibility("default"))) void autoLinkKeplerTurboModulesV1() noexc
     // Currently, the macro argument cannot be namespace-qualified.
     using namespace bugsnag;
     KEPLER_REGISTER_TURBO_MODULE(BugsnagKeplerNative);
+    KEPLER_REGISTER_TURBO_MODULE(BugsnagFileIO);
 }
 }

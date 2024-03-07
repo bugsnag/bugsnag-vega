@@ -1,7 +1,7 @@
 import { version } from '../package.json'
 import { Client, Event } from '@bugsnag/core'
 import { schema } from './config'
-import delivery from '@bugsnag/delivery-fetch'
+import delivery from './delivery'
 import BugsnagPluginReact from '@bugsnag/plugin-react'
 import createBugsnagGlobalErrorHandlerPlugin from '@bugsnag/plugin-react-native-global-error-handler'
 import { BugsnagKeplerNative } from '@bugsnag/kepler-native'

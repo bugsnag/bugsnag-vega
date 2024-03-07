@@ -7,6 +7,11 @@ export const schema = {
   logger: {
     ...coreSchema.logger,
     defaultValue: () => getPrefixedConsole()
+  },
+  persistenceDirectory: {
+    defaultValue: () => '/data/bugsnag',
+    message: 'should be a path string',
+    validate: (value) => typeof value === 'object' && value !== null
   }
 }
 

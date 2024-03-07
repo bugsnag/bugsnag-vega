@@ -1,7 +1,9 @@
 import { type Client, type Config } from '@bugsnag/core'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface KeplerConfig extends Config {}
+interface KeplerConfig extends Config {
+  persistenceDirectory?: string
+}
 
 declare class KeplerClient extends Client {
   markLaunchComplete: () => void
