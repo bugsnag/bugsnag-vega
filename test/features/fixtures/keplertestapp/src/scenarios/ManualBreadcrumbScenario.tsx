@@ -9,13 +9,14 @@ const App = () => {
     const styles = getStyles()
 
     useEffect(() => {
-        Bugsnag.notify(new Error('HandledJSError'))
+        Bugsnag.leaveBreadcrumb('manualBreadcrumb', { key: "myval" })
+        Bugsnag.notify(new Error('ManualBreadcrumbError'))
     }, [])
 
     return (
         <View style={styles.background}>
             <View style={styles.headerContainer}>
-                <Text style={styles.headerText}>HandledJsErrorScenario</Text>
+                <Text style={styles.headerText}>ManualBreadcrumbScenario</Text>
             </View>
         </View>
     )
