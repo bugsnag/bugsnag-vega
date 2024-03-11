@@ -1,9 +1,10 @@
 import { version } from '../package.json'
 import { Client, Event } from '@bugsnag/core'
 import { schema } from './config'
-import delivery from '@bugsnag/delivery-fetch'
+import delivery from './delivery'
 import BugsnagPluginReact from '@bugsnag/plugin-react'
 import createBugsnagGlobalErrorHandlerPlugin from '@bugsnag/plugin-react-native-global-error-handler'
+import { BugsnagKeplerNative } from '@bugsnag/kepler-native'
 import unhandledRejectionPlugin from '@bugsnag/plugin-react-native-unhandled-rejection'
 import pluginConsoleBreadcrumbs from '@bugsnag/plugin-console-breadcrumbs'
 import React from 'react'
@@ -29,8 +30,14 @@ export const Bugsnag = {
 
     // configure a client with user supplied options
     const bugsnag = new Client(opts, schema, internalPlugins, { name, version, url })
+    BugsnagKeplerNative.configure({
+      apiKey: opts.apiKey
+    })
 
     bugsnag._setDelivery(delivery)
+    bugsnag.markLaunchComplete = () => {
+      BugsnagKeplerNative.markLaunchCompleted()
+    }
 
     bugsnag._logger.debug('Loaded!')
     bugsnag.leaveBreadcrumb('Bugsnag loaded', {}, 'state')

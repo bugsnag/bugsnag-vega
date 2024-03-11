@@ -12,10 +12,6 @@ namespace bugsnag {
         BugsnagKeplerNative();
 
         void aggregateMethods(TM_API_NAMESPACE::MethodAggregator<TM_API_NAMESPACE::KeplerTurboModule>& methodAggregator) const noexcept;
-
-        std::string readTextFile(std::string filename);
-        bool writeTextFile(std::string filename, std::string content);
-
         void nativeCrash();
 
         utils::json::JsonContainer configure(utils::json::JsonContainer config);

@@ -17,6 +17,7 @@ public:
 
     std::string event_filename;
 private:
+    std::atomic<bool> is_launching;
     std::unique_ptr<Configuration> config;
 };
 

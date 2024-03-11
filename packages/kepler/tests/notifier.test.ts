@@ -2,24 +2,21 @@ import type KeplerBugsnagStatic from '..'
 
 const API_KEY = '030bab153e7c2349be364d23b5ae93b5'
 
-const typedGlobal: any = global
-
-function mockFetch () {
-  typedGlobal.fetch = jest.fn(() => Promise.resolve({ json: () => Promise.resolve() }))
-}
-
 describe('kepler notifier', () => {
   let Bugsnag: typeof KeplerBugsnagStatic
+  let BugsnagFileIO: any
 
   beforeAll(() => {
-    jest.spyOn(console, 'debug').mockImplementation(() => {})
-    jest.spyOn(console, 'warn').mockImplementation(() => {})
+    jest.spyOn(console, 'debug').mockImplementation(() => {
+    })
+    jest.spyOn(console, 'warn').mockImplementation(() => {
+    })
   })
 
   beforeEach(() => {
-    mockFetch()
     jest.isolateModules(() => {
       Bugsnag = require('../lib/notifier').default
+      BugsnagFileIO = require('@bugsnag/kepler-native').BugsnagFileIO
     })
   })
 
@@ -28,15 +25,10 @@ describe('kepler notifier', () => {
     Bugsnag.notify(new Error('123'), undefined, (err, event) => {
       if (err) done(err)
       expect(event.originalError.message).toBe('123')
-      expect(typedGlobal.fetch).toHaveBeenCalledWith('https://notify.bugsnag.com', expect.objectContaining({
-        method: 'POST',
-        headers: expect.objectContaining({
-          'Bugsnag-Api-Key': API_KEY,
-          'Bugsnag-Payload-Version': '4',
-          'Bugsnag-Sent-At': expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/),
-          'Content-Type': 'application/json'
-        })
-      }))
+      expect(BugsnagFileIO.writeTextFile).toHaveBeenCalledWith(
+        expect.stringMatching(RegExp(`^\\/data\\/bugsnag\\/\\d+_${API_KEY}\\.json$`)),
+        expect.stringMatching(/^\{.*}$/)
+      )
       done()
     })
   })
