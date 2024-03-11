@@ -21,7 +21,7 @@ describe('kepler notifier', () => {
   })
 
   it('notifies handled errors', (done) => {
-    Bugsnag.start(API_KEY)
+    Bugsnag.start({ apiKey: API_KEY, enabledBreadcrumbTypes: [] })
     Bugsnag.notify(new Error('123'), undefined, (err, event) => {
       if (err) done(err)
       expect(event.originalError.message).toBe('123')
@@ -39,7 +39,7 @@ describe('kepler notifier', () => {
     })
 
     it('returns true when the notifier has been initialised', () => {
-      Bugsnag.start('030bab153e7c2349be364d23b5ae93b5')
+      Bugsnag.start({ apiKey: '030bab153e7c2349be364d23b5ae93b5', enabledBreadcrumbTypes: [] })
       expect(Bugsnag.isStarted()).toBe(true)
     })
   })

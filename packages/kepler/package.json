@@ -23,6 +23,7 @@
     "@bugsnag/core": "^7.19.0",
     "@bugsnag/kepler-native": "^0.0.0",
     "@bugsnag/plugin-console-breadcrumbs": "^7.22.3",
+    "@bugsnag/plugin-network-breadcrumbs": "^7.22.3",
     "@bugsnag/plugin-react": "^7.19.0",
     "@bugsnag/plugin-react-native-global-error-handler": "^7.22.3",
     "@bugsnag/plugin-react-native-unhandled-rejection": "^7.19.0",
