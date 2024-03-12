@@ -7,6 +7,7 @@ Scenario: Calling notify() with a caught Error
   And the exception "type" equals "reactnativejs"
   And the exception "message" equals "HandledJSError"
   And the event "unhandled" is false
+  And the event "context" is null
 
 Scenario: Errors are stored when the network is unreachable
   # make the network unreachable
