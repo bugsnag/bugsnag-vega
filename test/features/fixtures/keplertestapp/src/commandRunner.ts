@@ -3,6 +3,7 @@ import { startBugsnag } from "./commands/startBugsnag"
 import { getCommand } from "./getCommand"
 import delay from "./utils/delay"
 import { clearLastCommandUUID, getLastCommandUUID, setLastCommandUUID } from "./utils/storage"
+import {Command} from "../types";
 
 const COMMAND_INTERVAL = 500
 

@@ -1,7 +1,6 @@
 import type { Command } from "../types"
 import delay from './utils/delay'
 
-const DEFAULT_RETRY_COUNT = 20
 const INTERVAL = 500
 
 function getErrorMessage(error: unknown) {
@@ -9,14 +8,13 @@ function getErrorMessage(error: unknown) {
     return String(error)
 }
 
-export async function getCommand (mazeAddress = '10.0.2.2:9339', allowedRetries = DEFAULT_RETRY_COUNT): Promise<Command> {
+export async function getCommand (mazeAddress = '10.0.2.2:9339'): Promise<Command> {
     // poll the server for the next command to run
     const mazeUrl = `http://${mazeAddress}/command`
 
     console.log('[Bugsnag] getCommand entered!')
 
-    let retries = 0
-    while (retries++ < allowedRetries) {
+    while (true) {
         try {
             console.log('[Bugsnag] Fetching command from maze')
             const response = await fetch(mazeUrl)
@@ -33,6 +31,4 @@ export async function getCommand (mazeAddress = '10.0.2.2:9339', allowedRetries 
         }
       await delay(INTERVAL)
     }
-
-    throw new Error('Retry limit exceeded, giving up...')
 }
