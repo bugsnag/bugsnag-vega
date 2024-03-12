@@ -8,6 +8,7 @@ import { BugsnagKeplerNative } from '@bugsnag/kepler-native'
 import unhandledRejectionPlugin from '@bugsnag/plugin-react-native-unhandled-rejection'
 import pluginConsoleBreadcrumbs from '@bugsnag/plugin-console-breadcrumbs'
 import createPluginNetworkBreadcrumbs from '@bugsnag/plugin-network-breadcrumbs'
+import pluginSession from '@bugsnag/plugin-browser-session'
 import React from 'react'
 
 const name = 'Bugsnag Kepler'
@@ -33,6 +34,7 @@ export const Bugsnag = {
       unhandledRejectionPlugin,
       pluginConsoleBreadcrumbs,
       createPluginNetworkBreadcrumbs(),
+      pluginSession,
       new BugsnagPluginReact(React)
     ]
 
@@ -52,7 +54,9 @@ export const Bugsnag = {
     bugsnag._logger.debug('Loaded!')
     bugsnag.leaveBreadcrumb('Bugsnag loaded', {}, 'state')
 
-    return bugsnag
+    return bugsnag._config.autoTrackSessions
+      ? bugsnag.startSession()
+      : bugsnag
   },
   start: (opts) => {
     if (Bugsnag._client) {
