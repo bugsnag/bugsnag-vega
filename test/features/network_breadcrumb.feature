@@ -6,5 +6,5 @@ Scenario: Getting breadcrumb from fetch request
   And the exception "errorClass" equals "Error"
   And the exception "message" equals "NetworkBreadcrumbError"
   And the event has a "request" breadcrumb named "XMLHttpRequest succeeded"
-  And the event contains a breadcrumb matching the JSON fixture in "features/network_breadcrumb_match.json"
+  And the event contains a breadcrumb matching the JSON fixture in "features/breadcrumbs/network_breadcrumb_match.json"
   And the error Bugsnag-Integrity header is valid
