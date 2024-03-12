@@ -16,6 +16,8 @@
 
 static const int bsg_native_signals[BSG_HANDLED_SIGNAL_COUNT + 1] = {
     SIGILL, SIGTRAP, SIGABRT, SIGBUS, SIGFPE, SIGSEGV};
+static const char bsg_native_signal_names[BSG_HANDLED_SIGNAL_COUNT + 1][9] = {
+    "SIGILL\n", "SIGTRAP\n", "SIGABRT\n", "SIGBUS\n", "SIGFPE\n", "SIGSEGV\n"};
 static struct sigaction bsg_previous_signal_handles[BSG_HANDLED_SIGNAL_COUNT];
 
 static void bsg_invoke_previous_signal_handler(int signum, siginfo_t *info,
@@ -47,10 +49,43 @@ static void bsg_invoke_previous_signal_handler(int signum, siginfo_t *info,
   }
 }
 
+static char* itoa(int value, char* result, int base) {
+    // check that the base if valid
+    if (base < 2 || base > 36) { *result = '\0'; return result; }
+
+    char* ptr = result, *ptr1 = result, tmp_char;
+    int tmp_value;
+
+    do {
+        tmp_value = value;
+        value /= base;
+        *ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
+    } while ( value );
+
+    // Apply negative sign
+    if (tmp_value < 0) *ptr++ = '-';
+    *ptr-- = '\0';
+
+    // Reverse the string
+    while(ptr1 < ptr) {
+        tmp_char = *ptr;
+        *ptr--= *ptr1;
+        *ptr1++ = tmp_char;
+    }
+    return result;
+}
+
+void bsg_handler_uninstall_signal() {
+  for (int i = 0; i < BSG_HANDLED_SIGNAL_COUNT; i++) {
+    const int signal = bsg_native_signals[i];
+    sigaction(signal, &bsg_previous_signal_handles[i], 0);
+  }
+}
+
 static void bsg_handle_signal(int signum, siginfo_t *info,
                        void *user_context) {
 
-    TMWARN("Signal Handler Triggered!");
+    TMWARN("[bugsnag] Signal Handler Triggered!");
 
     static const char tab[] = "\t";
     static const char lf[] = "\n";
@@ -61,16 +96,34 @@ static void bsg_handle_signal(int signum, siginfo_t *info,
 
     bugsnag::Client *client = bugsnag::global_client;
     if (!client) {
-        TMWARN("No configured BugsnagClient");
+        TMWARN("[bugsnag] No configured BugsnagClient");
         goto call_previous_handler;
     }
 
-    fd = open(client->event_filename.c_str(), O_WRONLY | O_CREAT | O_TRUNC);
+    // This is horrible code, and must be removed before this handler is used for anything other than debugging
+    static int counter = 0;
+    char path[1024];
+    char number_buffer[32];
+    strncpy(path, client->event_dir.c_str(), 1024);
+    strcat(path, "crash_");
+    itoa(++counter, number_buffer, 10);
+    strcat(path, number_buffer);
+    strcat(path, ".txt");
+
+    fd = open(path, O_WRONLY | O_CREAT | O_TRUNC);
     if (fd == -1) {
-        TMWARN("Could not open crash dump file:");
-        TMWARN(client->event_filename.c_str());
+        TMWARN("[bugsnag] Could not open crash dump file:");
+        TMWARN(path);
+        TMWARN(strerror(errno));
 
         goto call_previous_handler;
+    }
+
+    for(int i = 0; i < BSG_HANDLED_SIGNAL_COUNT; i++) {
+        if (bsg_native_signals[i] == signum) {
+            write(fd, bsg_native_signal_names[i], strlen(bsg_native_signal_names[i]));
+            break;
+        }
     }
 
     stack_size = backtrace(stacktrace, BSG_MAX_STACK_FRAMES);
@@ -95,12 +148,21 @@ static void bsg_handle_signal(int signum, siginfo_t *info,
 
     close(fd);
 call_previous_handler:
+    bsg_handler_uninstall_signal();
     bsg_invoke_previous_signal_handler(signum, info, user_context);
 }
 
-
 void install_signal_handlers() {
+    static bool handlers_installed = false;
+
+    if (handlers_installed) {
+      TMINFO("[bugsnag] install_signal_handlers() called more than once");
+      return;
+    }
+
     struct sigaction action;
+    handlers_installed = true;
+
     memset(&action, 0, sizeof(action));
     action.sa_sigaction = bsg_handle_signal;
     action.sa_flags = SA_SIGINFO | SA_ONSTACK;

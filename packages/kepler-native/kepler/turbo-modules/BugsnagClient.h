@@ -15,7 +15,7 @@ public:
 
     void markLaunchCompleted();
 
-    std::string event_filename;
+    std::string event_dir;
 private:
     std::atomic<bool> is_launching;
     std::unique_ptr<Configuration> config;
