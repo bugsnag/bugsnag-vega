@@ -14,6 +14,12 @@ const url = 'https://github.com/bugsnag/bugsnag-kepler'
 
 Event.__type = 'reactnativejs'
 
+const keplerEventFactory = (createCoreEvent, nativeStateInfo) => (...createEventArgs) => {
+  const event = createCoreEvent(...createEventArgs)
+  Object.assign(event.app, nativeStateInfo.app)
+  return event
+}
+
 export const Bugsnag = {
   _client: null,
   createClient: (opts) => {
@@ -30,9 +36,11 @@ export const Bugsnag = {
 
     // configure a client with user supplied options
     const bugsnag = new Client(opts, schema, internalPlugins, { name, version, url })
-    BugsnagKeplerNative.configure({
+    const nativeStaticInfo = BugsnagKeplerNative.configure({
       apiKey: opts.apiKey
     })
+
+    Event.create = keplerEventFactory(Event.create, nativeStaticInfo)
 
     bugsnag._setDelivery(delivery)
     bugsnag.markLaunchComplete = () => {
