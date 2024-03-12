@@ -10,5 +10,5 @@ export const BugsnagFileIO = {
 
 
 export const BugsnagKeplerNative = {
-  configure: jest.fn(),
+  configure: jest.fn().mockReturnValue({app: {}}),
 }

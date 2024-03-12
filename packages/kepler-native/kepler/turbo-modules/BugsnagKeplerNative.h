@@ -15,6 +15,7 @@ namespace bugsnag {
         void nativeCrash();
 
         utils::json::JsonContainer configure(utils::json::JsonContainer config);
+        void markLaunchCompleted();
 
       private:
         Client *bugsnag;

@@ -6,9 +6,17 @@ interface BugsnagConfiguration {
   appVersion?: string
 }
 
+interface NativeStaticApp {
+  binaryArch: string
+}
+
+interface BugsnagNativeStaticInfo {
+  app: NativeStaticApp
+}
+
 export interface BugsnagKeplerNative extends KeplerTurboModule {
   // Exported methods.
-  configure: (configuration: BugsnagConfiguration) => void
+  configure: (configuration: BugsnagConfiguration) => BugsnagNativeStaticInfo
   markLaunchCompleted: () => void
   nativeCrash: () => void
 }
