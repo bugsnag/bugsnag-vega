@@ -16,7 +16,7 @@ describe('kepler config', () => {
   describe('logger', () => {
     it('uses the supplied logger', () => {
       const logger = { debug: jest.fn(), info: jest.fn(), warn: jest.fn(), error: jest.fn() }
-      Bugsnag.start({ apiKey: API_KEY, logger })
+      Bugsnag.start({ apiKey: API_KEY, logger, enabledBreadcrumbTypes: [] })
       expect(logger.debug).toHaveBeenCalledWith('Loaded!')
     })
 

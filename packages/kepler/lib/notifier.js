@@ -7,6 +7,7 @@ import createBugsnagGlobalErrorHandlerPlugin from '@bugsnag/plugin-react-native-
 import { BugsnagKeplerNative } from '@bugsnag/kepler-native'
 import unhandledRejectionPlugin from '@bugsnag/plugin-react-native-unhandled-rejection'
 import pluginConsoleBreadcrumbs from '@bugsnag/plugin-console-breadcrumbs'
+import createPluginNetworkBreadcrumbs from '@bugsnag/plugin-network-breadcrumbs'
 import React from 'react'
 
 const name = 'Bugsnag Kepler'
@@ -25,6 +26,7 @@ export const Bugsnag = {
       createBugsnagGlobalErrorHandlerPlugin(),
       unhandledRejectionPlugin,
       pluginConsoleBreadcrumbs,
+      createPluginNetworkBreadcrumbs(),
       new BugsnagPluginReact(React)
     ]
 

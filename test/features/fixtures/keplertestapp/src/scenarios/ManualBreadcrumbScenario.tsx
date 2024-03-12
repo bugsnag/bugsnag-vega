@@ -2,8 +2,11 @@ import Bugsnag from '@bugsnag/kepler'
 import React, { useEffect } from 'react'
 import { Text, View } from "react-native"
 import { getStyles } from '../utils/defaultStyle'
+import { BreadcrumbType } from '@bugsnag/core/types'
 
-const config = {}
+const config = {
+    enabledBreadcrumbTypes: ['error','manual'] as BreadcrumbType[],
+}
 
 const App = () => {
     const styles = getStyles()

@@ -1,0 +1,9 @@
+{
+    "type": "request",
+    "name": "XMLHttpRequest succeeded",
+    "timestamp": "^\\d{4}\\-\\d{2}\\-\\d{2}T\\d{2}:\\d{2}:[\\d\\.]+Z?$",
+    "metaData": {
+        "request": "GET https://postman-echo.com/get",
+        "status": 200
+    }
+}
