@@ -9,3 +9,4 @@ export { default as OnErrorPreventSendScenario } from './OnErrorPreventSendScena
 export { default as SessionAutoDisabledScenario } from './SessionAutoDisabledScenario';
 export { default as SessionManualScenario } from './SessionManualScenario';
 export { default as OnSessionCallbackScenario } from './OnSessionCallbackScenario';
+export { default as OnBreadcrumbCallbackScenario } from './OnBreadcrumbCallbackScenario';
