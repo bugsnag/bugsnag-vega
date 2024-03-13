@@ -12,3 +12,6 @@ export { default as OnSessionCallbackScenario } from './OnSessionCallbackScenari
 export { default as OnBreadcrumbCallbackScenario } from './OnBreadcrumbCallbackScenario';
 export { default as DisabledBreadcrumbScenario } from './DisabledBreadcrumbScenario';
 export { default as MaxBreadcrumbScenario } from './MaxBreadcrumbScenario';
+export { default as ReleaseStageEnabledScenario } from './ReleaseStageEnabledScenario';
+export { default as ReleaseStageDisabledScenario } from './ReleaseStageDisabledScenario';
+
