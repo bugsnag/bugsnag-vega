@@ -6,3 +6,5 @@ export { default as ContextJsCustomScenario } from './ContextJsCustomScenario';
 export { default as NetworkBreadcrumbScenario } from './NetworkBreadcrumbScenario';
 export { default as OnErrorCallbackScenario } from './OnErrorCallbackScenario';
 export { default as OnErrorPreventSendScenario } from './OnErrorPreventSendScenario';
+export { default as SessionAutoDisabledScenario } from './SessionAutoDisabledScenario';
+export { default as SessionManualScenario } from './SessionManualScenario';
