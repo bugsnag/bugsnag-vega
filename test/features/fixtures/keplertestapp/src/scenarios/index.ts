@@ -17,4 +17,4 @@ export { default as ReleaseStageDisabledScenario } from './ReleaseStageDisabledS
 export { default as ErrorBoundaryScenario } from './ErrorBoundaryScenario';
 export { default as HandledOverrideJsErrorScenario } from './HandledOverrideJsErrorScenario';
 export { default as UnhandledOverrideJsErrorScenario } from './UnhandledOverrideJsErrorScenario';
-
+export { default as NavigationBreadcrumbScenario } from './NavigationBreadcrumbScenario';
