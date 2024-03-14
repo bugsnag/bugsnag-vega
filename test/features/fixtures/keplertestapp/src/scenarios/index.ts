@@ -8,3 +8,4 @@ export { default as OnErrorCallbackScenario } from './OnErrorCallbackScenario';
 export { default as OnErrorPreventSendScenario } from './OnErrorPreventSendScenario';
 export { default as SessionAutoDisabledScenario } from './SessionAutoDisabledScenario';
 export { default as SessionManualScenario } from './SessionManualScenario';
+export { default as OnSessionCallbackScenario } from './OnSessionCallbackScenario';

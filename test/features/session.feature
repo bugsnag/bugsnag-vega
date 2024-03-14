@@ -63,3 +63,13 @@ Scenario: Manual sessions
   And the event "session" is not null
   And the error payload field "events.0.session.id" equals the stored value "second_session_id"
   And the event "session.events.handled" equals 1
+
+Scenario: Modifying sessions via onSession callbacks
+  When I run "OnSessionCallbackScenario"
+  And I wait to receive a session
+  Then the session is valid for the session reporting API version "1" for the "Bugsnag Kepler" notifier
+  And the session payload has a valid sessions array
+  And the session payload field "app.releaseStage" equals "test"
+  And the session payload field "sessions.0.user.id" equals "123"
+  And the session payload field "sessions.0.user.name" equals "Test User"
+  And the session payload field "sessions.0.user.email" equals "test@bugsnag.com"
