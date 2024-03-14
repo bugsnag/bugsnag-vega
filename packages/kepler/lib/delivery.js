@@ -44,7 +44,7 @@ const delivery = (client, fetch = global.fetch) => {
   }
 
   // try to send the first event immediately
-  setImmediate(() => enqueueNextEvent())
+  enqueueNextEvent()
 
   return {
     sendEvent: (event, cb = () => {}) => {
