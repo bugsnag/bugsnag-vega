@@ -2,6 +2,12 @@ import type KeplerBugsnagStatic from '..'
 
 const API_KEY = '030bab153e7c2349be364d23b5ae93b5'
 
+const config = {
+  apiKey: API_KEY,
+  enabledBreadcrumbTypes: [],
+  autoTrackSessions: false
+}
+
 describe('kepler notifier', () => {
   let Bugsnag: typeof KeplerBugsnagStatic
   let BugsnagFileIO: any
@@ -21,7 +27,7 @@ describe('kepler notifier', () => {
   })
 
   it('notifies handled errors', (done) => {
-    Bugsnag.start({ apiKey: API_KEY, enabledBreadcrumbTypes: [] })
+    Bugsnag.start(config)
     Bugsnag.notify(new Error('123'), undefined, (err, event) => {
       if (err) done(err)
       expect(event.originalError.message).toBe('123')
@@ -39,7 +45,7 @@ describe('kepler notifier', () => {
     })
 
     it('returns true when the notifier has been initialised', () => {
-      Bugsnag.start({ apiKey: '030bab153e7c2349be364d23b5ae93b5', enabledBreadcrumbTypes: [] })
+      Bugsnag.start(config)
       expect(Bugsnag.isStarted()).toBe(true)
     })
   })
