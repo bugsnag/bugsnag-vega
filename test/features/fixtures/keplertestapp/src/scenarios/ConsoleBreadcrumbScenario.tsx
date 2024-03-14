@@ -1,12 +1,11 @@
-import Bugsnag from '@bugsnag/kepler'
+import Bugsnag, { type KeplerConfig }  from '@bugsnag/kepler'
 import React, { useEffect } from 'react'
 import { Text, View } from "react-native"
-import { BreadcrumbType } from '@bugsnag/core/types'
 import { getStyles } from '../utils/defaultStyle'
 
 
-const config = {
-    enabledBreadcrumbTypes: ['error', 'log', 'manual'] as BreadcrumbType[],
+const config: Partial<KeplerConfig> = {
+    enabledBreadcrumbTypes: ['error', 'log', 'manual'],
 }
 
 const App = () => {

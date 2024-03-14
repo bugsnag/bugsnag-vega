@@ -10,3 +10,5 @@ export { default as SessionAutoDisabledScenario } from './SessionAutoDisabledSce
 export { default as SessionManualScenario } from './SessionManualScenario';
 export { default as OnSessionCallbackScenario } from './OnSessionCallbackScenario';
 export { default as OnBreadcrumbCallbackScenario } from './OnBreadcrumbCallbackScenario';
+export { default as DisabledBreadcrumbScenario } from './DisabledBreadcrumbScenario';
+export { default as MaxBreadcrumbScenario } from './MaxBreadcrumbScenario';
