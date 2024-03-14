@@ -18,10 +18,13 @@ export type WriteFileResult = ErrorResult | Record<string, never>
 
 export interface BugsnagFileIO extends KeplerTurboModule {
   readTextFile: (path: string) => ReadFileResult
+  readFile: (path: string) => ArrayBuffer
   writeTextFile: (path: string, content: string) => WriteFileResult
   listDirectory: (dir: string) => DirEntry[]
   mkdir: (dir: string) => boolean
   deleteFile: (path: string) => boolean
+
+  sha1: (data: ArrayBuffer) => string
 }
 
 // prettier-ignore

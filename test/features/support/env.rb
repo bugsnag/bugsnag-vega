@@ -1,5 +1,5 @@
 BeforeAll do
-  Maze.config.enforce_bugsnag_integrity = false
+  Maze.config.enforce_bugsnag_integrity = true
 
   # start the simulator
   Maze::Runner.run_command("kepler device simulator start")

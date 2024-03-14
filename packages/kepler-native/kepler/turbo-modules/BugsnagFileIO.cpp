@@ -1,12 +1,14 @@
 #include "Kepler/turbomodule/TMLog.h"
 
 #include "BugsnagFileIO.h"
+#include "external/sha1/sha1.hpp"
 
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <string>
 
+#include <inttypes.h>
 #include <unistd.h>
 #include <fcntl.h>
 
@@ -25,10 +27,12 @@ BugsnagFileIO::BugsnagFileIO() :
 
 void BugsnagFileIO::aggregateMethods(TM_API_NAMESPACE::MethodAggregator<TM_API_NAMESPACE::KeplerTurboModule>& methodAggregator) const noexcept {
     methodAggregator.addMethod("readTextFile", 1, &BugsnagFileIO::readTextFile);
+    methodAggregator.addMethod("readFile", 1, &BugsnagFileIO::readFile);
     methodAggregator.addMethod("writeTextFile", 2, &BugsnagFileIO::writeTextFile);
     methodAggregator.addMethod("listDirectory", 1, &BugsnagFileIO::listDirectory);
     methodAggregator.addMethod("mkdir", 1, &BugsnagFileIO::mkdir);
     methodAggregator.addMethod("deleteFile", 1, &BugsnagFileIO::deleteFile);
+    methodAggregator.addMethod("sha1", 1, &BugsnagFileIO::sha1);
 }
 
 utils::json::JsonContainer BugsnagFileIO::readTextFile(std::string path) {
@@ -45,6 +49,30 @@ utils::json::JsonContainer BugsnagFileIO::readTextFile(std::string path) {
     }
 
     result.insert("content", content);
+    return result;
+}
+
+TM_API_NAMESPACE::ArrayBuffer BugsnagFileIO::readFile(std::string path) {
+    auto result = TM_API_NAMESPACE::ArrayBuffer();
+    std::ifstream ifs(path, std::ios::binary);
+
+    if (!ifs.is_open()) {
+        return result;
+    }
+
+    uint8_t buffer[1024];
+    while(true) {
+        if (!ifs.read(reinterpret_cast<char*>(buffer), sizeof(buffer))) {
+            break;
+        }
+
+        if (ifs.gcount() == 0) {
+            break;
+        }
+
+        result.insert(static_cast<uint8_t*>(buffer), ifs.gcount());
+    }
+
     return result;
 }
 
@@ -89,6 +117,12 @@ bool BugsnagFileIO::deleteFile(std::string path) {
     std::error_code ec;
     std::filesystem::remove(std::filesystem::path{path}, ec);
     return !ec;
+}
+
+std::string BugsnagFileIO::sha1(std::string data) {
+    SHA1 digest;
+    digest.update(data);
+    return digest.final();
 }
 
 }
