@@ -1,5 +1,6 @@
 import createEventQueue from './event_store'
 import payload from '@bugsnag/core/lib/json-payload'
+import { BugsnagFileIO } from '@bugsnag/kepler-native'
 
 const isHttpStatusFatal = (responseCode) =>
   responseCode >= 400 && responseCode <= 499 &&
@@ -24,7 +25,8 @@ const delivery = (client, fetch = global.fetch) => {
           'Content-Type': 'application/json',
           'Bugsnag-Api-Key': queueEntry.apiKey,
           'Bugsnag-Payload-Version': '4',
-          'Bugsnag-Sent-At': (new Date()).toISOString()
+          'Bugsnag-Sent-At': (new Date()).toISOString(),
+          'Bugsnag-Integrity': `sha1 ${BugsnagFileIO.sha1(queueEntry.eventString)}`
         },
         body: queueEntry.eventString
       }).then(response => {
@@ -58,16 +60,17 @@ const delivery = (client, fetch = global.fetch) => {
     },
     sendSession: (session, cb = () => {}) => {
       const url = client._config.endpoints.sessions
-
+      const sessionPayload = payload.session(session, client._config.redactedKeys)
       fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Bugsnag-Api-Key': client._config.apiKey,
           'Bugsnag-Payload-Version': '1',
-          'Bugsnag-Sent-At': (new Date()).toISOString()
+          'Bugsnag-Sent-At': (new Date()).toISOString(),
+          'Bugsnag-Integrity': `sha1 ${BugsnagFileIO.sha1(sessionPayload)}`
         },
-        body: payload.session(session, client._config.redactedKeys)
+        body: sessionPayload
       }).then(() => {
         cb(null)
       }).catch(err => {
