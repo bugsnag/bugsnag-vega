@@ -27,6 +27,8 @@ describe('kepler notifier', () => {
   })
 
   it('notifies handled errors', (done) => {
+    // @ts-expect-error global is not defined
+    global.fetch = jest.fn().mockResolvedValue({ status: 200 })
     Bugsnag.start(config)
     Bugsnag.notify(new Error('123'), undefined, (err, event) => {
       if (err) done(err)
