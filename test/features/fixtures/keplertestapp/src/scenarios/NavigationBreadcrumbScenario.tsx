@@ -1,16 +1,15 @@
-import Bugsnag from '@bugsnag/kepler'
+import Bugsnag, { type KeplerConfig } from '@bugsnag/kepler'
 import { NavigationContainer } from "@amzn/react-navigation__native"
 import { createStackNavigator } from "@amzn/react-navigation__stack"
 import BugsnagPluginReactNavigation from "@bugsnag/kepler-plugin-react-navigation"
 import React, { useEffect } from 'react'
 import { Text, View } from 'react-native'
-import { BreadcrumbType } from '@bugsnag/core/types'
 import { getStyles } from '../utils/defaultStyle'
 import delay from '../utils/delay'
 
 
-const config = {
-    enabledBreadcrumbTypes: ['navigation'] as BreadcrumbType[],
+const config: Partial<KeplerConfig> = {
+    enabledBreadcrumbTypes: ['navigation'],
     plugins: [new BugsnagPluginReactNavigation()]
 }
 

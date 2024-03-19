@@ -2,7 +2,7 @@
   "name": "@bugsnag/kepler-plugin-react-navigation",
   "version": "0.0.0",
   "main": "react-navigation.js",
-  "description": "@bugsnag/react-native plugin to update context and leave breadcrumb when the screen changes",
+  "description": "@bugsnag/kepler plugin to update context and leave breadcrumb when the screen changes",
   "publishConfig": {
     "access": "public"
   },
@@ -29,9 +29,7 @@
     "@bugsnag/core": "^7.19.0",
     "@types/react": "^16.9.49",
     "@types/react-native": "^0.63.20",
-    "@types/react-test-renderer": "^16.9.3",
-    "react": "18.2.0",
-    "react-native": "0.72.0"
+    "@types/react-test-renderer": "^16.9.3"
   },
   "peerDependencies": {
     "@bugsnag/core": "^7.0.0",
@@ -41,6 +39,5 @@
     "@bugsnag/core": {
       "optional": true
     }
-  },
-  "gitHead": "7ae1c1ed2d84573d7a12b35cc3786579a04883e8"
+  }
 }

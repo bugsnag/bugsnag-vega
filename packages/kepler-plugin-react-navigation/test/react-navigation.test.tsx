@@ -4,7 +4,7 @@ import TestRenderer from 'react-test-renderer'
 import * as React from 'react'
 import { NavigationContainer, NavigationContainerRef } from "@amzn/react-navigation__native"
 
-jest.mock('@react-navigation/native')
+jest.mock('@amzn/react-navigation__native')
 
 afterEach(() => jest.clearAllMocks())
 
