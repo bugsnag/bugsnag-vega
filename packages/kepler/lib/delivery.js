@@ -14,10 +14,12 @@ const isHttpStatusSuccess = (responseCode) => responseCode >= 200 && responseCod
 
 const delivery = (client, fetch = global.fetch) => {
   const fileQueue = createEventQueue(client._config.persistenceDirectory)
+  let inFlight = false
 
   const enqueueNextEvent = () => {
     const queueEntry = fileQueue.nextEvent()
-    if (queueEntry) {
+    if (queueEntry && !inFlight) {
+      inFlight = true
       const url = client._config.endpoints.notify
       fetch(url, {
         method: 'POST',
@@ -39,12 +41,14 @@ const delivery = (client, fetch = global.fetch) => {
         // there is no retry *or* continue on an Error, we assume there is a network problem and wait
         // until a reconnection event, or another sendEvent call, or similar
         client._logger.error(err)
+      }).finally(() => {
+        inFlight = false
       })
     }
   }
 
   // try to send the first event immediately
-  setImmediate(() => enqueueNextEvent())
+  enqueueNextEvent()
 
   return {
     sendEvent: (event, cb = () => {}) => {

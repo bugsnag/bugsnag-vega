@@ -12,7 +12,7 @@ const getApiKeyFromFilename = (name) => {
 
 const dirEntryEquals = (a, b) => a && b && a.name === b.name && a.isFile === b.isFile && a.isDirectory === b.isDirectory
 
-function createFilename (dir, apiKey) {
+function createFilename (apiKey) {
   const date = new Date()
   const formattedDate = [
     date.getFullYear().toString().padStart(4, '0'),
@@ -24,7 +24,7 @@ function createFilename (dir, apiKey) {
     date.getMilliseconds().toString().padStart(4, '0')
   ].join('')
 
-  return `${dir}/${formattedDate}_${apiKey}.json`
+  return `${formattedDate}_${apiKey}.json`
 }
 
 export default (dir) => {
@@ -34,9 +34,9 @@ export default (dir) => {
   return {
     queue: loadQueuedEventFiles(dir),
     writeEvent: function (eventString, apiKey) {
-      BugsnagFileIO.writeTextFile(createFilename(dir, apiKey), eventString)
-      // reload the queue to make sure it's up-to-date
-      this.queue = loadQueuedEventFiles(dir)
+      const fileName = createFilename(apiKey)
+      BugsnagFileIO.writeTextFile(`${dir}/${fileName}`, eventString)
+      this.queue.push({ name: fileName, isFile: true, isDirectory: false })
     },
     nextEvent: function () {
       let entries = this.queue

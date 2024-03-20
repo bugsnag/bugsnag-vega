@@ -6,6 +6,7 @@ export const BugsnagFileIO = {
   listDirectory: jest.fn(),
   mkdir: jest.fn(),
   deleteFile: jest.fn(),
+  sha1: jest.fn().mockImplementation((payload: string) => payload),
 }
 
 
