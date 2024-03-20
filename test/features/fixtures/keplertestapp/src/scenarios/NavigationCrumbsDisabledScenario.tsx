@@ -9,7 +9,7 @@ import delay from '../utils/delay'
 
 
 const config: Partial<KeplerConfig> = {
-    enabledBreadcrumbTypes: ['navigation'],
+    enabledBreadcrumbTypes: [],
     plugins: [new BugsnagPluginReactNavigation()]
 }
 
@@ -33,7 +33,7 @@ const App = () => {
     )
 }
 
-const Screen1 = ({navigation}: {navigation: any}) => {
+const Screen1 = ({ navigation }: { navigation: any }) => {
     useEffect(() => {
         (async () => {
             await delay(1000)
@@ -51,7 +51,7 @@ const Screen1 = ({navigation}: {navigation: any}) => {
     )
 }
 
-const Screen2 = ({navigation}: {navigation: any}) => {
+const Screen2 = ({ navigation }: { navigation: any }) => {
     useEffect(() => {
         (async () => {
             await delay(1000)
@@ -69,7 +69,7 @@ const Screen2 = ({navigation}: {navigation: any}) => {
     )
 }
 
-const Screen3 = ( ) => {
+const Screen3 = () => {
     useEffect(() => {
         (async () => {
             await delay(1000)
