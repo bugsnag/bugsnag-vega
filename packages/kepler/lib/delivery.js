@@ -32,7 +32,6 @@ const delivery = (client, fetch = global.fetch) => {
         },
         body: queueEntry.eventString
       }).then(response => {
-        inFlight = false
         const statusCode = response.status
         if (isHttpStatusSuccess(statusCode) || isHttpStatusFatal(statusCode)) {
           fileQueue.deleteEvent(queueEntry.file)
@@ -42,6 +41,7 @@ const delivery = (client, fetch = global.fetch) => {
         // there is no retry *or* continue on an Error, we assume there is a network problem and wait
         // until a reconnection event, or another sendEvent call, or similar
         client._logger.error(err)
+      }).finally(() => {
         inFlight = false
       })
     }
