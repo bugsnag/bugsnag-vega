@@ -15,4 +15,6 @@ export { default as MaxBreadcrumbScenario } from './MaxBreadcrumbScenario';
 export { default as ReleaseStageEnabledScenario } from './ReleaseStageEnabledScenario';
 export { default as ReleaseStageDisabledScenario } from './ReleaseStageDisabledScenario';
 export { default as ErrorBoundaryScenario } from './ErrorBoundaryScenario';
+export { default as HandledOverrideJsErrorScenario } from './HandledOverrideJsErrorScenario';
+export { default as UnhandledOverrideJsErrorScenario } from './UnhandledOverrideJsErrorScenario';
 
