@@ -1,0 +1,43 @@
+{
+  "name": "@bugsnag/kepler-plugin-react-navigation",
+  "version": "0.0.0",
+  "main": "react-navigation.js",
+  "description": "@bugsnag/kepler plugin to update context and leave breadcrumb when the screen changes",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "*.js",
+    "types"
+  ],
+  "scripts": {
+    "test:types": "tsc -p tsconfig.json"
+  },
+  "types": "types/bugsnag-plugin-react-navigation.d.ts",
+  "author": "Bugsnag",
+  "license": "MIT",
+  "devDependencies": {
+    "@amzn/keplerscript-react-native-reanimated": "~2.0.0",
+    "@amzn/react-native-kepler": "~2.0.0",
+    "@amzn/react-native-safe-area-context": "~2.0.0",
+    "@amzn/react-native-screens": "~2.0.0",
+    "@amzn/react-navigation__core": "~2.0.0",
+    "@amzn/react-navigation__drawer": "~2.0.0",
+    "@amzn/react-navigation__native": "~2.0.0",
+    "@amzn/react-navigation__routers": "~2.0.0",
+    "@amzn/react-navigation__stack": "~2.0.0",
+    "@bugsnag/core": "^7.19.0",
+    "@types/react": "^16.9.49",
+    "@types/react-native": "^0.63.20",
+    "@types/react-test-renderer": "^16.9.3"
+  },
+  "peerDependencies": {
+    "@bugsnag/core": "^7.0.0",
+    "@react-navigation/native": "^5.0 || ^6.0"
+  },
+  "peerDependenciesMeta": {
+    "@bugsnag/core": {
+      "optional": true
+    }
+  }
+}
