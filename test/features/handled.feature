@@ -9,6 +9,10 @@ Scenario: Calling notify() with a caught Error
   And the event "unhandled" is false
   And the event "context" is null
   And the event "app.binaryArch" is not null
+  And the event "device.time" is not null
+  And the event "device.runtimeVersions.reactNative" is not null
+  And the event "device.runtimeVersions.reactNativeJsEngine" equals "hermes"
+  And the event "device.osName" equals "kepler"
 
 Scenario: Errors are stored when the network is unreachable
   # make the network unreachable

@@ -10,6 +10,7 @@ import pluginConsoleBreadcrumbs from '@bugsnag/plugin-console-breadcrumbs'
 import createPluginNetworkBreadcrumbs from '@bugsnag/plugin-network-breadcrumbs'
 import pluginSession from '@bugsnag/plugin-browser-session'
 import React from 'react'
+import pluginDevice from './device'
 
 const name = 'Bugsnag Kepler'
 const url = 'https://github.com/bugsnag/bugsnag-kepler'
@@ -35,6 +36,7 @@ export const Bugsnag = {
       pluginConsoleBreadcrumbs,
       createPluginNetworkBreadcrumbs(),
       pluginSession,
+      pluginDevice,
       new BugsnagPluginReact(React)
     ]
 
