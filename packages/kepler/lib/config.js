@@ -1,4 +1,5 @@
 import { schema as coreSchema } from '@bugsnag/core/config'
+import intRange from '@bugsnag/core/lib/validators/int-range'
 
 const iserror = require('iserror')
 
@@ -11,7 +12,12 @@ export const schema = {
   persistenceDirectory: {
     defaultValue: () => '/data/bugsnag',
     message: 'should be a path string',
-    validate: (value) => typeof value === 'object' && value !== null
+    validate: (value) => typeof value === 'string' && value !== null
+  },
+  maxPersistedEvents: {
+    defaultValue: () => undefined,
+    message: 'should be a number or undefined',
+    validate: (value) => value === undefined || intRange(0)
   }
 }
 

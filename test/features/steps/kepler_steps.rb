@@ -23,6 +23,11 @@ When('I restart the test fixture') do
   Maze::Runner.run_command("kepler device launch-app -d Simulator -a com.bugsnag.fixtures.keplertestapp.main")
 end
 
+Then("the exception {string} equals one of:") do |keypath, possible_values|
+  value = Maze::Helper.read_key_path(Maze::Server.errors.current[:body], "events.0.exceptions.0.#{keypath}")
+  Maze.check.include(possible_values.raw.flatten, value)
+end
+
 def execute_command(action, scenario_name = '')
   address = $address ? $address : '10.0.2.2:9339'
 

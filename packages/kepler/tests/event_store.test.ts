@@ -12,6 +12,9 @@ describe('kepler event store', () => {
       {name: '202403051447450978_030bab153e7c2349be364d23b5ae93b5.json', isFile: true, isDirectory: false},
     ])
   })
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
 
   it('nextEvent removes events from queue, but not files', () => {
     const eventQueue = createEventQueue('/tmp/queue')
@@ -55,5 +58,16 @@ describe('kepler event store', () => {
     const calls = (BugsnagFileIO.deleteFile as jest.Mock).mock.calls
     expect(calls).toHaveLength(1)
     expect(calls[0][0]).toEqual('/tmp/queue/202403051447450978_030bab153e7c2349be364d23b5ae93b5.json')
+  })
+
+  it('deletes files if over the maxPersistedEvents limit', () => {
+    const maxPersistedEvents = 1
+    const eventQueue = createEventQueue('/tmp/queue')
+    eventQueue.checkMaxEvents(API_KEY, maxPersistedEvents)
+
+    const calls = (BugsnagFileIO.deleteFile as jest.Mock).mock.calls
+    expect(calls).toHaveLength(2)
+    expect(calls[0][0]).toEqual('/tmp/queue/202403051447450978_030bab153e7c2349be364d23b5ae93b5.json')
+    expect(calls[1][0]).toEqual('/tmp/queue/202403051448060148_030bab153e7c2349be364d23b5ae93b5.json')
   })
 })

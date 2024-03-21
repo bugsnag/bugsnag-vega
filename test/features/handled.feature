@@ -22,3 +22,33 @@ Scenario: Errors are stored when the network is unreachable
   * the exception "errorClass" equals "Error"
   * the exception "message" equals "HandledJSError"
   * the event "unhandled" is false
+
+Scenario: Errors are stored when the network is unreachable, only maxPersistedEvents sent
+  # make the network unreachable
+  Given I configure the endpoints to "127.0.0.1:8000"
+  When I run "MaxPersistedEventsScenario"
+  Then I should receive no errors
+  And I restart the test fixture
+  And I configure the endpoints to default
+  And I start bugsnag for "MaxPersistedEventsScenario"
+  Then I wait to receive 3 errors
+  And the exception "errorClass" equals "Error"
+  And the exception "message" equals one of:
+    | MaxPersistedEventsError7 |
+    | MaxPersistedEventsError8 |
+    | MaxPersistedEventsError9 |
+  And the event "unhandled" is false
+  And I discard the oldest error
+  And the exception "errorClass" equals "Error"
+  And the exception "message" equals one of:
+    | MaxPersistedEventsError7 |
+    | MaxPersistedEventsError8 |
+    | MaxPersistedEventsError9 |
+  And the event "unhandled" is false
+  And I discard the oldest error
+  And the exception "errorClass" equals "Error"
+  And the exception "message" equals one of:
+    | MaxPersistedEventsError7 |
+    | MaxPersistedEventsError8 |
+    | MaxPersistedEventsError9 |
+  And the event "unhandled" is false

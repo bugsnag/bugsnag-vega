@@ -10,6 +10,23 @@ const getApiKeyFromFilename = (name) => {
   return match ? match[1] : null
 }
 
+const getDateFromFilename = (name) => {
+  const match = name.match(/^([0-9]+)_[^.]+\.json$/)
+  return match ? parseDateFromFilename(match[1]) : null
+}
+
+const parseDateFromFilename = (date) => {
+  const fileDate = new Date()
+  fileDate.setFullYear(date.substring(0, 4))
+  fileDate.setMonth(date.substring(4, 6))
+  fileDate.setDate(date.substring(6, 8))
+  fileDate.setHours(date.substring(8, 10))
+  fileDate.setMinutes(date.substring(10, 12))
+  fileDate.setSeconds(date.substring(12, 14))
+  fileDate.setMilliseconds(date.substring(14))
+  return fileDate
+}
+
 const dirEntryEquals = (a, b) => a && b && a.name === b.name && a.isFile === b.isFile && a.isDirectory === b.isDirectory
 
 function createFilename (apiKey) {
@@ -33,6 +50,17 @@ export default (dir) => {
 
   return {
     queue: loadQueuedEventFiles(dir),
+    checkMaxEvents: function (apiKey, maxPersistedEvents) {
+      if (maxPersistedEvents === undefined) return
+
+      const entries = BugsnagFileIO.listDirectory(dir)
+      const apiKeyEntries = entries.filter(e => getApiKeyFromFilename(e.name) === apiKey)
+      if (apiKeyEntries.length > maxPersistedEvents) {
+        apiKeyEntries.sort((a, b) => getDateFromFilename(a.name) - getDateFromFilename(b.name))
+        const toDelete = apiKeyEntries.slice(0, apiKeyEntries.length - maxPersistedEvents)
+        toDelete.forEach(file => BugsnagFileIO.deleteFile(`${dir}/${file.name}`))
+      }
+    },
     writeEvent: function (eventString, apiKey) {
       const fileName = createFilename(apiKey)
       BugsnagFileIO.writeTextFile(`${dir}/${fileName}`, eventString)
