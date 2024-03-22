@@ -22,3 +22,5 @@ export { default as NavigationCrumbsDisabledScenario } from './NavigationCrumbsD
 export { default as AutoDetectErrorsScenario } from './AutoDetectErrorsScenario';
 export { default as UnhandledPromiseRejectionsDisabledScenario } from './UnhandledPromiseRejectionsDisabledScenario';
 export { default as MaxPersistedEventsScenario } from './MaxPersistedEventsScenario';
+export { default as AddMetadataScenario } from './AddMetadataScenario';
+export { default as RedactMetadataScenario } from './RedactMetadataScenario';
