@@ -1,4 +1,4 @@
-import createEventQueue from '../lib/event_store'
+import createEventQueue from '../lib/file_store'
 import payload from '@bugsnag/core/lib/json-payload'
 import {BugsnagFileIO} from "@bugsnag/kepler-native"
 
@@ -17,22 +17,22 @@ describe('kepler event store', () => {
     jest.clearAllMocks()
   })
 
-  it('nextEvent removes events from queue, but not files', () => {
+  it('nextItem removes events from queue, but not files', () => {
     const eventQueue = createEventQueue('/tmp/queue')
-    let event = eventQueue.nextEvent()
+    let event = eventQueue.nextItem()
 
     expect(event).not.toBeNull()
     expect(event.apiKey).toEqual(API_KEY)
     expect(event.file.isFile).toBeTruthy()
     expect(event.file.name).toBe("202403051447450978_030bab153e7c2349be364d23b5ae93b5.json")
 
-    event = eventQueue.nextEvent()
+    event = eventQueue.nextItem()
     expect(event).not.toBeNull()
     expect(event.apiKey).toEqual(API_KEY)
     expect(event.file.isFile).toBeTruthy()
     expect(event.file.name).toBe("202403051448060148_030bab153e7c2349be364d23b5ae93b5.json")
 
-    event = eventQueue.nextEvent()
+    event = eventQueue.nextItem()
     expect(event).not.toBeNull()
     expect(event.apiKey).toEqual(API_KEY)
     expect(event.file.isFile).toBeTruthy()
@@ -51,7 +51,7 @@ describe('kepler event store', () => {
       isDirectory: false,
     }
 
-    eventQueue.deleteEvent(file)
+    eventQueue.deleteItem(file)
 
     expect(eventQueue.queue).toHaveLength(2)
     expect(eventQueue.queue).not.toContainEqual(file)
@@ -64,7 +64,7 @@ describe('kepler event store', () => {
   it('deletes files if over the maxPersistedEvents limit', () => {
     const maxPersistedEvents = 1
     const eventQueue = createEventQueue('/tmp/queue')
-    eventQueue.deleteOldEventsIfNeeded(maxPersistedEvents)
+    eventQueue.deleteOldItemsIfNeeded(maxPersistedEvents)
 
     const calls = (BugsnagFileIO.deleteFile as jest.Mock).mock.calls
     expect(calls).toHaveLength(2)
@@ -75,7 +75,7 @@ describe('kepler event store', () => {
   it('deletes one file if nearing the maxPersistedEvents limit', () => {
     const maxPersistedEvents = 3
     const eventQueue = createEventQueue('/tmp/queue')
-    eventQueue.deleteOldEventsIfNeeded(maxPersistedEvents)
+    eventQueue.deleteOldItemsIfNeeded(maxPersistedEvents)
 
     const calls = (BugsnagFileIO.deleteFile as jest.Mock).mock.calls
     expect(calls).toHaveLength(1)
@@ -85,7 +85,7 @@ describe('kepler event store', () => {
   it('does not delete files if under the maxPersistedEvents limit', () => {
     const maxPersistedEvents = 4
     const eventQueue = createEventQueue('/tmp/queue')
-    eventQueue.deleteOldEventsIfNeeded(maxPersistedEvents)
+    eventQueue.deleteOldItemsIfNeeded(maxPersistedEvents)
 
     const calls = (BugsnagFileIO.deleteFile as jest.Mock).mock.calls
     expect(calls).toHaveLength(0)
@@ -95,9 +95,44 @@ describe('kepler event store', () => {
     const maxPersistedEvents = 0
     const eventQueue = createEventQueue('/tmp/queue')
     const eventPayload = payload.event({ severity: "error" }, ['password'])
-    eventQueue.writeEvent(eventPayload, API_KEY, maxPersistedEvents)
+    eventQueue.writeItem(eventPayload, API_KEY, maxPersistedEvents)
 
     const calls = (BugsnagFileIO.writeTextFile as jest.Mock).mock.calls
     expect(calls).toHaveLength(0)
+  })
+
+  it('deletes items older than 60 days', () => {
+    const file = {
+      name: '202312110100000000_030bab153e7c2349be364d23b5ae93b5.json',
+      isFile: true,
+      isDirectory: false,
+    }
+    const event = {
+      file,
+      apiKey: API_KEY,
+      valueString: ""
+    }
+    const eventQueue = createEventQueue('/tmp/queue')
+    eventQueue.discardIfOlderThan60days(event)
+
+    const calls = (BugsnagFileIO.deleteFile as jest.Mock).mock.calls
+    expect(calls).toHaveLength(1)
+  })
+
+  it('does not delete items newer than 60 days', () => {
+    (BugsnagFileIO.listDirectory as jest.Mock).mockReturnValue([])
+    const eventQueue = createEventQueue('/tmp/queue')
+
+    // create fresh event with today's date
+    const eventPayload = payload.event({ severity: "error" }, ['password'])
+    eventQueue.writeItem(eventPayload, API_KEY, 10)
+    const event = eventQueue.nextItem()
+    const writeCalls = (BugsnagFileIO.writeTextFile as jest.Mock).mock.calls
+    expect(writeCalls).toHaveLength(1)
+
+    eventQueue.discardIfOlderThan60days(event)
+
+    const deleteCalls = (BugsnagFileIO.deleteFile as jest.Mock).mock.calls
+    expect(deleteCalls).toHaveLength(0)
   })
 })
