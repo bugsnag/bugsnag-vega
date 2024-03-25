@@ -19,3 +19,4 @@ export { default as HandledOverrideJsErrorScenario } from './HandledOverrideJsEr
 export { default as UnhandledOverrideJsErrorScenario } from './UnhandledOverrideJsErrorScenario';
 export { default as NavigationBreadcrumbScenario } from './NavigationBreadcrumbScenario';
 export { default as NavigationCrumbsDisabledScenario } from './NavigationCrumbsDisabledScenario';
+export { default as MaxPersistedEventsScenario } from './MaxPersistedEventsScenario';

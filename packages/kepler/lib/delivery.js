@@ -35,6 +35,7 @@ const delivery = (client, fetch = global.fetch) => {
         const statusCode = response.status
         if (isHttpStatusSuccess(statusCode) || isHttpStatusFatal(statusCode)) {
           fileQueue.deleteEvent(queueEntry.file)
+          inFlight = false
           enqueueNextEvent()
         }
       }).catch(err => {
@@ -54,7 +55,7 @@ const delivery = (client, fetch = global.fetch) => {
     sendEvent: (event, cb = () => {}) => {
       try {
         const eventPayload = payload.event(event, client._config.redactedKeys)
-        fileQueue.writeEvent(eventPayload, event.apiKey || client._config.apiKey)
+        fileQueue.writeEvent(eventPayload, event.apiKey || client._config.apiKey, client._config.maxPersistedEvents)
         enqueueNextEvent(fileQueue, fetch)
         cb(null)
       } catch (err) {

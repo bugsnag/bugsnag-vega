@@ -16,7 +16,6 @@ export async function getCommand (mazeAddress = '10.0.2.2:9339'): Promise<Comman
 
     while (true) {
         try {
-            console.log('[Bugsnag] Fetching command from maze')
             const response = await fetch(mazeUrl)
             const command: Command = await response.json()
             if (response.ok) {

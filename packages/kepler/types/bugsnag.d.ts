@@ -3,6 +3,7 @@ import { type Client, type Config } from '@bugsnag/core'
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface KeplerConfig extends Config {
   persistenceDirectory?: string
+  maxPersistedEvents?: number
 }
 
 declare class KeplerClient extends Client {

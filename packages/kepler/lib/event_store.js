@@ -2,7 +2,8 @@ import { BugsnagFileIO, isErrorResult } from '@bugsnag/kepler-native'
 
 const loadQueuedEventFiles = (dir) => {
   const entries = BugsnagFileIO.listDirectory(dir) || []
-  return entries.sort()
+  // should be sorted by name property, otherwise the order is not guaranteed
+  return entries.sort((a, b) => { return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0) })
 }
 
 const getApiKeyFromFilename = (name) => {
@@ -33,9 +34,20 @@ export default (dir) => {
 
   return {
     queue: loadQueuedEventFiles(dir),
-    writeEvent: function (eventString, apiKey) {
+    deleteOldEventsIfNeeded: function (maxPersistedEvents) {
+      const entries = loadQueuedEventFiles(dir)
+      if (entries.length >= maxPersistedEvents) {
+        const endIdx = entries.length === maxPersistedEvents ? 1 : entries.length - maxPersistedEvents
+        const toDelete = entries.slice(0, endIdx)
+        toDelete.forEach(file => this.deleteEvent(file))
+      }
+    },
+    writeEvent: function (eventString, apiKey, maxPersistedEvents) {
       const fileName = createFilename(apiKey)
-      BugsnagFileIO.writeTextFile(`${dir}/${fileName}`, eventString)
+      if (maxPersistedEvents !== 0) {
+        this.deleteOldEventsIfNeeded(maxPersistedEvents)
+        BugsnagFileIO.writeTextFile(`${dir}/${fileName}`, eventString)
+      }
       this.queue.push({ name: fileName, isFile: true, isDirectory: false })
     },
     nextEvent: function () {
@@ -46,7 +58,7 @@ export default (dir) => {
         this.queue = entries
       }
 
-      const file = entries.pop()
+      const file = entries.shift()
       if (!file) {
         return null
       }
