@@ -36,15 +36,19 @@ export default (dir) => {
     queue: loadQueuedEventFiles(dir),
     checkMaxEvents: function (maxPersistedEvents) {
       const entries = BugsnagFileIO.listDirectory(dir) || []
-      if (entries.length > maxPersistedEvents) {
+      if (entries.length >= maxPersistedEvents) {
         entries.sort((a, b) => { return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0) })
-        const toDelete = entries.slice(0, entries.length - maxPersistedEvents)
-        toDelete.forEach(file => BugsnagFileIO.deleteFile(`${dir}/${file.name}`))
+        const endIdx = entries.length === maxPersistedEvents ? 1 : entries.length - maxPersistedEvents
+        const toDelete = entries.slice(0, endIdx)
+        toDelete.forEach(file => this.deleteEvent(file))
       }
     },
-    writeEvent: function (eventString, apiKey) {
+    writeEvent: function (eventString, apiKey, maxPersistedEvents) {
       const fileName = createFilename(apiKey)
-      BugsnagFileIO.writeTextFile(`${dir}/${fileName}`, eventString)
+      if (maxPersistedEvents !== 0) {
+        this.checkMaxEvents(maxPersistedEvents)
+        BugsnagFileIO.writeTextFile(`${dir}/${fileName}`, eventString)
+      }
       this.queue.push({ name: fileName, isFile: true, isDirectory: false })
     },
     nextEvent: function () {
