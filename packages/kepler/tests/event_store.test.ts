@@ -64,7 +64,7 @@ describe('kepler event store', () => {
   it('deletes files if over the maxPersistedEvents limit', () => {
     const maxPersistedEvents = 1
     const eventQueue = createEventQueue('/tmp/queue')
-    eventQueue.checkMaxEvents(maxPersistedEvents)
+    eventQueue.deleteOldEventsIfNeeded(maxPersistedEvents)
 
     const calls = (BugsnagFileIO.deleteFile as jest.Mock).mock.calls
     expect(calls).toHaveLength(2)
@@ -75,7 +75,7 @@ describe('kepler event store', () => {
   it('deletes one file if nearing the maxPersistedEvents limit', () => {
     const maxPersistedEvents = 3
     const eventQueue = createEventQueue('/tmp/queue')
-    eventQueue.checkMaxEvents(maxPersistedEvents)
+    eventQueue.deleteOldEventsIfNeeded(maxPersistedEvents)
 
     const calls = (BugsnagFileIO.deleteFile as jest.Mock).mock.calls
     expect(calls).toHaveLength(1)
@@ -85,7 +85,7 @@ describe('kepler event store', () => {
   it('does not delete files if under the maxPersistedEvents limit', () => {
     const maxPersistedEvents = 4
     const eventQueue = createEventQueue('/tmp/queue')
-    eventQueue.checkMaxEvents(maxPersistedEvents)
+    eventQueue.deleteOldEventsIfNeeded(maxPersistedEvents)
 
     const calls = (BugsnagFileIO.deleteFile as jest.Mock).mock.calls
     expect(calls).toHaveLength(0)
