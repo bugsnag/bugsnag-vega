@@ -63,7 +63,7 @@ describe('kepler event store', () => {
   it('deletes files if over the maxPersistedEvents limit', () => {
     const maxPersistedEvents = 1
     const eventQueue = createEventQueue('/tmp/queue')
-    eventQueue.checkMaxEvents(API_KEY, maxPersistedEvents)
+    eventQueue.checkMaxEvents(maxPersistedEvents)
 
     const calls = (BugsnagFileIO.deleteFile as jest.Mock).mock.calls
     expect(calls).toHaveLength(2)

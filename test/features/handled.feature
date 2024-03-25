@@ -33,22 +33,13 @@ Scenario: Errors are stored when the network is unreachable, only maxPersistedEv
   And I start bugsnag for "MaxPersistedEventsScenario"
   Then I wait to receive 3 errors
   And the exception "errorClass" equals "Error"
-  And the exception "message" equals one of:
-    | MaxPersistedEventsError7 |
-    | MaxPersistedEventsError8 |
-    | MaxPersistedEventsError9 |
+  And the exception "message" equals "MaxPersistedEventsError7"
   And the event "unhandled" is false
   And I discard the oldest error
   And the exception "errorClass" equals "Error"
-  And the exception "message" equals one of:
-    | MaxPersistedEventsError7 |
-    | MaxPersistedEventsError8 |
-    | MaxPersistedEventsError9 |
+  And the exception "message" equals "MaxPersistedEventsError8"
   And the event "unhandled" is false
   And I discard the oldest error
   And the exception "errorClass" equals "Error"
-  And the exception "message" equals one of:
-    | MaxPersistedEventsError7 |
-    | MaxPersistedEventsError8 |
-    | MaxPersistedEventsError9 |
+  And the exception "message" equals "MaxPersistedEventsError9"
   And the event "unhandled" is false

@@ -56,7 +56,7 @@ const delivery = (client, fetch = global.fetch) => {
       try {
         const eventPayload = payload.event(event, client._config.redactedKeys)
         fileQueue.writeEvent(eventPayload, event.apiKey || client._config.apiKey)
-        fileQueue.checkMaxEvents(event.apiKey || client._config.apiKey, client._config.maxPersistedEvents)
+        fileQueue.checkMaxEvents(client._config.maxPersistedEvents)
         enqueueNextEvent(fileQueue, fetch)
         cb(null)
       } catch (err) {

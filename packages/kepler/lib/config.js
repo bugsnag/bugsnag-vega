@@ -15,9 +15,9 @@ export const schema = {
     validate: (value) => typeof value === 'string' && value !== null
   },
   maxPersistedEvents: {
-    defaultValue: () => undefined,
-    message: 'should be a number or undefined',
-    validate: (value) => value === undefined || intRange(0)
+    defaultValue: () => 32,
+    message: 'should be a positive number',
+    validate: (value) => intRange()(value)
   }
 }
 
