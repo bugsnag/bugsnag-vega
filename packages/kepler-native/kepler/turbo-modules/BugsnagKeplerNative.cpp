@@ -1,7 +1,6 @@
 #include "Kepler/turbomodule/TMLog.h"
 
 #include "BugsnagKeplerNative.h"
-#include "utils/signal_handler.h"
 
 #include <filesystem>
 #include <fstream>
@@ -39,7 +38,6 @@ BugsnagKeplerNative::BugsnagKeplerNative() :
 void BugsnagKeplerNative::aggregateMethods(TM_API_NAMESPACE::MethodAggregator<TM_API_NAMESPACE::KeplerTurboModule>& methodAggregator) const noexcept {
   methodAggregator.addMethod("configure", 1, &BugsnagKeplerNative::configure);
   methodAggregator.addMethod("markLaunchCompleted", 0, &BugsnagKeplerNative::markLaunchCompleted);
-  methodAggregator.addMethod("nativeCrash", 0, &BugsnagKeplerNative::nativeCrash);
 }
 
 utils::json::JsonContainer BugsnagKeplerNative::configure(utils::json::JsonContainer config) {
@@ -48,8 +46,6 @@ utils::json::JsonContainer BugsnagKeplerNative::configure(utils::json::JsonConta
 
   Client *c = new Client(std::move(bsg_config));
   global_client = c;
-
-  install_signal_handlers();
 
   auto result = utils::json::JsonContainer::createJsonObject();
   result.insert("app", createStaticApp());
@@ -62,16 +58,6 @@ void BugsnagKeplerNative::markLaunchCompleted() {
   if (client != nullptr) {
     client->markLaunchCompleted();
   }
-}
-
-// Temporary native crash that can be used for testing:
-
-static void __attribute__((used)) somefakefunc(void) {}
-
-void BugsnagKeplerNative::nativeCrash() {
-  // Write to a read-only page
-  volatile char *ptr = (char *)somefakefunc;
-  *ptr = 0;
 }
 
 }

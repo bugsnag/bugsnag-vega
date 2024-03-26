@@ -18,7 +18,6 @@ export interface BugsnagKeplerNative extends KeplerTurboModule {
   // Exported methods.
   configure: (configuration: BugsnagConfiguration) => BugsnagNativeStaticInfo
   markLaunchCompleted: () => void
-  nativeCrash: () => void
 }
 
 // prettier-ignore
