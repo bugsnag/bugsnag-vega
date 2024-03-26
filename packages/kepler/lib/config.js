@@ -1,13 +1,23 @@
+/* global __DEV__ */
+
 import { schema as coreSchema } from '@bugsnag/core/config'
 import intRange from '@bugsnag/core/lib/validators/int-range'
 
 const iserror = require('iserror')
+
+const IS_PRODUCTION = typeof __DEV__ === 'undefined' || __DEV__ !== true
 
 export const schema = {
   ...coreSchema,
   logger: {
     ...coreSchema.logger,
     defaultValue: () => getPrefixedConsole()
+  },
+  releaseStage: {
+    ...coreSchema.releaseStage,
+    defaultValue: () => {
+      return IS_PRODUCTION ? 'production' : 'development'
+    }
   },
   persistenceDirectory: {
     defaultValue: () => '/data/bugsnag',
