@@ -39,4 +39,21 @@ describe('kepler config', () => {
       expect(console.warn).toHaveBeenCalledWith('[bugsnag]', 'oh no')
     })
   })
+
+  describe('releaseStage', () => {
+    it('sets a default value for releaseStage correctly', () => {
+
+      // @ts-expect-error __DEV__ is a const
+      __DEV__ = false
+      let config = require('../lib/config').default
+      expect(config.releaseStage.defaultValue()).toBe('production')
+
+      jest.resetModules()
+
+      // @ts-expect-error __DEV__ is a const
+      __DEV__ = true
+      config = require('../lib/config').default
+      expect(config.releaseStage.defaultValue()).toBe('development')
+    })
+  })
 })
