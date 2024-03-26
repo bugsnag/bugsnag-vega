@@ -18,6 +18,11 @@ export const schema = {
     defaultValue: () => 32,
     message: 'should be a positive number',
     validate: (value) => intRange()(value)
+  },
+  maxPersistedSessions: {
+    defaultValue: () => 128,
+    message: 'should be a positive number',
+    validate: (value) => intRange()(value)
   }
 }
 

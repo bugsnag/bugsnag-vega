@@ -4,6 +4,7 @@ import { type Client, type Config } from '@bugsnag/core'
 interface KeplerConfig extends Config {
   persistenceDirectory?: string
   maxPersistedEvents?: number
+  maxPersistedSessions?: number
 }
 
 declare class KeplerClient extends Client {

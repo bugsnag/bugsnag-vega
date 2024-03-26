@@ -34,7 +34,7 @@ describe('kepler notifier', () => {
       if (err) done(err)
       expect(event.originalError.message).toBe('123')
       expect(BugsnagFileIO.writeTextFile).toHaveBeenCalledWith(
-        expect.stringMatching(RegExp(`^\\/data\\/bugsnag\\/\\d+_${API_KEY}\\.json$`)),
+        expect.stringMatching(RegExp(`^\\/data\\/bugsnag\\/errors\\/\\d+_${API_KEY}\\.json$`)),
         expect.stringMatching(/^\{.*}$/)
       )
       done()
