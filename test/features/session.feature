@@ -5,10 +5,12 @@ Scenario: Automatic sessions enabled by default
   And I wait to receive a session
   Then the session is valid for the session reporting API version "1" for the "Bugsnag Kepler" notifier
   And the session payload has a valid sessions array
+  And the session payload field "device.runtimeVersions.reactNative" is not null
+  And the session payload field "device.runtimeVersions.reactNativeJsEngine" equals "hermes"
+  And the session payload field "device.osName" equals "kepler"
 
 Scenario: Automatic sessions disabled
   When I run "SessionAutoDisabledScenario"
-  And I wait for 5 seconds
   Then I should receive no sessions
 
 Scenario: Manual sessions
