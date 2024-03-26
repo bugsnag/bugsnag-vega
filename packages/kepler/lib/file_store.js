@@ -27,6 +27,7 @@ const parseDateFromFilename = (date) => {
   return new Date(formatStr)
 }
 
+const MAX_RETENTION_MILLISECONDS = 60 * 24 * 60 * 60 * 1000 // 60 days
 const dirEntryEquals = (a, b) => a && b && a.name === b.name && a.isFile === b.isFile && a.isDirectory === b.isDirectory
 
 function createFilename (apiKey) {
@@ -50,11 +51,9 @@ export default (dir) => {
 
   return {
     queue: loadPersistedFiles(dir),
-    discardIfOlderThan60days: function (queueEntry) {
+    discardIfPastRetention: function (queueEntry) {
       const fileCreationDate = getDateFromFilename(queueEntry.file.name)
-      const sixtyDaysAgo = new Date()
-      sixtyDaysAgo.setMonth(sixtyDaysAgo.getMonth() - 2)
-      if (fileCreationDate !== null && fileCreationDate < sixtyDaysAgo) {
+      if (fileCreationDate && fileCreationDate.getTime() + MAX_RETENTION_MILLISECONDS < Date.now()) {
         this.deleteItem(queueEntry.file)
       }
     },

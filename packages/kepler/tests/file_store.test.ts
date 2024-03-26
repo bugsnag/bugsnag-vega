@@ -113,7 +113,7 @@ describe('kepler event store', () => {
       valueString: ""
     }
     const eventQueue = createEventQueue('/tmp/queue')
-    eventQueue.discardIfOlderThan60days(event)
+    eventQueue.discardIfPastRetention(event)
 
     const calls = (BugsnagFileIO.deleteFile as jest.Mock).mock.calls
     expect(calls).toHaveLength(1)
@@ -130,7 +130,7 @@ describe('kepler event store', () => {
     const writeCalls = (BugsnagFileIO.writeTextFile as jest.Mock).mock.calls
     expect(writeCalls).toHaveLength(1)
 
-    eventQueue.discardIfOlderThan60days(event)
+    eventQueue.discardIfPastRetention(event)
 
     const deleteCalls = (BugsnagFileIO.deleteFile as jest.Mock).mock.calls
     expect(deleteCalls).toHaveLength(0)

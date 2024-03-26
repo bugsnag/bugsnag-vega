@@ -43,7 +43,7 @@ const delivery = (client, fetch = global.fetch) => {
           inFlightEvent = false
           enqueueNextEvent()
         } else {
-          eventQueue.discardIfOlderThan60days(queueEntry)
+          eventQueue.discardIfPastRetention(queueEntry)
         }
       }).catch(err => {
         // there is no retry *or* continue on an Error, we assume there is a network problem and wait
@@ -77,7 +77,7 @@ const delivery = (client, fetch = global.fetch) => {
           inFlightSession = false
           enqueueNextSession()
         } else {
-          sessionQueue.discardIfOlderThan60days(queueEntry)
+          sessionQueue.discardIfPastRetention(queueEntry)
         }
       }).catch(err => {
         // there is no retry *or* continue on an Error, we assume there is a network problem and wait
