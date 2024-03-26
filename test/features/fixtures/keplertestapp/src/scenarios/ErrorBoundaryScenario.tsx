@@ -1,5 +1,5 @@
 import Bugsnag, { type Event } from '@bugsnag/kepler'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Text, View, Button } from "react-native"
 import { getStyles } from '../utils/defaultStyle'
 
@@ -28,10 +28,6 @@ const App = () => {
     const styles = getStyles()
 
     const ErrorBoundary = Bugsnag.getPlugin('react').createErrorBoundary(React)
-
-    useEffect(() => {
-        console.log('ErrorBoundaryScenario useEffect');
-      }, []);
 
     return (
         <ErrorBoundary FallbackComponent={ErrorView} onError={onError}>
