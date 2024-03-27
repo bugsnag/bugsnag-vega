@@ -75,3 +75,20 @@ Scenario: Modifying sessions via onSession callbacks
   And the session payload field "sessions.0.user.id" equals "123"
   And the session payload field "sessions.0.user.name" equals "Test User"
   And the session payload field "sessions.0.user.email" equals "test@bugsnag.com"
+
+Scenario: Sessions are stored when the network is unreachable, only maxPersistedSessions sent
+  # make the network unreachable
+  Given I configure the endpoints to "127.0.0.1:8000"
+  When I run "MaxPersistedSessionsScenario"
+  Then I should receive no sessions
+  And I should receive no errors
+  And I restart the test fixture
+  And I configure the endpoints to default
+  And I start bugsnag for "MaxPersistedSessionsScenario"
+  Then I wait to receive 3 sessions
+  And I wait to receive 10 errors
+  And the session payload field "sessions.0.id" is stored as the value "MaxPersistedSessions7"
+  And I discard the oldest session
+  And the session payload field "sessions.0.id" is stored as the value "MaxPersistedSessions8"
+  And I discard the oldest session
+  And the session payload field "sessions.0.id" is stored as the value "MaxPersistedSessions9"

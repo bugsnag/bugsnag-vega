@@ -25,3 +25,4 @@ export { default as MaxPersistedEventsScenario } from './MaxPersistedEventsScena
 export { default as AddMetadataScenario } from './AddMetadataScenario';
 export { default as RedactMetadataScenario } from './RedactMetadataScenario';
 export { default as FeatureFlagsScenario } from './FeatureFlagsScenario';
+export { default as MaxPersistedSessionsScenario } from './MaxPersistedSessionsScenario';
