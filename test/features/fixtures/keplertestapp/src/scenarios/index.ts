@@ -24,3 +24,4 @@ export { default as UnhandledPromiseRejectionsDisabledScenario } from './Unhandl
 export { default as MaxPersistedEventsScenario } from './MaxPersistedEventsScenario';
 export { default as AddMetadataScenario } from './AddMetadataScenario';
 export { default as RedactMetadataScenario } from './RedactMetadataScenario';
+export { default as FeatureFlagsScenario } from './FeatureFlagsScenario';
