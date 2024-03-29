@@ -14,6 +14,8 @@ Scenario: Calling notify() with a caught Error
   And the event "device.runtimeVersions.reactNative" is not null
   And the event "device.runtimeVersions.reactNativeJsEngine" equals "hermes"
   And the event "device.osName" equals "kepler"
+  And the event "device.id" is not null
+  And the event "device.id" matches "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
 
 Scenario: Errors are stored when the network is unreachable
   # make the network unreachable

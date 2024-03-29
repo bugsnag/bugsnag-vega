@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <random>
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -32,12 +33,17 @@ static utils::json::JsonContainer createStaticApp() {
   return app;
 }
 
-BugsnagKeplerNative::BugsnagKeplerNative() :
-        TM_API_NAMESPACE::KeplerTurboModule("BugsnagKeplerNative") {}
+BugsnagKeplerNative::BugsnagKeplerNative() : TM_API_NAMESPACE::KeplerTurboModule("BugsnagKeplerNative")
+{
+  this->deviceID = this->generateUUID();
+}
 
 void BugsnagKeplerNative::aggregateMethods(TM_API_NAMESPACE::MethodAggregator<TM_API_NAMESPACE::KeplerTurboModule>& methodAggregator) const noexcept {
   methodAggregator.addMethod("configure", 1, &BugsnagKeplerNative::configure);
   methodAggregator.addMethod("markLaunchCompleted", 0, &BugsnagKeplerNative::markLaunchCompleted);
+  methodAggregator.addMethod("getDeviceID", 0, &BugsnagKeplerNative::getDeviceID);
+  methodAggregator.addMethod("setDeviceID", 1, &BugsnagKeplerNative::setDeviceID);
+  methodAggregator.addMethod("generateUUID", 0, &BugsnagKeplerNative::generateUUID);
 }
 
 utils::json::JsonContainer BugsnagKeplerNative::configure(utils::json::JsonContainer config) {
@@ -60,4 +66,31 @@ void BugsnagKeplerNative::markLaunchCompleted() {
   }
 }
 
+std::string BugsnagKeplerNative::generateUUID()
+{
+  std::random_device rng;
+  const char *availableChars = "0123456789abcdef";
+  std::uniform_int_distribution<int> dist(0, 15);
+  char uuidBuffer[37];
+
+  for (int i = 0; i < 36; ++i)
+  {
+    uuidBuffer[i] = availableChars[dist(rng)];
+  }
+  uuidBuffer[8] = '-';
+  uuidBuffer[13] = '-';
+  uuidBuffer[18] = '-';
+  uuidBuffer[23] = '-';
+  return std::string(uuidBuffer);
+}
+
+std::string BugsnagKeplerNative::getDeviceID()
+{
+  return this->deviceID;
+}
+
+void BugsnagKeplerNative::setDeviceID(std::string deviceID)
+{
+  this->deviceID = deviceID;
+}
 }
