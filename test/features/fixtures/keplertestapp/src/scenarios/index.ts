@@ -26,3 +26,6 @@ export { default as AddMetadataScenario } from './AddMetadataScenario';
 export { default as RedactMetadataScenario } from './RedactMetadataScenario';
 export { default as FeatureFlagsScenario } from './FeatureFlagsScenario';
 export { default as MaxPersistedSessionsScenario } from './MaxPersistedSessionsScenario';
+export { default as SetUserScenario } from './SetUserScenario';
+export { default as NoUserScenario } from './NoUserScenario';
+export { default as SetUserNotPersistedScenario } from './SetUserNotPersistedScenario';

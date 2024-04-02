@@ -5,6 +5,7 @@ interface KeplerConfig extends Config {
   persistenceDirectory?: string
   maxPersistedEvents?: number
   maxPersistedSessions?: number
+  persistUser?: boolean
 }
 
 declare class KeplerClient extends Client {

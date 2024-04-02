@@ -33,6 +33,11 @@ export const schema = {
     defaultValue: () => 128,
     message: 'should be a positive number',
     validate: (value) => intRange()(value)
+  },
+  persistUser: {
+    defaultValue: () => true,
+    message: 'should be a boolean',
+    validate: (value) => typeof value === 'boolean'
   }
 }
 
