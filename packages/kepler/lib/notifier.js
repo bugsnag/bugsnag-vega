@@ -7,6 +7,7 @@ import createBugsnagGlobalErrorHandlerPlugin from '@bugsnag/plugin-react-native-
 import { BugsnagKeplerNative } from '@bugsnag/kepler-native'
 import unhandledRejectionPlugin from '@bugsnag/plugin-react-native-unhandled-rejection'
 import pluginConsoleBreadcrumbs from '@bugsnag/plugin-console-breadcrumbs'
+import pluginAppDuration from '@bugsnag/plugin-app-duration'
 import createPluginNetworkBreadcrumbs from '@bugsnag/plugin-network-breadcrumbs'
 import pluginSession from '@bugsnag/plugin-browser-session'
 import React from 'react'
@@ -37,6 +38,7 @@ export const Bugsnag = {
       createPluginNetworkBreadcrumbs(),
       pluginSession,
       pluginDevice,
+      pluginAppDuration,
       new BugsnagPluginReact(React)
     ]
 
