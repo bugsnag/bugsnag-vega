@@ -15,9 +15,13 @@ namespace bugsnag {
 
         utils::json::JsonContainer configure(utils::json::JsonContainer config);
         void markLaunchCompleted();
+        std::string generateUUID();
+        std::string getDeviceID();
+        void setDeviceID(std::string deviceID);
 
       private:
         Client *bugsnag;
+        std::string deviceID;
     };
 }
 

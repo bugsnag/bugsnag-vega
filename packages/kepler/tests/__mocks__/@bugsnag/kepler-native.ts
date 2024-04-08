@@ -9,7 +9,9 @@ export const BugsnagFileIO = {
   sha1: jest.fn().mockImplementation((payload: string) => payload),
 }
 
-
 export const BugsnagKeplerNative = {
-  configure: jest.fn().mockReturnValue({app: {}}),
+  configure: jest.fn().mockReturnValue({ app: {} }),
+  getDeviceID: jest.fn(),
+  setDeviceID: jest.fn(),
+  generateUUID: jest.fn(),
 }

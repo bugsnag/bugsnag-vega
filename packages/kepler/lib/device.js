@@ -7,6 +7,8 @@ const getReactNativeVersion = () => {
   return `${major}.${minor}.${patch}`
 }
 
+let deviceID
+
 const pluginDevice = {
   load: (client) => {
     const device = {
@@ -20,7 +22,8 @@ const pluginDevice = {
     client.addOnSession(session => {
       session.device = {
         ...session.device,
-        ...device
+        ...device,
+        id: deviceID
       }
     })
 
@@ -28,9 +31,13 @@ const pluginDevice = {
       event.device = {
         ...event.device,
         ...device,
+        id: deviceID,
         time: new Date()
       }
     }, true)
+  },
+  setDeviceID: (id) => {
+    deviceID = id
   }
 }
 
