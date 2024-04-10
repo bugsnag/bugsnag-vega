@@ -29,3 +29,4 @@ export { default as MaxPersistedSessionsScenario } from './MaxPersistedSessionsS
 export { default as SetUserScenario } from './SetUserScenario';
 export { default as NoUserScenario } from './NoUserScenario';
 export { default as SetUserNotPersistedScenario } from './SetUserNotPersistedScenario';
+export { default as RunNativeUnitTestsScenario } from './RunNativeUnitTestsScenario';
