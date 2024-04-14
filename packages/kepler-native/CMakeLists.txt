@@ -17,6 +17,7 @@ set(HEADERS
   kepler/turbo-modules/BugsnagKeplerNative.h
 )
 set(SOURCES
+    kepler/turbo-modules/utils/signal_handler.cpp
     kepler/turbo-modules/BugsnagClient.cpp
     kepler/turbo-modules/BugsnagFileIO.cpp
     kepler/turbo-modules/BugsnagKeplerNative.cpp

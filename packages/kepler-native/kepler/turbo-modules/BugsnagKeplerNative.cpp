@@ -1,6 +1,7 @@
 #include "Kepler/turbomodule/TMLog.h"
 
 #include "BugsnagKeplerNative.h"
+#include "utils/signal_handler.h"
 
 #include <filesystem>
 #include <fstream>
@@ -50,6 +51,8 @@ void BugsnagKeplerNative::aggregateMethods(
                              &BugsnagKeplerNative::setDeviceID);
   methodAggregator.addMethod("generateUUID", 0,
                              &BugsnagKeplerNative::generateUUID);
+  methodAggregator.addMethod("nativeCrash", 0,
+                             &BugsnagKeplerNative::nativeCrash);
 }
 
 utils::json::JsonContainer
@@ -59,6 +62,8 @@ BugsnagKeplerNative::configure(utils::json::JsonContainer config) {
 
   Client *c = new Client(std::move(bsg_config));
   global_client = c;
+
+  install_signal_handlers();
 
   auto result = utils::json::JsonContainer::createJsonObject();
   result.insert("app", createStaticApp());
@@ -93,5 +98,15 @@ std::string BugsnagKeplerNative::getDeviceID() { return this->deviceID; }
 
 void BugsnagKeplerNative::setDeviceID(std::string deviceID) {
   this->deviceID = deviceID;
+}
+
+// Temporary native crash that can be used for testing:
+
+static void __attribute__((used)) somefakefunc(void) {}
+
+void BugsnagKeplerNative::nativeCrash() {
+  // Write to a read-only page
+  volatile char *ptr = (char *)somefakefunc;
+  *ptr = 0;
 }
 } // namespace bugsnag

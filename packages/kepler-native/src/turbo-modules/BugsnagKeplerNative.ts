@@ -21,6 +21,7 @@ export interface BugsnagKeplerNative extends KeplerTurboModule {
   getDeviceID: () => string
   setDeviceID: (id: string) => void
   generateUUID: () => string
+  nativeCrash: () => void
 }
 
 // prettier-ignore
