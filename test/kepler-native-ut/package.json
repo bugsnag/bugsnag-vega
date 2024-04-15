@@ -1,6 +1,6 @@
 {
   "name": "@bugsnag/kepler-native-ut",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -13,11 +13,13 @@
     "lint:fix": "eslint src tst --ext .ts,.tsx --fix",
     "compile": "tsc -p tsconfig-build.json",
     "build": "npm run compile",
-    "release": "npm-run-all lint test compile"
+    "release": "npm-run-all lint test compile",
+    "local-npm:publish": "npm publish --registry http://localhost:5539"
   },
   "dependencies": {
     "@amzn/keplerscript-turbomodule-api": "^1.0.0",
-    "react-native-tscodegen-types": "0.66.0"
+    "react-native-tscodegen-types": "0.66.0",
+    "verdaccio": "^5.30.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -58,5 +60,7 @@
       }
     }
   },
-  "gitHead": "ce14bf0d1591c868bbd8d7375eaf35131b6f41f7"
+  "publishConfig": {
+    "registry": "http://localhost:5539"
+  }
 }

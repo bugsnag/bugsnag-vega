@@ -23,7 +23,7 @@ set(SOURCES
     kepler/AutoLinkInit.cpp
 )
 
-set(NATIVE_DIR ${CMAKE_SOURCE_DIR}/../kepler-native)
+set(NATIVE_DIR ${CMAKE_SOURCE_DIR}/../../packages/kepler-native)
 set(KEPLER_NATIVE_H ${NATIVE_DIR}/kepler/turbo-modules/BugsnagFileIO.h)
 set(KEPLER_NATIVE_S ${NATIVE_DIR}/kepler/turbo-modules/BugsnagFileIO.cpp)
 
