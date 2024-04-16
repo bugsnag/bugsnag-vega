@@ -3,8 +3,6 @@ import { type KeplerConfig }  from '@bugsnag/kepler'
 import React, { useEffect } from 'react'
 import { Text, View } from "react-native"
 import { getStyles } from '../utils/defaultStyle'
-import delay from '../utils/delay'
-
 
 const config: Partial<KeplerConfig> = {
     enabledBreadcrumbTypes: [],

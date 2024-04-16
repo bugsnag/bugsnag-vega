@@ -22,7 +22,7 @@ fixtureDir="`dirname $0`/../fixtures/keplertestapp"
 pushd "$fixtureDir"
 npm run clean
 rm -rf build package-lock.json
-npm i @bugsnag/kepler @bugsnag/kepler-native --force --registry 'http://0.0.0.0:5539'
+npm i @bugsnag/kepler @bugsnag/kepler-native @bugsnag/kepler-native-ut --force --registry 'http://0.0.0.0:5539'
 
 # build the test fixture
 kepler build
