@@ -1,6 +1,6 @@
 {
   "name": "@bugsnag/kepler-native-ut",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -18,8 +18,7 @@
   },
   "dependencies": {
     "@amzn/keplerscript-turbomodule-api": "^1.0.0",
-    "react-native-tscodegen-types": "0.66.0",
-    "verdaccio": "^5.30.3"
+    "react-native-tscodegen-types": "0.66.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

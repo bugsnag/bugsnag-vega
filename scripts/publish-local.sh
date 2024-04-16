@@ -16,7 +16,7 @@ npm run local-npm:publish
 
 pushd "$projectRoot/test/kepler-native-ut"
 npm run clean
-rm -rf bugsnag-native-ut-0.0.1.tgz CMakeUserPresets.json build
+rm -rf bugsnag-native-ut-0.0.0.tgz CMakeUserPresets.json build
 kepler build
 npm run local-npm:publish
 popd

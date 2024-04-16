@@ -4,7 +4,7 @@ import type { KeplerTurboModule } from '@amzn/keplerscript-turbomodule-api';
 import { TurboModuleRegistry } from '@amzn/keplerscript-turbomodule-api';
 
 export interface BugsnagNativeUT extends KeplerTurboModule {
-  configure: () => void;
+  configure: (path: string) => void;
   runUnitTests: () => number;
 }
 

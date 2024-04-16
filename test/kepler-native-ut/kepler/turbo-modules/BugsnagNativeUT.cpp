@@ -21,18 +21,19 @@ void BugsnagNativeUT::aggregateMethods(
   methodAggregator.addMethod("runUnitTests", 0, &BugsnagNativeUT::runUnitTests);
 }
 
-void BugsnagNativeUT::configure() {
+void BugsnagNativeUT::configure(std::string path) {
   // TODO REMOVE FILE IO usage - placeholder for testing the linking
   auto item = BugsnagFileIO();
   item.sha1("akakka");
+
+  this->utOutput.open(path);
   this->context.setOption("no-breaks", true);
   this->context.setCout(&(this->utOutput));
 }
 
 int BugsnagNativeUT::runUnitTests() {
   int res = context.run();
-  std::string message = "[bugsnag] Unit test output: " + this->utOutput.str();
-  TMINFO(message);
+  this->utOutput.close();
   return res;
 }
 

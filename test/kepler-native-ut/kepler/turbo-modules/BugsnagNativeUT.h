@@ -4,7 +4,7 @@
 #include "Kepler/turbomodule/KeplerTurboModule.h"
 #include "doctest.h"
 
-#include <sstream>
+#include <fstream>
 
 #define TM_API_NAMESPACE com::amazon::kepler::turbomodule
 
@@ -17,12 +17,12 @@ namespace bugsnag
 
         void aggregateMethods(TM_API_NAMESPACE::MethodAggregator<TM_API_NAMESPACE::KeplerTurboModule> &methodAggregator) const noexcept;
 
-        void configure();
+        void configure(std::string path);
         int runUnitTests();
 
     private:
         doctest::Context context;
-        std::ostringstream utOutput;
+        std::ofstream utOutput;
     };
 }
 #endif // BUGSNAG_NATIVE_UT_H
