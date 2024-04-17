@@ -10,6 +10,7 @@
 #include "Kepler/turbomodule/TMLog.h"
 
 #include "../BugsnagClient.h"
+#include "reference_guard.h"
 
 #define BSG_HANDLED_SIGNAL_COUNT 6
 #define BSG_MAX_STACK_FRAMES 512
@@ -88,6 +89,8 @@ void bsg_handler_uninstall_signal() {
 }
 
 static void bsg_handle_signal(int signum, siginfo_t *info, void *user_context) {
+
+  atomic_store(&is_signal_handler_running, true);
 
   TMWARN("[bugsnag] Signal Handler Triggered!");
 
