@@ -46,12 +46,12 @@ void bsg_guarded_ptr_release(bsg_guarded_ptr *guard) {
     }
   }
 
-    if (current == 1) {
-      bool is_running = atomic_load(&is_signal_handler_running);
-      if (is_running) {
-        return;
-      }
-
-      free(guard->protected_ptr);
+  if (current == 1) {
+    bool is_running = atomic_load(&is_signal_handler_running);
+    if (is_running) {
+      return;
     }
+
+    free(guard->protected_ptr);
+  }
 }
