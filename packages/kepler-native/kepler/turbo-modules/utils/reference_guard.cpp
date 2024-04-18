@@ -18,8 +18,7 @@ void bsg_guarded_ptr_init_copy(bsg_guarded_ptr *guard, bsg_guarded_ptr *other) {
   atomic_exchange(guard->counter, *other->counter);
   guard->protected_ptr = other->protected_ptr;
 
-  uint_fast64_t current = atomic_load(guard->counter);
-  atomic_compare_exchange_strong(guard->counter, &current, current + 1);
+  atomic_fetch_add(guard->counter, 1);
 }
 
 void bsg_guarded_ptr_init_move(bsg_guarded_ptr *guard, bsg_guarded_ptr *other) {
@@ -35,15 +34,24 @@ void *bsg_guarded_ptr_acquire(bsg_guarded_ptr *guard) {
 
 void bsg_guarded_ptr_release(bsg_guarded_ptr *guard) {
   uint_fast64_t current = atomic_load(guard->counter);
-  atomic_compare_exchange_strong(guard->counter, &current, current - 1);
-  current = atomic_load(guard->counter);
-
-  if (current == 0) {
-    bool is_running = atomic_load(&is_signal_handler_running);
-    if (is_running) {
+  for (;;) {
+    if (current == 0) {
+      // spurious extra release from somewhere
+      // return and avoid an unsigned `0 - 1`
       return;
     }
 
-    free(guard->protected_ptr);
+    if (atomic_compare_exchange_strong(guard->counter, &current, current - 1)) {
+      break;
+    }
   }
+
+    if (current == 1) {
+      bool is_running = atomic_load(&is_signal_handler_running);
+      if (is_running) {
+        return;
+      }
+
+      free(guard->protected_ptr);
+    }
 }
