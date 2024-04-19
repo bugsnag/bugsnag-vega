@@ -14,14 +14,14 @@ public:
   SafeSharedPtr(const SafeSharedPtr &other);
   SafeSharedPtr &operator=(const SafeSharedPtr &other);
   // move constructor/operator
-  SafeSharedPtr(SafeSharedPtr &&other);
-  SafeSharedPtr &operator=(SafeSharedPtr &&other);
+  SafeSharedPtr(SafeSharedPtr &&other) = delete;
+  SafeSharedPtr &operator=(SafeSharedPtr &&other) = delete;
 
-  T *get();
+  bool reset(T *ptr);
+  T *acquire();
+  bool release();
 
 private:
-  void releasePtr();
-
   bsg_guarded_ptr *guarded_ptr;
 };
 
