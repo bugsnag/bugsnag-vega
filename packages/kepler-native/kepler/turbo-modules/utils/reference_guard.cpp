@@ -8,23 +8,23 @@ void bsg_guarded_ptr_init(bsg_guarded_ptr *guard, void *ptr) {
   guard->protected_ptr = ptr;
 
   if (ptr == NULL) {
-    atomic_init(guard->counter, 0uLL);
+    atomic_init(&guard->counter, 0uLL);
   } else {
-    atomic_init(guard->counter, 1uLL);
+    atomic_init(&guard->counter, 1uLL);
   }
 }
 
 void bsg_guarded_ptr_init_copy(bsg_guarded_ptr *guard, bsg_guarded_ptr *other) {
-  atomic_exchange(guard->counter, *other->counter);
+  atomic_exchange(&guard->counter, other->counter);
   guard->protected_ptr = other->protected_ptr;
 
-  atomic_fetch_add(guard->counter, 1);
+  atomic_fetch_add(&guard->counter, 1);
 }
 
 void bsg_guarded_ptr_init_move(bsg_guarded_ptr *guard, bsg_guarded_ptr *other) {
-  atomic_exchange(guard->counter, *other->counter);
+  atomic_exchange(&guard->counter, other->counter);
   guard->protected_ptr = other->protected_ptr;
-  atomic_store(other->counter, NULL);
+  atomic_store(&other->counter, NULL);
   other->protected_ptr = NULL;
 }
 
@@ -33,7 +33,7 @@ void *bsg_guarded_ptr_acquire(bsg_guarded_ptr *guard) {
 }
 
 void bsg_guarded_ptr_release(bsg_guarded_ptr *guard) {
-  uint_fast64_t current = atomic_load(guard->counter);
+  uint_fast64_t current = atomic_load(&guard->counter);
   for (;;) {
     if (current == 0) {
       // spurious extra release from somewhere
@@ -41,7 +41,8 @@ void bsg_guarded_ptr_release(bsg_guarded_ptr *guard) {
       return;
     }
 
-    if (atomic_compare_exchange_strong(guard->counter, &current, current - 1)) {
+    if (atomic_compare_exchange_strong(&guard->counter, &current,
+                                       current - 1)) {
       break;
     }
   }

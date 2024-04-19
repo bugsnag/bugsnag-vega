@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
 typedef struct {
-  atomic_uint_fast64_t *counter;
+  atomic_uint_fast64_t counter;
   void *protected_ptr;
 } bsg_guarded_ptr;
 
