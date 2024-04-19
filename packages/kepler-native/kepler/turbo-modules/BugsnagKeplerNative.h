@@ -20,6 +20,7 @@ public:
   std::string generateUUID();
   std::string getDeviceID();
   void setDeviceID(std::string deviceID);
+  void nativeCrash();
 
 private:
   Client *bugsnag;
