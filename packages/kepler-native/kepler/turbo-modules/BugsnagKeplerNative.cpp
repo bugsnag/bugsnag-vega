@@ -51,6 +51,8 @@ void BugsnagKeplerNative::aggregateMethods(
                              &BugsnagKeplerNative::setDeviceID);
   methodAggregator.addMethod("generateUUID", 0,
                              &BugsnagKeplerNative::generateUUID);
+  methodAggregator.addMethod("leaveBreadcrumb", 4,
+                             &BugsnagKeplerNative::leaveBreadcrumb);
   methodAggregator.addMethod("nativeCrash", 0,
                              &BugsnagKeplerNative::nativeCrash);
 }
@@ -98,6 +100,14 @@ std::string BugsnagKeplerNative::getDeviceID() { return this->deviceID; }
 
 void BugsnagKeplerNative::setDeviceID(std::string deviceID) {
   this->deviceID = deviceID;
+}
+
+void BugsnagKeplerNative::leaveBreadcrumb(int type, std::string message,
+                                          std::string metadata, int timestamp) {
+
+  bsg_breadcrumb_type castedType = static_cast<bsg_breadcrumb_type>(type);
+  time_t castedTime = static_cast<time_t>(timestamp);
+  this->bugsnag->leaveBreadcrumb(castedType, message, metadata, castedTime);
 }
 
 // Temporary native crash that can be used for testing:

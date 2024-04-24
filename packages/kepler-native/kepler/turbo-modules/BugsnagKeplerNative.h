@@ -22,6 +22,9 @@ public:
   void setDeviceID(std::string deviceID);
   void nativeCrash();
 
+  void leaveBreadcrumb(int type, std::string message, std::string metadata,
+                       int timestamp);
+
 private:
   Client *bugsnag;
   std::string deviceID;

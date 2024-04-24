@@ -28,7 +28,6 @@ set(SOURCES
     kepler/turbo-modules/BugsnagClient.cpp
     kepler/turbo-modules/BugsnagFileIO.cpp
     kepler/turbo-modules/BugsnagKeplerNative.cpp
-    kepler/turbo-modules/BugsnagSafeSharedPtr.cpp
     kepler/turbo-modules/BugsnagBreadcrumbBuffer.cpp
     kepler/AutoLinkInit.cpp
 )

@@ -14,7 +14,7 @@
 namespace bugsnag {
 
 class BreadcrumbBuffer {
-
+public:
   BreadcrumbBuffer(int maxBreadcrumbs);
   ~BreadcrumbBuffer();
 
