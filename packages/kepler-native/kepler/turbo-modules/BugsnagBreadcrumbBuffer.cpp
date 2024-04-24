@@ -11,9 +11,11 @@ BreadcrumbBuffer::BreadcrumbBuffer(int maxBreadcrumbs)
 BreadcrumbBuffer::~BreadcrumbBuffer() {
   if (this->buffer != nullptr) {
     for (int i = 0; i < this->maxBreadcrumbs; ++i) {
-      this->buffer[i].release();
+      // free char* fields in crumb
+      free_breadcrumb_fields(this->buffer[i].get());
     }
 
+    // safe shared_ptr destructor will take care of freeing crumb itself
     delete[] this->buffer;
   }
 }

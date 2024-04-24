@@ -52,6 +52,12 @@ public:
     return casted;
   }
 
+  T *get() {
+    void *ptr = this->guarded_ptr->protected_ptr;
+    T *casted = static_cast<T *>(ptr);
+    return casted;
+  }
+
   bool release() { return bsg_guarded_ptr_release(this->guarded_ptr); }
 
 private:

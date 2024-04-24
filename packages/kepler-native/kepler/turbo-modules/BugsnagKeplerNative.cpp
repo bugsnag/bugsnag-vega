@@ -62,8 +62,8 @@ BugsnagKeplerNative::configure(utils::json::JsonContainer config) {
   auto bsg_config = std::make_unique<Configuration>();
   bsg_config->storage_dir = std::string("/data/");
 
-  Client *c = new Client(std::move(bsg_config));
-  global_client = c;
+  this->bugsnag = new Client(std::move(bsg_config));
+  global_client = this->bugsnag;
 
   install_signal_handlers();
 
@@ -74,9 +74,8 @@ BugsnagKeplerNative::configure(utils::json::JsonContainer config) {
 }
 
 void BugsnagKeplerNative::markLaunchCompleted() {
-  auto client = this->bugsnag;
-  if (client != nullptr) {
-    client->markLaunchCompleted();
+  if (this->bugsnag != nullptr) {
+    this->bugsnag->markLaunchCompleted();
   }
 }
 

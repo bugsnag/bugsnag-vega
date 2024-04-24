@@ -36,6 +36,8 @@ typedef struct {
 bsg_breadcrumb *new_breadcrumb(bsg_breadcrumb_type type, const char *message,
                                const char *metadata, time_t timestamp);
 
+void free_breadcrumb_fields(bsg_breadcrumb *crumb);
+
 #ifdef __cplusplus
 }
 #endif
