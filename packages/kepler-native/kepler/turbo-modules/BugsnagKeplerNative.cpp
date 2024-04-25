@@ -3,9 +3,9 @@
 #include "BugsnagKeplerNative.h"
 #include "utils/signal_handler.h"
 
+#include <chrono>
 #include <filesystem>
 #include <fstream>
-#include <iostream>
 #include <random>
 
 #include <fcntl.h>
@@ -101,12 +101,22 @@ void BugsnagKeplerNative::setDeviceID(std::string deviceID) {
   this->deviceID = deviceID;
 }
 
-void BugsnagKeplerNative::leaveBreadcrumb(int type, std::string message,
-                                          std::string metadata, int timestamp) {
-
+void BugsnagKeplerNative::leaveBreadcrumb(utils::json::JsonContainer crumb) {
+  auto type = crumb["type"].getValue(0);
   bsg_breadcrumb_type castedType = static_cast<bsg_breadcrumb_type>(type);
-  time_t castedTime = static_cast<time_t>(timestamp);
-  this->bugsnag->leaveBreadcrumb(castedType, message, metadata, castedTime);
+
+  std::string empty = "";
+  auto msg = crumb["message"].getValue(empty);
+  auto metadata = crumb["metadata"].getValue(empty);
+
+  auto timeNow = std::chrono::system_clock::now();
+  time_t timestamp = std::chrono::system_clock::to_time_t(timeNow);
+  auto crumbTime = crumb["timestamp"].getValue(0);
+  if (crumbTime != 0) {
+    timestamp = static_cast<time_t>(crumbTime);
+  }
+
+  this->bugsnag->leaveBreadcrumb(castedType, msg, metadata, timestamp);
 }
 
 // Temporary native crash that can be used for testing:

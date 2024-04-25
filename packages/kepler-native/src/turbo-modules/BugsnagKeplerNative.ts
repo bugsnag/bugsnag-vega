@@ -14,6 +14,13 @@ interface BugsnagNativeStaticInfo {
   app: NativeStaticApp
 }
 
+interface BugsnagBreadcrumb {
+  type: number
+  message: string
+  metadata: string
+  timestamp: number
+}
+
 export interface BugsnagKeplerNative extends KeplerTurboModule {
   // Exported methods.
   configure: (configuration: BugsnagConfiguration) => BugsnagNativeStaticInfo
@@ -21,7 +28,7 @@ export interface BugsnagKeplerNative extends KeplerTurboModule {
   getDeviceID: () => string
   setDeviceID: (id: string) => void
   generateUUID: () => string
-  leaveBreadcrumb: (type: number, message: string, metadata: string, timestamp: number) => void
+  leaveBreadcrumb: (crumb: BugsnagBreadcrumb) => void
   nativeCrash: () => void
 }
 

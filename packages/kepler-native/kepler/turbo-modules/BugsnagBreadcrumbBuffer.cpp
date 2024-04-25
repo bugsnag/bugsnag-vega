@@ -5,19 +5,17 @@ namespace bugsnag {
 BreadcrumbBuffer::BreadcrumbBuffer(int maxBreadcrumbs)
     : maxBreadcrumbs{maxBreadcrumbs} {
   atomic_init(&this->index, 0);
-  this->buffer = new SafeSharedPtr<bsg_breadcrumb>[maxBreadcrumbs];
+  this->buffer =
+      new SafeSharedPtr<bsg_breadcrumb,
+                        decltype(free_breadcrumb_fields)>[maxBreadcrumbs];
 }
 
 BreadcrumbBuffer::~BreadcrumbBuffer() {
-  if (this->buffer != nullptr) {
-    for (int i = 0; i < this->maxBreadcrumbs; ++i) {
-      // free char* fields in crumb
-      free_breadcrumb_fields(this->buffer[i].get());
-    }
-
+  if (this->buffer == nullptr) {
+    return;
+  }
     // safe shared_ptr destructor will take care of freeing crumb itself
     delete[] this->buffer;
-  }
 }
 
 void BreadcrumbBuffer::add(bsg_breadcrumb_type type, std::string message,

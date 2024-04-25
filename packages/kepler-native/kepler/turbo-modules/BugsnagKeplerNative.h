@@ -22,8 +22,7 @@ public:
   void setDeviceID(std::string deviceID);
   void nativeCrash();
 
-  void leaveBreadcrumb(int type, std::string message, std::string metadata,
-                       int timestamp);
+  void leaveBreadcrumb(utils::json::JsonContainer crumb);
 
 private:
   Client *bugsnag;

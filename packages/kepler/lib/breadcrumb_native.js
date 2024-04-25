@@ -17,7 +17,12 @@ const nativeBreadcrumbs = {
       const nativeType = breadcrumbType[crumb.type]
       const metadataStr = JSON.stringify(crumb.metadata)
       const timeSeconds = Math.floor(Date.now() / 1000)
-      BugsnagKeplerNative.leaveBreadcrumb(nativeType, crumb.message, metadataStr, timeSeconds)
+      BugsnagKeplerNative.leaveBreadcrumb({
+        type: nativeType,
+        message: crumb.message,
+        metadata: metadataStr,
+        timestamp: timeSeconds
+      })
     }, true)
   }
 }

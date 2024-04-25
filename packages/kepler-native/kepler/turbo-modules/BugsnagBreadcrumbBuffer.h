@@ -25,7 +25,7 @@ public:
 private:
   int getBreadcrumbIndex();
 
-  SafeSharedPtr<bsg_breadcrumb> *buffer;
+  SafeSharedPtr<bsg_breadcrumb, decltype(free_breadcrumb_fields)> *buffer;
   atomic_int index;
   int maxBreadcrumbs;
 };

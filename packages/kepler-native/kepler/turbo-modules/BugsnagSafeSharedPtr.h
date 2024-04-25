@@ -5,19 +5,27 @@
 
 namespace bugsnag {
 
-template <typename T> class SafeSharedPtr {
+template <typename T, typename Deallocator = void (*)(T *)>
+class SafeSharedPtr {
 public:
   SafeSharedPtr() {
+    this->deallocator = nullptr;
     this->guarded_ptr = new bsg_guarded_ptr;
     bsg_guarded_ptr_init(this->guarded_ptr, nullptr);
   }
 
-  SafeSharedPtr(T *ptr) {
+  SafeSharedPtr(T *ptr, Deallocator *funcPtr = nullptr) {
+    this->deallocator = funcPtr;
     this->guarded_ptr = new bsg_guarded_ptr;
     bsg_guarded_ptr_init(this->guarded_ptr, ptr);
   }
 
   ~SafeSharedPtr() {
+    if (this->deallocator) {
+      void *ptr = this->guarded_ptr->protected_ptr;
+      T *casted = static_cast<T *>(ptr);
+      (*this->deallocator)(casted);
+    }
     this->release();
     delete this->guarded_ptr;
   }
@@ -52,16 +60,11 @@ public:
     return casted;
   }
 
-  T *get() {
-    void *ptr = this->guarded_ptr->protected_ptr;
-    T *casted = static_cast<T *>(ptr);
-    return casted;
-  }
-
   bool release() { return bsg_guarded_ptr_release(this->guarded_ptr); }
 
 private:
   bsg_guarded_ptr *guarded_ptr;
+  Deallocator *deallocator;
 };
 
 } // namespace bugsnag
