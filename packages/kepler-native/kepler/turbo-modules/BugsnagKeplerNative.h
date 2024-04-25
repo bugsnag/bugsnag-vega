@@ -22,6 +22,8 @@ public:
   void setDeviceID(std::string deviceID);
   void nativeCrash();
 
+  void leaveBreadcrumb(utils::json::JsonContainer crumb);
+
 private:
   Client *bugsnag;
   std::string deviceID;

@@ -14,6 +14,7 @@ import createPluginNetworkBreadcrumbs from '@bugsnag/plugin-network-breadcrumbs'
 import pluginSession from '@bugsnag/plugin-browser-session'
 import React from 'react'
 import pluginDevice from './device'
+import nativeBreadcrumbs from './breadcrumb_native'
 
 const name = 'Bugsnag Kepler'
 const url = 'https://github.com/bugsnag/bugsnag-kepler'
@@ -49,6 +50,8 @@ export const Bugsnag = {
     const nativeStaticInfo = BugsnagKeplerNative.configure({
       apiKey: opts.apiKey
     })
+
+    nativeBreadcrumbs.register(bugsnag)
 
     Event.create = keplerEventFactory(Event.create, nativeStaticInfo)
 

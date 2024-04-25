@@ -3,9 +3,9 @@
 #include "BugsnagKeplerNative.h"
 #include "utils/signal_handler.h"
 
+#include <chrono>
 #include <filesystem>
 #include <fstream>
-#include <iostream>
 #include <random>
 
 #include <fcntl.h>
@@ -51,6 +51,8 @@ void BugsnagKeplerNative::aggregateMethods(
                              &BugsnagKeplerNative::setDeviceID);
   methodAggregator.addMethod("generateUUID", 0,
                              &BugsnagKeplerNative::generateUUID);
+  methodAggregator.addMethod("leaveBreadcrumb", 1,
+                             &BugsnagKeplerNative::leaveBreadcrumb);
   methodAggregator.addMethod("nativeCrash", 0,
                              &BugsnagKeplerNative::nativeCrash);
 }
@@ -60,8 +62,8 @@ BugsnagKeplerNative::configure(utils::json::JsonContainer config) {
   auto bsg_config = std::make_unique<Configuration>();
   bsg_config->storage_dir = std::string("/data/");
 
-  Client *c = new Client(std::move(bsg_config));
-  global_client = c;
+  this->bugsnag = new Client(std::move(bsg_config));
+  global_client = this->bugsnag;
 
   install_signal_handlers();
 
@@ -72,9 +74,8 @@ BugsnagKeplerNative::configure(utils::json::JsonContainer config) {
 }
 
 void BugsnagKeplerNative::markLaunchCompleted() {
-  auto client = this->bugsnag;
-  if (client != nullptr) {
-    client->markLaunchCompleted();
+  if (this->bugsnag != nullptr) {
+    this->bugsnag->markLaunchCompleted();
   }
 }
 
@@ -98,6 +99,24 @@ std::string BugsnagKeplerNative::getDeviceID() { return this->deviceID; }
 
 void BugsnagKeplerNative::setDeviceID(std::string deviceID) {
   this->deviceID = deviceID;
+}
+
+void BugsnagKeplerNative::leaveBreadcrumb(utils::json::JsonContainer crumb) {
+  auto type = crumb["type"].getValue(0);
+  bsg_breadcrumb_type castedType = static_cast<bsg_breadcrumb_type>(type);
+
+  std::string empty = "";
+  auto msg = crumb["message"].getValue(empty);
+  auto metadata = crumb["metadata"].getValue(empty);
+
+  auto timeNow = std::chrono::system_clock::now();
+  time_t timestamp = std::chrono::system_clock::to_time_t(timeNow);
+  auto crumbTime = crumb["timestamp"].getValue(0);
+  if (crumbTime != 0) {
+    timestamp = static_cast<time_t>(crumbTime);
+  }
+
+  this->bugsnag->leaveBreadcrumb(castedType, msg, metadata, timestamp);
 }
 
 // Temporary native crash that can be used for testing:
