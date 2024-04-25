@@ -51,7 +51,7 @@ void BugsnagKeplerNative::aggregateMethods(
                              &BugsnagKeplerNative::setDeviceID);
   methodAggregator.addMethod("generateUUID", 0,
                              &BugsnagKeplerNative::generateUUID);
-  methodAggregator.addMethod("leaveBreadcrumb", 4,
+  methodAggregator.addMethod("leaveBreadcrumb", 1,
                              &BugsnagKeplerNative::leaveBreadcrumb);
   methodAggregator.addMethod("nativeCrash", 0,
                              &BugsnagKeplerNative::nativeCrash);
