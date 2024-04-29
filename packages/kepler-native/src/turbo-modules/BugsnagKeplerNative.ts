@@ -31,6 +31,8 @@ export interface BugsnagKeplerNative extends KeplerTurboModule {
   leaveBreadcrumb: (crumb: BugsnagBreadcrumb) => void
   addMetadata(): (metadataStr: string) => void
   clearMetadata(): () => void
+  addFeatures(): (featuresStr: string) => void
+  clearFeatures(): () => void
   nativeCrash: () => void
 }
 

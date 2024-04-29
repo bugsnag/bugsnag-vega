@@ -34,4 +34,23 @@ std::string Client::getMetadata() {
 }
 
 void Client::clearMetadata() { this->metadata.reset(nullptr); }
+
+void Client::addFeatures(std::string featuresStr) {
+  char *newFeatures = strdup(featuresStr.c_str());
+  this->features.reset(newFeatures);
+}
+
+std::string Client::getFeatures() {
+  std::string featuresStr;
+  char *featuresChar = this->features.acquire();
+  if (featuresChar != nullptr) {
+    featuresStr = std::string(featuresChar);
+  }
+
+  this->features.release();
+
+  return featuresStr;
+}
+
+void Client::clearFeatures() { this->features.reset(nullptr); }
 } // namespace bugsnag

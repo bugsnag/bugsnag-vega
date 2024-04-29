@@ -24,6 +24,10 @@ public:
   std::string getMetadata();
   void clearMetadata();
 
+  void addFeatures(std::string featuresStr);
+  std::string getFeatures();
+  void clearFeatures();
+
   std::string event_dir;
 
 private:
@@ -31,6 +35,7 @@ private:
   std::unique_ptr<Configuration> config;
   BreadcrumbBuffer breadcrumb_buffer;
   SafeSharedPtr<char> metadata;
+  SafeSharedPtr<char> features;
 };
 
 extern Client *global_client;
