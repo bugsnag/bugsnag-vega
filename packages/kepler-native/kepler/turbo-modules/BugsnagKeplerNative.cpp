@@ -57,6 +57,10 @@ void BugsnagKeplerNative::aggregateMethods(
                              &BugsnagKeplerNative::addMetadata);
   methodAggregator.addMethod("clearMetadata", 0,
                              &BugsnagKeplerNative::clearMetadata);
+  methodAggregator.addMethod("addFeatures", 1,
+                             &BugsnagKeplerNative::addFeatures);
+  methodAggregator.addMethod("clearFeatures", 0,
+                             &BugsnagKeplerNative::clearFeatures);
   methodAggregator.addMethod("nativeCrash", 0,
                              &BugsnagKeplerNative::nativeCrash);
 }
@@ -128,6 +132,12 @@ void BugsnagKeplerNative::addMetadata(std::string metadataStr) {
 }
 
 void BugsnagKeplerNative::clearMetadata() { this->bugsnag->clearMetadata(); }
+
+void BugsnagKeplerNative::addFeatures(std::string featuresStr) {
+  this->bugsnag->addFeatures(featuresStr);
+}
+
+void BugsnagKeplerNative::clearFeatures() { this->bugsnag->clearFeatures(); }
 
 // Temporary native crash that can be used for testing:
 
