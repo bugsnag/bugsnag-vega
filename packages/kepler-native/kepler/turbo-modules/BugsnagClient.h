@@ -20,12 +20,17 @@ public:
   void leaveBreadcrumb(bsg_breadcrumb_type type, std::string message,
                        std::string metadata, time_t timestamp);
 
+  void addMetadata(std::string metadataStr);
+  std::string getMetadata();
+  void clearMetadata();
+
   std::string event_dir;
 
 private:
   std::atomic<bool> is_launching;
   std::unique_ptr<Configuration> config;
   BreadcrumbBuffer breadcrumb_buffer;
+  SafeSharedPtr<char> metadata;
 };
 
 extern Client *global_client;

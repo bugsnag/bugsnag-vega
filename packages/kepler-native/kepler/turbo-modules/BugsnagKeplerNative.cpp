@@ -53,6 +53,10 @@ void BugsnagKeplerNative::aggregateMethods(
                              &BugsnagKeplerNative::generateUUID);
   methodAggregator.addMethod("leaveBreadcrumb", 1,
                              &BugsnagKeplerNative::leaveBreadcrumb);
+  methodAggregator.addMethod("addMetadata", 1,
+                             &BugsnagKeplerNative::addMetadata);
+  methodAggregator.addMethod("clearMetadata", 0,
+                             &BugsnagKeplerNative::clearMetadata);
   methodAggregator.addMethod("nativeCrash", 0,
                              &BugsnagKeplerNative::nativeCrash);
 }
@@ -118,6 +122,12 @@ void BugsnagKeplerNative::leaveBreadcrumb(utils::json::JsonContainer crumb) {
 
   this->bugsnag->leaveBreadcrumb(castedType, msg, metadata, timestamp);
 }
+
+void BugsnagKeplerNative::addMetadata(std::string metadataStr) {
+  this->bugsnag->addMetadata(metadataStr);
+}
+
+void BugsnagKeplerNative::clearMetadata() { this->bugsnag->clearMetadata(); }
 
 // Temporary native crash that can be used for testing:
 

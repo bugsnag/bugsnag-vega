@@ -23,6 +23,8 @@ public:
   void nativeCrash();
 
   void leaveBreadcrumb(utils::json::JsonContainer crumb);
+  void addMetadata(std::string metadataStr);
+  void clearMetadata();
 
 private:
   Client *bugsnag;
