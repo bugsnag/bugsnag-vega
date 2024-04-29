@@ -15,6 +15,7 @@ import pluginSession from '@bugsnag/plugin-browser-session'
 import React from 'react'
 import pluginDevice from './device'
 import nativeBreadcrumbs from './breadcrumb_native'
+import nativeMetadata from './metadata_native'
 
 const name = 'Bugsnag Kepler'
 const url = 'https://github.com/bugsnag/bugsnag-kepler'
@@ -52,6 +53,7 @@ export const Bugsnag = {
     })
 
     nativeBreadcrumbs.register(bugsnag)
+    nativeMetadata.register()
 
     Event.create = keplerEventFactory(Event.create, nativeStaticInfo)
 

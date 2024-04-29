@@ -29,6 +29,8 @@ export interface BugsnagKeplerNative extends KeplerTurboModule {
   setDeviceID: (id: string) => void
   generateUUID: () => string
   leaveBreadcrumb: (crumb: BugsnagBreadcrumb) => void
+  addMetadata(): (metadataStr: string) => void
+  clearMetadata(): () => void
   nativeCrash: () => void
 }
 
