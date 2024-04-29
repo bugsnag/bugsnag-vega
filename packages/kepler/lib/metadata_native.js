@@ -16,7 +16,9 @@ const nativeMetadata = {
     const origClearMetadata = Client.prototype.clearMetadata
     Client.prototype.clearMetadata = function (...args) {
       origClearMetadata.apply(this, args)
-      BugsnagKeplerNative.clearMetadata()
+      const metadataAll = this._metadata
+      const metadataStr = JSON.stringify(metadataAll)
+      BugsnagKeplerNative.addMetadata(metadataStr)
     }
   }
 }
