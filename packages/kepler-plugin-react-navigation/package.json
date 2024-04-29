@@ -27,6 +27,7 @@
     "@amzn/react-navigation__routers": "~2.0.0",
     "@amzn/react-navigation__stack": "~2.0.0",
     "@bugsnag/core": "^7.19.0",
+    "@react-navigation/native": "^6.1.17",
     "@types/react": "^16.9.49",
     "@types/react-native": "^0.63.20",
     "@types/react-test-renderer": "^16.9.3"
