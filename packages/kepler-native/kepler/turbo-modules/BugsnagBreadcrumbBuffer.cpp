@@ -6,7 +6,7 @@ BreadcrumbBuffer::BreadcrumbBuffer(int maxBreadcrumbs)
     : maxBreadcrumbs{maxBreadcrumbs} {
   atomic_init(&this->index, 0);
   this->buffer =
-      new SafeSharedPtr<bsg_breadcrumb,
+      new SignalSafePtr<bsg_breadcrumb,
                         decltype(free_breadcrumb_fields)>[maxBreadcrumbs];
 }
 

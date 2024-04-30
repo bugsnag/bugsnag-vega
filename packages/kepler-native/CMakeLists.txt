@@ -18,7 +18,7 @@ set(HEADERS
   kepler/turbo-modules/utils/bsg_signal_handler.h
   kepler/turbo-modules/utils/bsg_breadcrumb.h
   kepler/turbo-modules/BugsnagKeplerNative.h
-  kepler/turbo-modules/BugsnagSafeSharedPtr.h
+  kepler/turbo-modules/BugsnagSignalSafePtr.h
   kepler/turbo-modules/BugsnagBreadcrumbBuffer.h
 )
 set(SOURCES

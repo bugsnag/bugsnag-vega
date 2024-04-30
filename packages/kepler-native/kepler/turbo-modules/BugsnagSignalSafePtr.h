@@ -1,26 +1,26 @@
-#ifndef BUGSNAG_SAFESHAREDPTR_H
-#define BUGSNAG_SAFESHAREDPTR_H
+#ifndef BUGSNAG_SIGNALSAFEPTR_H
+#define BUGSNAG_SIGNALSAFEPTR_H
 
 #include "./utils/bsg_reference_guard.h"
 
 namespace bugsnag {
 
 template <typename T, typename Deallocator = void (*)(T *)>
-class SafeSharedPtr {
+class SignalSafePtr {
 public:
-  SafeSharedPtr() {
+  SignalSafePtr() {
     this->deallocator = nullptr;
     this->guarded_ptr = new bsg_ref_guard;
     bsg_ref_guard_init(this->guarded_ptr, nullptr);
   }
 
-  SafeSharedPtr(T *ptr, Deallocator *funcPtr = nullptr) {
+  SignalSafePtr(T *ptr, Deallocator *funcPtr = nullptr) {
     this->deallocator = funcPtr;
     this->guarded_ptr = new bsg_ref_guard;
     bsg_ref_guard_init(this->guarded_ptr, ptr);
   }
 
-  ~SafeSharedPtr() {
+  ~SignalSafePtr() {
     if (this->deallocator) {
       void *ptr = this->guarded_ptr->protected_ptr;
       T *casted = static_cast<T *>(ptr);
@@ -30,20 +30,20 @@ public:
     delete this->guarded_ptr;
   }
 
-  SafeSharedPtr(const SafeSharedPtr &other) {
+  SignalSafePtr(const SignalSafePtr &other) {
     // just copying underlying wrappers pointers, not their contents
     this->guarded_ptr = other->guarded_ptr;
   }
 
-  SafeSharedPtr &operator=(const SafeSharedPtr &other) {
+  SignalSafePtr &operator=(const SignalSafePtr &other) {
     // just copying underlying wrappers pointers, not their contents
     this->guarded_ptr = other->guarded_ptr;
 
     return *this;
   }
 
-  SafeSharedPtr(SafeSharedPtr &&other) = delete;
-  SafeSharedPtr &operator=(SafeSharedPtr &&other) = delete;
+  SignalSafePtr(SignalSafePtr &&other) = delete;
+  SignalSafePtr &operator=(SignalSafePtr &&other) = delete;
 
   bool reset(T *ptr) {
     bool res = bsg_ref_guard_release(this->guarded_ptr);
@@ -69,4 +69,4 @@ private:
 
 } // namespace bugsnag
 
-#endif // BUGSNAG_SAFESHAREDPTR_H
+#endif // BUGSNAG_SIGNALSAFEPTR_H

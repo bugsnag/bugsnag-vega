@@ -34,8 +34,8 @@ private:
   std::atomic<bool> is_launching;
   std::unique_ptr<Configuration> config;
   BreadcrumbBuffer breadcrumb_buffer;
-  SafeSharedPtr<char> metadata;
-  SafeSharedPtr<char> features;
+  SignalSafePtr<char> metadata;
+  SignalSafePtr<char> features;
 };
 
 extern Client *global_client;
