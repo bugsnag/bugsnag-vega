@@ -53,12 +53,12 @@ void BugsnagKeplerNative::aggregateMethods(
                              &BugsnagKeplerNative::generateUUID);
   methodAggregator.addMethod("leaveBreadcrumb", 1,
                              &BugsnagKeplerNative::leaveBreadcrumb);
-  methodAggregator.addMethod("addMetadata", 1,
-                             &BugsnagKeplerNative::addMetadata);
+  methodAggregator.addMethod("setMetadata", 1,
+                             &BugsnagKeplerNative::setMetadata);
   methodAggregator.addMethod("clearMetadata", 0,
                              &BugsnagKeplerNative::clearMetadata);
-  methodAggregator.addMethod("addFeatures", 1,
-                             &BugsnagKeplerNative::addFeatures);
+  methodAggregator.addMethod("setFeatures", 1,
+                             &BugsnagKeplerNative::setFeatures);
   methodAggregator.addMethod("clearFeatures", 0,
                              &BugsnagKeplerNative::clearFeatures);
   methodAggregator.addMethod("nativeCrash", 0,
@@ -127,14 +127,14 @@ void BugsnagKeplerNative::leaveBreadcrumb(utils::json::JsonContainer crumb) {
   this->bugsnag->leaveBreadcrumb(castedType, msg, metadata, timestamp);
 }
 
-void BugsnagKeplerNative::addMetadata(std::string metadata_str) {
-  this->bugsnag->addMetadata(metadata_str);
+void BugsnagKeplerNative::setMetadata(std::string metadata_str) {
+  this->bugsnag->setMetadata(metadata_str);
 }
 
 void BugsnagKeplerNative::clearMetadata() { this->bugsnag->clearMetadata(); }
 
-void BugsnagKeplerNative::addFeatures(std::string features_str) {
-  this->bugsnag->addFeatures(features_str);
+void BugsnagKeplerNative::setFeatures(std::string features_str) {
+  this->bugsnag->setFeatures(features_str);
 }
 
 void BugsnagKeplerNative::clearFeatures() { this->bugsnag->clearFeatures(); }

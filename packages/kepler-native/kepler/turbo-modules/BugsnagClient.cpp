@@ -16,7 +16,7 @@ void Client::leaveBreadcrumb(bsg_breadcrumb_type type, std::string message,
   this->breadcrumb_buffer.add(type, message, metadata, timestamp);
 }
 
-void Client::addMetadata(std::string metadata_str) {
+void Client::setMetadata(std::string metadata_str) {
   char *new_metadata = strdup(metadata_str.c_str());
   this->metadata.reset(new_metadata);
 }
@@ -35,7 +35,7 @@ std::string Client::getMetadata() {
 
 void Client::clearMetadata() { this->metadata.reset(nullptr); }
 
-void Client::addFeatures(std::string features_str) {
+void Client::setFeatures(std::string features_str) {
   char *new_features = strdup(features_str.c_str());
   this->features.reset(new_features);
 }

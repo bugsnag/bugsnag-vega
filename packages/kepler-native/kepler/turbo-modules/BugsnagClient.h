@@ -20,11 +20,11 @@ public:
   void leaveBreadcrumb(bsg_breadcrumb_type type, std::string message,
                        std::string metadata, time_t timestamp);
 
-  void addMetadata(std::string metadata_str);
+  void setMetadata(std::string metadata_str);
   std::string getMetadata();
   void clearMetadata();
 
-  void addFeatures(std::string features_str);
+  void setFeatures(std::string features_str);
   std::string getFeatures();
   void clearFeatures();
 

@@ -23,9 +23,9 @@ public:
   void nativeCrash();
 
   void leaveBreadcrumb(utils::json::JsonContainer crumb);
-  void addMetadata(std::string metadata_str);
+  void setMetadata(std::string metadata_str);
   void clearMetadata();
-  void addFeatures(std::string features_str);
+  void setFeatures(std::string features_str);
   void clearFeatures();
 
 private:

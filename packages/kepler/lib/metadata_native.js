@@ -9,7 +9,7 @@ const nativeMetadata = {
       origAddMetadata.apply(this, args)
       const metadataAll = this._metadata
       const metadataStr = JSON.stringify(metadataAll)
-      BugsnagKeplerNative.addMetadata(metadataStr)
+      BugsnagKeplerNative.setMetadata(metadataStr)
     }
 
     // wrap clear
@@ -18,7 +18,7 @@ const nativeMetadata = {
       origClearMetadata.apply(this, args)
       const metadataAll = this._metadata
       const metadataStr = JSON.stringify(metadataAll)
-      BugsnagKeplerNative.addMetadata(metadataStr)
+      BugsnagKeplerNative.setMetadata(metadataStr)
     }
   }
 }
