@@ -19,18 +19,18 @@ public:
   void markLaunchCompleted();
   std::string generateUUID();
   std::string getDeviceID();
-  void setDeviceID(std::string deviceID);
+  void setDeviceID(std::string device_id);
   void nativeCrash();
 
   void leaveBreadcrumb(utils::json::JsonContainer crumb);
-  void addMetadata(std::string metadataStr);
+  void addMetadata(std::string metadata_str);
   void clearMetadata();
-  void addFeatures(std::string featuresStr);
+  void addFeatures(std::string features_str);
   void clearFeatures();
 
 private:
   Client *bugsnag;
-  std::string deviceID;
+  std::string device_id;
 };
 } // namespace bugsnag
 

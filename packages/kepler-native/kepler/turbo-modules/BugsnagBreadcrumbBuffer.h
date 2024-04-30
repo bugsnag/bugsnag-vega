@@ -15,19 +15,18 @@ namespace bugsnag {
 
 class BreadcrumbBuffer {
 public:
-  BreadcrumbBuffer(int maxBreadcrumbs);
+  BreadcrumbBuffer(int max_breadcrumbs);
   ~BreadcrumbBuffer();
 
   void add(bsg_breadcrumb_type type, std::string message, std::string metadata,
            time_t timestamp);
-  // bsg_breadcrumb *copy();
 
 private:
   int getBreadcrumbIndex();
 
   SignalSafePtr<bsg_breadcrumb, decltype(free_breadcrumb_fields)> *buffer;
   atomic_int index;
-  int maxBreadcrumbs;
+  int max_breadcrumbs;
 };
 
 } // namespace bugsnag

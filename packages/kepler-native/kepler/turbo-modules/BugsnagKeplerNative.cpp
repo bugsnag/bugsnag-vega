@@ -36,7 +36,7 @@ static utils::json::JsonContainer createStaticApp() {
 
 BugsnagKeplerNative::BugsnagKeplerNative()
     : TM_API_NAMESPACE::KeplerTurboModule("BugsnagKeplerNative") {
-  this->deviceID = this->generateUUID();
+  this->device_id = this->generateUUID();
 }
 
 void BugsnagKeplerNative::aggregateMethods(
@@ -89,24 +89,24 @@ void BugsnagKeplerNative::markLaunchCompleted() {
 
 std::string BugsnagKeplerNative::generateUUID() {
   std::random_device rng;
-  const char *availableChars = "0123456789abcdef";
+  const char *available_chars = "0123456789abcdef";
   std::uniform_int_distribution<int> dist(0, 15);
-  char uuidBuffer[37];
+  char uuid_buffer[37];
 
   for (int i = 0; i < 36; ++i) {
-    uuidBuffer[i] = availableChars[dist(rng)];
+    uuid_buffer[i] = available_chars[dist(rng)];
   }
-  uuidBuffer[8] = '-';
-  uuidBuffer[13] = '-';
-  uuidBuffer[18] = '-';
-  uuidBuffer[23] = '-';
-  return std::string(uuidBuffer);
+  uuid_buffer[8] = '-';
+  uuid_buffer[13] = '-';
+  uuid_buffer[18] = '-';
+  uuid_buffer[23] = '-';
+  return std::string(uuid_buffer);
 }
 
-std::string BugsnagKeplerNative::getDeviceID() { return this->deviceID; }
+std::string BugsnagKeplerNative::getDeviceID() { return this->device_id; }
 
-void BugsnagKeplerNative::setDeviceID(std::string deviceID) {
-  this->deviceID = deviceID;
+void BugsnagKeplerNative::setDeviceID(std::string device_id) {
+  this->device_id = device_id;
 }
 
 void BugsnagKeplerNative::leaveBreadcrumb(utils::json::JsonContainer crumb) {
@@ -127,14 +127,14 @@ void BugsnagKeplerNative::leaveBreadcrumb(utils::json::JsonContainer crumb) {
   this->bugsnag->leaveBreadcrumb(castedType, msg, metadata, timestamp);
 }
 
-void BugsnagKeplerNative::addMetadata(std::string metadataStr) {
-  this->bugsnag->addMetadata(metadataStr);
+void BugsnagKeplerNative::addMetadata(std::string metadata_str) {
+  this->bugsnag->addMetadata(metadata_str);
 }
 
 void BugsnagKeplerNative::clearMetadata() { this->bugsnag->clearMetadata(); }
 
-void BugsnagKeplerNative::addFeatures(std::string featuresStr) {
-  this->bugsnag->addFeatures(featuresStr);
+void BugsnagKeplerNative::addFeatures(std::string features_str) {
+  this->bugsnag->addFeatures(features_str);
 }
 
 void BugsnagKeplerNative::clearFeatures() { this->bugsnag->clearFeatures(); }

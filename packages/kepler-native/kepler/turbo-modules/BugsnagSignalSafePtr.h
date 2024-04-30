@@ -10,34 +10,34 @@ class SignalSafePtr {
 public:
   SignalSafePtr() {
     this->deallocator = nullptr;
-    this->guarded_ptr = new bsg_ref_guard;
-    bsg_ref_guard_init(this->guarded_ptr, nullptr);
+    this->ref_guard = new bsg_ref_guard;
+    bsg_ref_guard_init(this->ref_guard, nullptr);
   }
 
   SignalSafePtr(T *ptr, Deallocator *funcPtr = nullptr) {
     this->deallocator = funcPtr;
-    this->guarded_ptr = new bsg_ref_guard;
-    bsg_ref_guard_init(this->guarded_ptr, ptr);
+    this->ref_guard = new bsg_ref_guard;
+    bsg_ref_guard_init(this->ref_guard, ptr);
   }
 
   ~SignalSafePtr() {
     if (this->deallocator) {
-      void *ptr = this->guarded_ptr->protected_ptr;
+      void *ptr = this->ref_guard->protected_ptr;
       T *casted = static_cast<T *>(ptr);
       (*this->deallocator)(casted);
     }
     this->release();
-    delete this->guarded_ptr;
+    delete this->ref_guard;
   }
 
   SignalSafePtr(const SignalSafePtr &other) {
     // just copying underlying wrappers pointers, not their contents
-    this->guarded_ptr = other->guarded_ptr;
+    this->ref_guard = other->ref_guard;
   }
 
   SignalSafePtr &operator=(const SignalSafePtr &other) {
     // just copying underlying wrappers pointers, not their contents
-    this->guarded_ptr = other->guarded_ptr;
+    this->ref_guard = other->ref_guard;
 
     return *this;
   }
@@ -46,24 +46,24 @@ public:
   SignalSafePtr &operator=(SignalSafePtr &&other) = delete;
 
   bool reset(T *ptr) {
-    bool res = bsg_ref_guard_release(this->guarded_ptr);
+    bool res = bsg_ref_guard_release(this->ref_guard);
     if (res) {
-      bsg_ref_guard_init(this->guarded_ptr, ptr);
+      bsg_ref_guard_init(this->ref_guard, ptr);
     }
 
     return res;
   }
 
   T *acquire() {
-    void *ptr = bsg_ref_guard_acquire(this->guarded_ptr);
+    void *ptr = bsg_ref_guard_acquire(this->ref_guard);
     T *casted = static_cast<T *>(ptr);
     return casted;
   }
 
-  bool release() { return bsg_ref_guard_release(this->guarded_ptr); }
+  bool release() { return bsg_ref_guard_release(this->ref_guard); }
 
 private:
-  bsg_ref_guard *guarded_ptr;
+  bsg_ref_guard *ref_guard;
   Deallocator *deallocator;
 };
 

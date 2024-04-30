@@ -2,12 +2,12 @@
 
 namespace bugsnag {
 
-BreadcrumbBuffer::BreadcrumbBuffer(int maxBreadcrumbs)
-    : maxBreadcrumbs{maxBreadcrumbs} {
+BreadcrumbBuffer::BreadcrumbBuffer(int max_breadcrumbs)
+    : max_breadcrumbs{max_breadcrumbs} {
   atomic_init(&this->index, 0);
   this->buffer =
       new SignalSafePtr<bsg_breadcrumb,
-                        decltype(free_breadcrumb_fields)>[maxBreadcrumbs];
+                        decltype(free_breadcrumb_fields)>[max_breadcrumbs];
 }
 
 BreadcrumbBuffer::~BreadcrumbBuffer() {
@@ -20,7 +20,7 @@ BreadcrumbBuffer::~BreadcrumbBuffer() {
 
 void BreadcrumbBuffer::add(bsg_breadcrumb_type type, std::string message,
                            std::string metadata, time_t timestamp) {
-  if (this->maxBreadcrumbs == 0) {
+  if (this->max_breadcrumbs == 0) {
     return;
   }
 
@@ -37,7 +37,7 @@ int BreadcrumbBuffer::getBreadcrumbIndex() {
     if (current == -1) {
       continue;
     }
-    int next = (current + 1) % this->maxBreadcrumbs;
+    int next = (current + 1) % this->max_breadcrumbs;
     if (atomic_compare_exchange_strong(&this->index, &current, next)) {
       return current;
     }
