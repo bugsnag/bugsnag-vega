@@ -22,7 +22,7 @@ public:
            time_t timestamp);
 
 private:
-  int getBreadcrumbIndex();
+  int get_breadcrumb_index();
 
   SignalSafePtr<bsg_breadcrumb, decltype(free_breadcrumb_fields)> *buffer;
   atomic_int index;

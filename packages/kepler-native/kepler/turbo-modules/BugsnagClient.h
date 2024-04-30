@@ -15,18 +15,18 @@ class Client {
 public:
   Client(std::unique_ptr<Configuration> config);
 
-  void markLaunchCompleted();
+  void mark_launch_completed();
 
-  void leaveBreadcrumb(bsg_breadcrumb_type type, std::string message,
-                       std::string metadata, time_t timestamp);
+  void leave_breadcrumb(bsg_breadcrumb_type type, std::string message,
+                        std::string metadata, time_t timestamp);
 
-  void setMetadata(std::string metadata_str);
-  std::string getMetadata();
-  void clearMetadata();
+  void set_metadata(std::string metadata_str);
+  std::string get_metadata();
+  void clear_metadata();
 
-  void setFeatures(std::string features_str);
-  std::string getFeatures();
-  void clearFeatures();
+  void set_features(std::string features_str);
+  std::string get_features();
+  void clear_features();
 
   std::string event_dir;
 
