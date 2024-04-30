@@ -1,11 +1,11 @@
 #include <stdlib.h>
 
-#include "reference_guard.h"
+#include "bsg_reference_guard.h"
 
 atomic_bool is_signal_handler_running(false);
 
 // We are the first owner of ptr
-void bsg_guarded_ptr_init(bsg_guarded_ptr *guard, void *ptr) {
+void bsg_ref_guard_init(bsg_ref_guard *guard, void *ptr) {
   guard->protected_ptr = ptr;
 
   if (ptr == NULL) {
@@ -16,13 +16,13 @@ void bsg_guarded_ptr_init(bsg_guarded_ptr *guard, void *ptr) {
 }
 
 // We are the next owner of ptr, need to acquire officially
-void bsg_guarded_ptr_init_copy(bsg_guarded_ptr *guard, bsg_guarded_ptr *other) {
+void bsg_ref_guard_init_copy(bsg_ref_guard *guard, bsg_ref_guard *other) {
   atomic_exchange(&guard->counter, other->counter);
-  guard->protected_ptr = bsg_guarded_ptr_acquire(guard);
+  guard->protected_ptr = bsg_ref_guard_acquire(guard);
 }
 
 // Mark that pointer as being read/written, return ptr to use
-void *bsg_guarded_ptr_acquire(bsg_guarded_ptr *guard) {
+void *bsg_ref_guard_acquire(bsg_ref_guard *guard) {
   uint_fast64_t current = atomic_load(&guard->counter);
   for (;;) {
     if (current == 0) {
@@ -39,7 +39,7 @@ void *bsg_guarded_ptr_acquire(bsg_guarded_ptr *guard) {
 }
 
 // Release your mark on ptr, return true if it was properly freed
-bool bsg_guarded_ptr_release(bsg_guarded_ptr *guard) {
+bool bsg_ref_guard_release(bsg_ref_guard *guard) {
   uint_fast64_t current = atomic_load(&guard->counter);
   for (;;) {
     if (current == 0) {

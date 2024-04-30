@@ -1,7 +1,7 @@
 #include "Kepler/turbomodule/TMLog.h"
 
 #include "BugsnagKeplerNative.h"
-#include "utils/signal_handler.h"
+#include "utils/bsg_signal_handler.h"
 
 #include <chrono>
 #include <filesystem>

@@ -10,7 +10,7 @@
 #include "Kepler/turbomodule/TMLog.h"
 
 #include "../BugsnagClient.h"
-#include "reference_guard.h"
+#include "bsg_reference_guard.h"
 
 #define BSG_HANDLED_SIGNAL_COUNT 6
 #define BSG_MAX_STACK_FRAMES 512
