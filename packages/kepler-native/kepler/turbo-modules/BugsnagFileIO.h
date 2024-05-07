@@ -14,13 +14,13 @@ public:
       TM_API_NAMESPACE::MethodAggregator<TM_API_NAMESPACE::KeplerTurboModule>
           &methodAggregator) const noexcept;
 
-  utils::json::JsonContainer readTextFile(std::string filename);
-  TM_API_NAMESPACE::ArrayBuffer readFile(std::string filename);
-  utils::json::JsonContainer writeTextFile(std::string filename,
-                                           std::string content);
-  utils::json::JsonContainer listDirectory(std::string dir);
+  utils::json::JsonContainer read_text_file(std::string filename);
+  TM_API_NAMESPACE::ArrayBuffer read_file(std::string filename);
+  utils::json::JsonContainer write_text_file(std::string filename,
+                                             std::string content);
+  utils::json::JsonContainer list_directory(std::string dir);
   bool mkdir(std::string path);
-  bool deleteFile(std::string path);
+  bool delete_file(std::string path);
   std::string sha1(std::string data);
 };
 } // namespace bugsnag

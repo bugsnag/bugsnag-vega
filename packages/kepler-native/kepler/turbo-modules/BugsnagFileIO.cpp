@@ -16,7 +16,7 @@
 
 namespace bugsnag {
 static utils::json::JsonContainer
-createErrorResult(utils::json::JsonContainer container) {
+create_error_result(utils::json::JsonContainer container) {
   container.insert("error", true);
   container.insert("message", std::string(strerror(errno)));
   container.insert("code", errno);
@@ -29,34 +29,36 @@ BugsnagFileIO::BugsnagFileIO()
 void BugsnagFileIO::aggregateMethods(
     TM_API_NAMESPACE::MethodAggregator<TM_API_NAMESPACE::KeplerTurboModule>
         &methodAggregator) const noexcept {
-  methodAggregator.addMethod("readTextFile", 1, &BugsnagFileIO::readTextFile);
-  methodAggregator.addMethod("readFile", 1, &BugsnagFileIO::readFile);
-  methodAggregator.addMethod("writeTextFile", 2, &BugsnagFileIO::writeTextFile);
-  methodAggregator.addMethod("listDirectory", 1, &BugsnagFileIO::listDirectory);
+  methodAggregator.addMethod("readTextFile", 1, &BugsnagFileIO::read_text_file);
+  methodAggregator.addMethod("readFile", 1, &BugsnagFileIO::read_file);
+  methodAggregator.addMethod("writeTextFile", 2,
+                             &BugsnagFileIO::write_text_file);
+  methodAggregator.addMethod("listDirectory", 1,
+                             &BugsnagFileIO::list_directory);
   methodAggregator.addMethod("mkdir", 1, &BugsnagFileIO::mkdir);
-  methodAggregator.addMethod("deleteFile", 1, &BugsnagFileIO::deleteFile);
+  methodAggregator.addMethod("deleteFile", 1, &BugsnagFileIO::delete_file);
   methodAggregator.addMethod("sha1", 1, &BugsnagFileIO::sha1);
 }
 
-utils::json::JsonContainer BugsnagFileIO::readTextFile(std::string path) {
+utils::json::JsonContainer BugsnagFileIO::read_text_file(std::string path) {
   auto result = utils::json::JsonContainer::createJsonObject();
   std::ifstream ifs(path);
 
   if (!ifs.is_open()) {
-    return createErrorResult(result);
+    return create_error_result(result);
   }
 
   std::string content((std::istreambuf_iterator<char>(ifs)),
                       (std::istreambuf_iterator<char>()));
   if (ifs.fail()) {
-    return createErrorResult(result);
+    return create_error_result(result);
   }
 
   result.insert("content", content);
   return result;
 }
 
-TM_API_NAMESPACE::ArrayBuffer BugsnagFileIO::readFile(std::string path) {
+TM_API_NAMESPACE::ArrayBuffer BugsnagFileIO::read_file(std::string path) {
   auto result = TM_API_NAMESPACE::ArrayBuffer();
   std::ifstream ifs(path, std::ios::binary);
 
@@ -80,24 +82,24 @@ TM_API_NAMESPACE::ArrayBuffer BugsnagFileIO::readFile(std::string path) {
   return result;
 }
 
-utils::json::JsonContainer BugsnagFileIO::writeTextFile(std::string path,
-                                                        std::string content) {
+utils::json::JsonContainer BugsnagFileIO::write_text_file(std::string path,
+                                                          std::string content) {
   auto result = utils::json::JsonContainer::createJsonObject();
   std::ofstream ofs(path);
   if (!ofs.is_open()) {
-    return createErrorResult(result);
+    return create_error_result(result);
   }
 
   ofs << content;
 
   if (ofs.fail()) {
-    return createErrorResult(result);
+    return create_error_result(result);
   }
 
   return result;
 }
 
-utils::json::JsonContainer BugsnagFileIO::listDirectory(std::string dir) {
+utils::json::JsonContainer BugsnagFileIO::list_directory(std::string dir) {
   auto entries = utils::json::JsonContainer::createJsonArray();
   for (auto const &dir_entry : std::filesystem::directory_iterator{dir}) {
     auto json_entry = utils::json::JsonContainer::createJsonObject();
@@ -118,7 +120,7 @@ bool BugsnagFileIO::mkdir(std::string path) {
   return !ec;
 }
 
-bool BugsnagFileIO::deleteFile(std::string path) {
+bool BugsnagFileIO::delete_file(std::string path) {
   std::error_code ec;
   std::filesystem::remove(std::filesystem::path{path}, ec);
   return !ec;

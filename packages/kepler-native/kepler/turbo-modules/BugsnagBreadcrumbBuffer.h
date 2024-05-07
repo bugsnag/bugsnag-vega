@@ -4,7 +4,7 @@
 #include <string>
 
 #include "./utils/bsg_breadcrumb.h"
-#include "BugsnagSafeSharedPtr.h"
+#include "BugsnagSignalSafePtr.h"
 
 #ifndef BUGSNAG_CRUMBS_MAX
 // Max number of breadcrumbs in an event. Configures a default if not defined.
@@ -15,19 +15,18 @@ namespace bugsnag {
 
 class BreadcrumbBuffer {
 public:
-  BreadcrumbBuffer(int maxBreadcrumbs);
+  BreadcrumbBuffer(int max_breadcrumbs);
   ~BreadcrumbBuffer();
 
   void add(bsg_breadcrumb_type type, std::string message, std::string metadata,
            time_t timestamp);
-  // bsg_breadcrumb *copy();
 
 private:
-  int getBreadcrumbIndex();
+  int get_breadcrumb_index();
 
-  SafeSharedPtr<bsg_breadcrumb, decltype(free_breadcrumb_fields)> *buffer;
+  SignalSafePtr<bsg_breadcrumb, decltype(free_breadcrumb_fields)> *buffer;
   atomic_int index;
-  int maxBreadcrumbs;
+  int max_breadcrumbs;
 };
 
 } // namespace bugsnag

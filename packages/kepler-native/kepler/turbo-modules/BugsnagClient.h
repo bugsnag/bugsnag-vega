@@ -8,25 +8,25 @@ namespace bugsnag {
 struct Configuration {
   char api_key[64];
   std::string storage_dir;
-  int maxBreadcrumbs = BUGSNAG_CRUMBS_MAX;
+  int max_breadcrumbs = BUGSNAG_CRUMBS_MAX;
 };
 
 class Client {
 public:
   Client(std::unique_ptr<Configuration> config);
 
-  void markLaunchCompleted();
+  void mark_launch_completed();
 
-  void leaveBreadcrumb(bsg_breadcrumb_type type, std::string message,
-                       std::string metadata, time_t timestamp);
+  void leave_breadcrumb(bsg_breadcrumb_type type, std::string message,
+                        std::string metadata, time_t timestamp);
 
-  void addMetadata(std::string metadataStr);
-  std::string getMetadata();
-  void clearMetadata();
+  void set_metadata(std::string metadata_str);
+  std::string get_metadata();
+  void clear_metadata();
 
-  void addFeatures(std::string featuresStr);
-  std::string getFeatures();
-  void clearFeatures();
+  void set_features(std::string features_str);
+  std::string get_features();
+  void clear_features();
 
   std::string event_dir;
 
@@ -34,8 +34,8 @@ private:
   std::atomic<bool> is_launching;
   std::unique_ptr<Configuration> config;
   BreadcrumbBuffer breadcrumb_buffer;
-  SafeSharedPtr<char> metadata;
-  SafeSharedPtr<char> features;
+  SignalSafePtr<char> metadata;
+  SignalSafePtr<char> features;
 };
 
 extern Client *global_client;

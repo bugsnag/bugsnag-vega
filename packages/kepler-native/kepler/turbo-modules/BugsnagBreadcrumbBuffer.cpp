@@ -2,12 +2,12 @@
 
 namespace bugsnag {
 
-BreadcrumbBuffer::BreadcrumbBuffer(int maxBreadcrumbs)
-    : maxBreadcrumbs{maxBreadcrumbs} {
+BreadcrumbBuffer::BreadcrumbBuffer(int max_breadcrumbs)
+    : max_breadcrumbs{max_breadcrumbs} {
   atomic_init(&this->index, 0);
   this->buffer =
-      new SafeSharedPtr<bsg_breadcrumb,
-                        decltype(free_breadcrumb_fields)>[maxBreadcrumbs];
+      new SignalSafePtr<bsg_breadcrumb,
+                        decltype(free_breadcrumb_fields)>[max_breadcrumbs];
 }
 
 BreadcrumbBuffer::~BreadcrumbBuffer() {
@@ -20,24 +20,24 @@ BreadcrumbBuffer::~BreadcrumbBuffer() {
 
 void BreadcrumbBuffer::add(bsg_breadcrumb_type type, std::string message,
                            std::string metadata, time_t timestamp) {
-  if (this->maxBreadcrumbs == 0) {
+  if (this->max_breadcrumbs == 0) {
     return;
   }
 
   bsg_breadcrumb *crumb =
       new_breadcrumb(type, message.c_str(), metadata.c_str(), timestamp);
 
-  int position = getBreadcrumbIndex();
+  int position = get_breadcrumb_index();
   this->buffer[position].reset(crumb);
 }
 
-int BreadcrumbBuffer::getBreadcrumbIndex() {
+int BreadcrumbBuffer::get_breadcrumb_index() {
   while (true) {
     int current = atomic_load(&this->index);
     if (current == -1) {
       continue;
     }
-    int next = (current + 1) % this->maxBreadcrumbs;
+    int next = (current + 1) % this->max_breadcrumbs;
     if (atomic_compare_exchange_strong(&this->index, &current, next)) {
       return current;
     }

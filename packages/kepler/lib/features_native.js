@@ -9,7 +9,7 @@ const nativeFeatures = {
       origAddOneFeature.apply(this, args)
       const featuresAll = this._features
       const featuresStr = JSON.stringify(featuresAll)
-      BugsnagKeplerNative.addFeatures(featuresStr)
+      BugsnagKeplerNative.setFeatures(featuresStr)
     }
 
     // wrap add multiple
@@ -18,7 +18,7 @@ const nativeFeatures = {
       origAddMultipleFeatures.apply(this, args)
       const featuresAll = this._features
       const featuresStr = JSON.stringify(featuresAll)
-      BugsnagKeplerNative.addFeatures(featuresStr)
+      BugsnagKeplerNative.setFeatures(featuresStr)
     }
 
     // wrap clear
@@ -27,7 +27,7 @@ const nativeFeatures = {
       origClearOneFeature.apply(this, args)
       const metadataAll = this._metadata
       const metadataStr = JSON.stringify(metadataAll)
-      BugsnagKeplerNative.addFeatures(metadataStr)
+      BugsnagKeplerNative.setFeatures(metadataStr)
     }
 
     // wrap clear all

@@ -16,21 +16,21 @@ public:
           &methodAggregator) const noexcept;
 
   utils::json::JsonContainer configure(utils::json::JsonContainer config);
-  void markLaunchCompleted();
-  std::string generateUUID();
-  std::string getDeviceID();
-  void setDeviceID(std::string deviceID);
-  void nativeCrash();
+  void mark_launch_completed();
+  std::string generate_uuid();
+  std::string get_device_id();
+  void set_device_id(std::string device_id);
+  void native_crash();
 
-  void leaveBreadcrumb(utils::json::JsonContainer crumb);
-  void addMetadata(std::string metadataStr);
-  void clearMetadata();
-  void addFeatures(std::string featuresStr);
-  void clearFeatures();
+  void leave_breadcrumb(utils::json::JsonContainer crumb);
+  void set_metadata(std::string metadata_str);
+  void clear_metadata();
+  void set_features(std::string features_str);
+  void clear_features();
 
 private:
   Client *bugsnag;
-  std::string deviceID;
+  std::string device_id;
 };
 } // namespace bugsnag
 

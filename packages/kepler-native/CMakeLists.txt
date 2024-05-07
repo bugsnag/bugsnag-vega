@@ -14,16 +14,16 @@ if (CMAKE_SYSTEM_NAME STREQUAL Android)
 endif()
 
 set(HEADERS
-  kepler/turbo-modules/utils/reference_guard.h
-  kepler/turbo-modules/utils/signal_handler.h
+  kepler/turbo-modules/utils/bsg_reference_guard.h
+  kepler/turbo-modules/utils/bsg_signal_handler.h
   kepler/turbo-modules/utils/bsg_breadcrumb.h
   kepler/turbo-modules/BugsnagKeplerNative.h
-  kepler/turbo-modules/BugsnagSafeSharedPtr.h
+  kepler/turbo-modules/BugsnagSignalSafePtr.h
   kepler/turbo-modules/BugsnagBreadcrumbBuffer.h
 )
 set(SOURCES
-    kepler/turbo-modules/utils/reference_guard.cpp
-    kepler/turbo-modules/utils/signal_handler.cpp
+    kepler/turbo-modules/utils/bsg_reference_guard.cpp
+    kepler/turbo-modules/utils/bsg_signal_handler.cpp
     kepler/turbo-modules/utils/bsg_breadcrumb.cpp
     kepler/turbo-modules/BugsnagClient.cpp
     kepler/turbo-modules/BugsnagFileIO.cpp

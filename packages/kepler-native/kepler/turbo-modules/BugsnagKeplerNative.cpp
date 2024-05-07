@@ -1,7 +1,7 @@
 #include "Kepler/turbomodule/TMLog.h"
 
 #include "BugsnagKeplerNative.h"
-#include "utils/signal_handler.h"
+#include "utils/bsg_signal_handler.h"
 
 #include <chrono>
 #include <filesystem>
@@ -36,7 +36,7 @@ static utils::json::JsonContainer createStaticApp() {
 
 BugsnagKeplerNative::BugsnagKeplerNative()
     : TM_API_NAMESPACE::KeplerTurboModule("BugsnagKeplerNative") {
-  this->deviceID = this->generateUUID();
+  this->device_id = this->generate_uuid();
 }
 
 void BugsnagKeplerNative::aggregateMethods(
@@ -44,25 +44,25 @@ void BugsnagKeplerNative::aggregateMethods(
         &methodAggregator) const noexcept {
   methodAggregator.addMethod("configure", 1, &BugsnagKeplerNative::configure);
   methodAggregator.addMethod("markLaunchCompleted", 0,
-                             &BugsnagKeplerNative::markLaunchCompleted);
+                             &BugsnagKeplerNative::mark_launch_completed);
   methodAggregator.addMethod("getDeviceID", 0,
-                             &BugsnagKeplerNative::getDeviceID);
+                             &BugsnagKeplerNative::get_device_id);
   methodAggregator.addMethod("setDeviceID", 1,
-                             &BugsnagKeplerNative::setDeviceID);
+                             &BugsnagKeplerNative::set_device_id);
   methodAggregator.addMethod("generateUUID", 0,
-                             &BugsnagKeplerNative::generateUUID);
+                             &BugsnagKeplerNative::generate_uuid);
   methodAggregator.addMethod("leaveBreadcrumb", 1,
-                             &BugsnagKeplerNative::leaveBreadcrumb);
-  methodAggregator.addMethod("addMetadata", 1,
-                             &BugsnagKeplerNative::addMetadata);
+                             &BugsnagKeplerNative::leave_breadcrumb);
+  methodAggregator.addMethod("setMetadata", 1,
+                             &BugsnagKeplerNative::set_metadata);
   methodAggregator.addMethod("clearMetadata", 0,
-                             &BugsnagKeplerNative::clearMetadata);
-  methodAggregator.addMethod("addFeatures", 1,
-                             &BugsnagKeplerNative::addFeatures);
+                             &BugsnagKeplerNative::clear_metadata);
+  methodAggregator.addMethod("setFeatures", 1,
+                             &BugsnagKeplerNative::set_features);
   methodAggregator.addMethod("clearFeatures", 0,
-                             &BugsnagKeplerNative::clearFeatures);
+                             &BugsnagKeplerNative::clear_features);
   methodAggregator.addMethod("nativeCrash", 0,
-                             &BugsnagKeplerNative::nativeCrash);
+                             &BugsnagKeplerNative::native_crash);
 }
 
 utils::json::JsonContainer
@@ -81,69 +81,69 @@ BugsnagKeplerNative::configure(utils::json::JsonContainer config) {
   return result;
 }
 
-void BugsnagKeplerNative::markLaunchCompleted() {
+void BugsnagKeplerNative::mark_launch_completed() {
   if (this->bugsnag != nullptr) {
-    this->bugsnag->markLaunchCompleted();
+    this->bugsnag->mark_launch_completed();
   }
 }
 
-std::string BugsnagKeplerNative::generateUUID() {
+std::string BugsnagKeplerNative::generate_uuid() {
   std::random_device rng;
-  const char *availableChars = "0123456789abcdef";
+  const char *available_chars = "0123456789abcdef";
   std::uniform_int_distribution<int> dist(0, 15);
-  char uuidBuffer[37];
+  char uuid_buffer[37];
 
   for (int i = 0; i < 36; ++i) {
-    uuidBuffer[i] = availableChars[dist(rng)];
+    uuid_buffer[i] = available_chars[dist(rng)];
   }
-  uuidBuffer[8] = '-';
-  uuidBuffer[13] = '-';
-  uuidBuffer[18] = '-';
-  uuidBuffer[23] = '-';
-  return std::string(uuidBuffer);
+  uuid_buffer[8] = '-';
+  uuid_buffer[13] = '-';
+  uuid_buffer[18] = '-';
+  uuid_buffer[23] = '-';
+  return std::string(uuid_buffer);
 }
 
-std::string BugsnagKeplerNative::getDeviceID() { return this->deviceID; }
+std::string BugsnagKeplerNative::get_device_id() { return this->device_id; }
 
-void BugsnagKeplerNative::setDeviceID(std::string deviceID) {
-  this->deviceID = deviceID;
+void BugsnagKeplerNative::set_device_id(std::string device_id) {
+  this->device_id = device_id;
 }
 
-void BugsnagKeplerNative::leaveBreadcrumb(utils::json::JsonContainer crumb) {
+void BugsnagKeplerNative::leave_breadcrumb(utils::json::JsonContainer crumb) {
   auto type = crumb["type"].getValue(0);
-  bsg_breadcrumb_type castedType = static_cast<bsg_breadcrumb_type>(type);
+  bsg_breadcrumb_type casted_type = static_cast<bsg_breadcrumb_type>(type);
 
   std::string empty = "";
   auto msg = crumb["message"].getValue(empty);
   auto metadata = crumb["metadata"].getValue(empty);
 
-  auto timeNow = std::chrono::system_clock::now();
-  time_t timestamp = std::chrono::system_clock::to_time_t(timeNow);
-  auto crumbTime = crumb["timestamp"].getValue(0);
-  if (crumbTime != 0) {
-    timestamp = static_cast<time_t>(crumbTime);
+  auto time_now = std::chrono::system_clock::now();
+  time_t timestamp = std::chrono::system_clock::to_time_t(time_now);
+  auto crumb_time = crumb["timestamp"].getValue(0);
+  if (crumb_time != 0) {
+    timestamp = static_cast<time_t>(crumb_time);
   }
 
-  this->bugsnag->leaveBreadcrumb(castedType, msg, metadata, timestamp);
+  this->bugsnag->leave_breadcrumb(casted_type, msg, metadata, timestamp);
 }
 
-void BugsnagKeplerNative::addMetadata(std::string metadataStr) {
-  this->bugsnag->addMetadata(metadataStr);
+void BugsnagKeplerNative::set_metadata(std::string metadata_str) {
+  this->bugsnag->set_metadata(metadata_str);
 }
 
-void BugsnagKeplerNative::clearMetadata() { this->bugsnag->clearMetadata(); }
+void BugsnagKeplerNative::clear_metadata() { this->bugsnag->clear_metadata(); }
 
-void BugsnagKeplerNative::addFeatures(std::string featuresStr) {
-  this->bugsnag->addFeatures(featuresStr);
+void BugsnagKeplerNative::set_features(std::string features_str) {
+  this->bugsnag->set_features(features_str);
 }
 
-void BugsnagKeplerNative::clearFeatures() { this->bugsnag->clearFeatures(); }
+void BugsnagKeplerNative::clear_features() { this->bugsnag->clear_features(); }
 
 // Temporary native crash that can be used for testing:
 
 static void __attribute__((used)) somefakefunc(void) {}
 
-void BugsnagKeplerNative::nativeCrash() {
+void BugsnagKeplerNative::native_crash() {
   // Write to a read-only page
   volatile char *ptr = (char *)somefakefunc;
   *ptr = 0;
