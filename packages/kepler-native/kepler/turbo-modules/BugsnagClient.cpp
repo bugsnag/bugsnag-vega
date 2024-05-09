@@ -1,56 +1,72 @@
 #include "BugsnagClient.h"
+#include "./utils/bsg_event.h"
 
 namespace bugsnag {
 Client *global_client;
 
 Client::Client(std::unique_ptr<Configuration> config)
     : event_dir(config->storage_dir), is_launching(true),
-      breadcrumb_buffer(config->max_breadcrumbs), metadata() {
+      current_event(std::make_unique<Event>(config->max_breadcrumbs)) {
   this->config = std::move(config);
 }
 
-void Client::mark_launch_completed() { is_launching = false; }
+void Client::mark_launch_completed() {
+  this->is_launching = false;
+  auto now = std::chrono::system_clock::now();
+  this->start_time = std::chrono::system_clock::to_time_t(now);
+}
 
 void Client::leave_breadcrumb(bsg_breadcrumb_type type, std::string message,
                               std::string metadata, time_t timestamp) {
-  this->breadcrumb_buffer.add(type, message, metadata, timestamp);
+  if (this->current_event == nullptr) {
+    return;
+  }
+  this->current_event->leave_breadcrumb(type, message, metadata, timestamp);
 }
 
 void Client::set_metadata(std::string metadata_str) {
-  char *new_metadata = strdup(metadata_str.c_str());
-  this->metadata.reset(new_metadata);
+  if (this->current_event == nullptr) {
+    return;
+  }
+  this->current_event->set_metadata(metadata_str);
 }
 
 std::string Client::get_metadata() {
-  std::string metadata_str;
-  char *metadata_char = this->metadata.acquire();
-  if (metadata_char != nullptr) {
-    metadata_str = std::string(metadata_char);
+  if (this->current_event == nullptr) {
+    return "";
   }
-
-  this->metadata.release();
-
-  return metadata_str;
+  return this->current_event->get_metadata();
 }
 
-void Client::clear_metadata() { this->metadata.reset(nullptr); }
+void Client::clear_metadata() {
+  if (this->current_event == nullptr) {
+    return;
+  }
+  this->current_event->clear_metadata();
+}
 
 void Client::set_features(std::string features_str) {
-  char *new_features = strdup(features_str.c_str());
-  this->features.reset(new_features);
+  if (this->current_event == nullptr) {
+    return;
+  }
+  this->current_event->set_features(features_str);
 }
 
 std::string Client::get_features() {
-  std::string features_str;
-  char *features_char = this->features.acquire();
-  if (features_char != nullptr) {
-    features_str = std::string(features_char);
+  if (this->current_event == nullptr) {
+    return "";
   }
-
-  this->features.release();
-
-  return features_str;
+  return this->current_event->get_features();
 }
 
-void Client::clear_features() { this->features.reset(nullptr); }
+void Client::clear_features() {
+  if (this->current_event == nullptr) {
+    return;
+  }
+  this->current_event->clear_features();
+}
+
+std::unique_ptr<Event> Client::move_event() {
+  return std::move(this->current_event);
+}
 } // namespace bugsnag
