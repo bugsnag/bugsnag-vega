@@ -24,10 +24,10 @@ set(HEADERS
   kepler/turbo-modules/BugsnagBreadcrumbBuffer.h
 )
 set(SOURCES
-    kepler/turbo-modules/utils/bsg_reference_guard.cpp
+    kepler/turbo-modules/utils/bsg_reference_guard.c
     kepler/turbo-modules/utils/bsg_signal_handler.cpp
-    kepler/turbo-modules/utils/bsg_breadcrumb.cpp
-    kepler/turbo-modules/utils/bsg_event.cpp
+    kepler/turbo-modules/utils/bsg_breadcrumb.c
+    kepler/turbo-modules/utils/bsg_event.c
     kepler/turbo-modules/BugsnagClient.cpp
     kepler/turbo-modules/BugsnagEvent.cpp
     kepler/turbo-modules/BugsnagFileIO.cpp

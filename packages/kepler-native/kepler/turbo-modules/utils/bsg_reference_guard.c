@@ -1,8 +1,9 @@
+#include <stdbool.h>
 #include <stdlib.h>
 
 #include "bsg_reference_guard.h"
 
-atomic_bool is_signal_handler_running(false);
+atomic_bool is_signal_handler_running = false;
 
 // We are the first owner of ptr
 void bsg_ref_guard_init(bsg_ref_guard *guard, void *ptr) {

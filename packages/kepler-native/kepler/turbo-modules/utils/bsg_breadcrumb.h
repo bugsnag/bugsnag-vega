@@ -27,14 +27,15 @@ enum bsg_breadcrumb_type {
 };
 
 typedef struct {
-  bsg_breadcrumb_type type;
+  enum bsg_breadcrumb_type type;
   char *message;
   char *metadata;
   time_t timestamp;
 } bsg_breadcrumb;
 
-bsg_breadcrumb *new_breadcrumb(bsg_breadcrumb_type type, const char *message,
-                               const char *metadata, time_t timestamp);
+bsg_breadcrumb *new_breadcrumb(enum bsg_breadcrumb_type type,
+                               const char *message, const char *metadata,
+                               time_t timestamp);
 
 void free_breadcrumb_fields(bsg_breadcrumb *crumb);
 
