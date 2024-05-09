@@ -8,8 +8,14 @@ bsg_event_payload *bsg_new_event_payload(const char *api_key,
                                          const char *payload_ver) {
   bsg_event_payload *new_payload =
       (bsg_event_payload *)calloc(1, sizeof(bsg_event_payload));
-  new_payload->api_key = strdup(api_key);
-  new_payload->payload_version = strdup(payload_ver);
+
+  if (api_key != NULL) {
+    new_payload->api_key = strdup(api_key);
+  }
+  if (payload_ver != NULL) {
+    new_payload->payload_version = strdup(payload_ver);
+  }
+
   new_payload->event.severity = BSG_SEVERITY_ERR;
   new_payload->event.unhandled = true;
   return new_payload;
@@ -22,9 +28,15 @@ void bsg_set_event_notifier_info(bsg_event_payload *payload,
     return;
   }
 
-  payload->notifier.name = strdup(name_arg);
-  payload->notifier.version = strdup(ver_arg);
-  payload->notifier.url = strdup(url_arg);
+  if (name_arg != NULL) {
+    payload->notifier.name = strdup(name_arg);
+  }
+  if (ver_arg != NULL) {
+    payload->notifier.version = strdup(ver_arg);
+  }
+  if (url_arg != NULL) {
+    payload->notifier.url = strdup(url_arg);
+  }
 }
 
 void bsg_set_event_severity(bsg_event_payload *payload, const char *type_arg) {
@@ -32,7 +44,9 @@ void bsg_set_event_severity(bsg_event_payload *payload, const char *type_arg) {
     return;
   }
 
-  payload->event.severity_reason.type = strdup(type_arg);
+  if (type_arg != NULL) {
+    payload->event.severity_reason.type = strdup(type_arg);
+  }
 }
 
 void bsg_set_event_user(bsg_event_payload *payload, const char *id_arg,
@@ -41,9 +55,15 @@ void bsg_set_event_user(bsg_event_payload *payload, const char *id_arg,
     return;
   }
 
-  payload->event.user.id = strdup(id_arg);
-  payload->event.user.email = strdup(email_arg);
-  payload->event.user.name = strdup(name_arg);
+  if (id_arg != NULL) {
+    payload->event.user.id = strdup(id_arg);
+  }
+  if (email_arg != NULL) {
+    payload->event.user.email = strdup(email_arg);
+  }
+  if (name_arg != NULL) {
+    payload->event.user.name = strdup(name_arg);
+  }
 }
 
 void bsg_set_event_device(bsg_event_payload *payload, const char *id,
@@ -55,15 +75,33 @@ void bsg_set_event_device(bsg_event_payload *payload, const char *id,
   if (payload == NULL) {
     return;
   }
-  payload->event.device.id = strdup(id);
-  payload->event.device.hostname = strdup(host);
-  payload->event.device.locale = strdup(locale);
-  payload->event.device.manufacturer = strdup(manufacturer);
-  payload->event.device.model = strdup(model);
-  payload->event.device.model_number = strdup(modelnr);
-  payload->event.device.orientation = strdup(orient);
-  payload->event.device.os_name = strdup(osname);
-  payload->event.device.os_version = strdup(osver);
+  if (id != NULL) {
+    payload->event.device.id = strdup(id);
+  }
+  if (host != NULL) {
+    payload->event.device.hostname = strdup(host);
+  }
+  if (locale != NULL) {
+    payload->event.device.locale = strdup(locale);
+  }
+  if (manufacturer != NULL) {
+    payload->event.device.manufacturer = strdup(manufacturer);
+  }
+  if (model != NULL) {
+    payload->event.device.model = strdup(model);
+  }
+  if (modelnr != NULL) {
+    payload->event.device.model_number = strdup(modelnr);
+  }
+  if (orient != NULL) {
+    payload->event.device.orientation = strdup(orient);
+  }
+  if (osname != NULL) {
+    payload->event.device.os_name = strdup(osname);
+  }
+  if (osver != NULL) {
+    payload->event.device.os_version = strdup(osver);
+  }
 }
 
 void bsg_set_event_device_time(bsg_event_payload *payload, time_t time_arg) {
@@ -79,10 +117,18 @@ void bsg_set_event_app(bsg_event_payload *payload, const char *bundle_id,
     return;
   }
 
-  payload->event.app.code_bundle_id = strdup(bundle_id);
-  payload->event.app.release_stage = strdup(stage);
-  payload->event.app.type = strdup(type);
-  payload->event.app.version = strdup(ver);
+  if (bundle_id != NULL) {
+    payload->event.app.code_bundle_id = strdup(bundle_id);
+  }
+  if (stage != NULL) {
+    payload->event.app.release_stage = strdup(stage);
+  }
+  if (type != NULL) {
+    payload->event.app.type = strdup(type);
+  }
+  if (ver != NULL) {
+    payload->event.app.version = strdup(ver);
+  }
 }
 
 void bsg_set_event_app_duration(bsg_event_payload *payload, int duration,
@@ -102,33 +148,17 @@ void bsg_set_event_exception(bsg_event_payload *payload, const char *class_arg,
     return;
   }
 
-  int class_len = strlen(class_arg);
-  if (class_len > (ERROR_CLASS_SIZE - 1)) {
-    class_len = ERROR_CLASS_SIZE - 1;
+  if (class_arg != NULL) {
+    bsg_strncpy(payload->event.exception.error_class, class_arg,
+                ERROR_CLASS_SIZE);
   }
-  int i = 0;
-  for (i = 0; i < class_len; ++i) {
-    payload->event.exception.error_class[i] = class_arg[i];
+  if (message_arg != NULL) {
+    bsg_strncpy(payload->event.exception.error_message, message_arg,
+                ERROR_MESSAGE_SIZE);
   }
-  payload->event.exception.error_class[i] = '\0';
-
-  int msg_len = strlen(message_arg);
-  if (msg_len > (ERROR_MESSAGE_SIZE - 1)) {
-    msg_len = ERROR_MESSAGE_SIZE - 1;
+  if (type_arg != NULL) {
+    bsg_strncpy(payload->event.exception.type, type_arg, ERROR_TYPE_SIZE);
   }
-  for (i = 0; i < msg_len; ++i) {
-    payload->event.exception.error_message[i] = message_arg[i];
-  }
-  payload->event.exception.error_message[i] = '\0';
-
-  int type_len = strlen(type_arg);
-  if (type_len > (ERROR_TYPE_SIZE - 1)) {
-    type_len = ERROR_TYPE_SIZE - 1;
-  }
-  for (i = 0; i < type_len; ++i) {
-    payload->event.exception.type[i] = type_arg[i];
-  }
-  payload->event.exception.type[i] = '\0';
 }
 
 void bsg_free_event_app(bsg_app *app) {
@@ -136,14 +166,10 @@ void bsg_free_event_app(bsg_app *app) {
     return;
   }
 
-  if (app->code_bundle_id != NULL)
-    free(app->code_bundle_id);
-  if (app->release_stage != NULL)
-    free(app->release_stage);
-  if (app->type != NULL)
-    free(app->type);
-  if (app->version != NULL)
-    free(app->version);
+  free(app->code_bundle_id);
+  free(app->release_stage);
+  free(app->type);
+  free(app->version);
 }
 
 void bsg_free_event_device(bsg_device *device) {
@@ -151,24 +177,15 @@ void bsg_free_event_device(bsg_device *device) {
     return;
   }
 
-  if (device->id != NULL)
-    free(device->id);
-  if (device->hostname != NULL)
-    free(device->hostname);
-  if (device->locale != NULL)
-    free(device->locale);
-  if (device->manufacturer != NULL)
-    free(device->manufacturer);
-  if (device->model != NULL)
-    free(device->model);
-  if (device->model_number != NULL)
-    free(device->model_number);
-  if (device->orientation != NULL)
-    free(device->orientation);
-  if (device->os_name != NULL)
-    free(device->os_name);
-  if (device->os_version != NULL)
-    free(device->os_version);
+  free(device->id);
+  free(device->hostname);
+  free(device->locale);
+  free(device->manufacturer);
+  free(device->model);
+  free(device->model_number);
+  free(device->orientation);
+  free(device->os_name);
+  free(device->os_version);
 }
 
 void bsg_free_event_user(bsg_user *user) {
@@ -176,12 +193,9 @@ void bsg_free_event_user(bsg_user *user) {
     return;
   }
 
-  if (user->id != NULL)
-    free(user->id);
-  if (user->email != NULL)
-    free(user->email);
-  if (user->name != NULL)
-    free(user->name);
+  free(user->id);
+  free(user->email);
+  free(user->name);
 }
 
 void bsg_free_event_severity(bsg_event_severity_reason *reason) {
@@ -189,8 +203,7 @@ void bsg_free_event_severity(bsg_event_severity_reason *reason) {
     return;
   }
 
-  if (reason->type != NULL)
-    free(reason->type);
+  free(reason->type);
 }
 
 void bsg_free_event_notifier_info(bsg_notifier_info *info) {
@@ -198,12 +211,9 @@ void bsg_free_event_notifier_info(bsg_notifier_info *info) {
     return;
   }
 
-  if (info->name != NULL)
-    free(info->name);
-  if (info->version != NULL)
-    free(info->version);
-  if (info->url != NULL)
-    free(info->url);
+  free(info->name);
+  free(info->version);
+  free(info->url);
 }
 
 void bsg_free_event_payload(bsg_event_payload *payload) {
@@ -234,4 +244,15 @@ bsg_error_types bsg_error_types_all_enabled() {
   et.unhandled_exceptions = true;
   et.unhandled_rejections = true;
   return et;
+}
+
+size_t bsg_strncpy(char *dst, const char *src, size_t dst_size) {
+  if (dst == NULL || dst_size == 0) {
+    return 0;
+  }
+  dst[0] = '\0';
+  if (src != NULL) {
+    return strlcat(dst, src, dst_size);
+  }
+  return 0;
 }

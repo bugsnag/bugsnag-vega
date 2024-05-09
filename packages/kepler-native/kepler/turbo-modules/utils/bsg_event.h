@@ -53,6 +53,7 @@ void bsg_free_event_notifier_info(bsg_notifier_info *info);
 void bsg_free_event_payload(bsg_event_payload *payload);
 
 bsg_error_types bsg_error_types_all_enabled();
+size_t bsg_strncpy(char *dst, const char *src, size_t dst_size);
 
 #ifdef __cplusplus
 }
