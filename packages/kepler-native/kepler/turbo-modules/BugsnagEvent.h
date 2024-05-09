@@ -12,6 +12,8 @@ public:
   ~Event();
 
   void configure(std::string api_key);
+  void set_exception(const char *class_arg, const char *message_arg,
+                     const char *type_arg);
 
   void leave_breadcrumb(bsg_breadcrumb_type type, std::string message,
                         std::string metadata, time_t timestamp);

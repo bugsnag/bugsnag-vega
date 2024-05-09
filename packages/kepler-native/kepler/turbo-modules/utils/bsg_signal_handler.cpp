@@ -20,6 +20,13 @@ static const int bsg_native_signals[BSG_HANDLED_SIGNAL_COUNT + 1] = {
 static const char bsg_native_signal_names[BSG_HANDLED_SIGNAL_COUNT + 1][9] = {
     "SIGILL\n", "SIGTRAP\n", "SIGABRT\n", "SIGBUS\n", "SIGFPE\n", "SIGSEGV\n"};
 static struct sigaction bsg_previous_signal_handles[BSG_HANDLED_SIGNAL_COUNT];
+static const char bsg_native_signal_msgs[BSG_HANDLED_SIGNAL_COUNT + 1][60] = {
+    "Illegal instruction",
+    "Trace/breakpoint trap",
+    "Abort program",
+    "Bus error (bad memory access)",
+    "Floating-point exception",
+    "Segmentation violation (invalid memory reference)"};
 
 static void bsg_invoke_previous_signal_handler(int signum, siginfo_t *info,
                                                void *user_context) {
@@ -101,14 +108,20 @@ static void bsg_handle_signal(int signum, siginfo_t *info, void *user_context) {
   Dl_info sym_info;
   int fd, stack_size, i;
 
+  bugsnag::Event *current_event;
   bugsnag::Client *client = bugsnag::global_client;
   if (!client) {
     TMWARN("[bugsnag] No configured BugsnagClient");
     goto call_previous_handler;
   }
 
-  // This is horrible code, and must be removed before this handler is used for
-  // anything other than debugging
+  current_event = client->release_event();
+  current_event->set_exception(bsg_native_signal_names[signum],
+                               bsg_native_signal_msgs[signum], "c");
+  // TODO write event to file
+
+  // This is horrible code, and must be removed before this handler is used
+  // for anything other than debugging
   static int counter = 0;
   char path[1024];
   char number_buffer[32];

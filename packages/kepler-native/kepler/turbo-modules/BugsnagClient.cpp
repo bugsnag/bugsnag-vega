@@ -67,7 +67,5 @@ void Client::clear_features() {
   this->current_event->clear_features();
 }
 
-std::unique_ptr<Event> Client::move_event() {
-  return std::move(this->current_event);
-}
+Event *Client::release_event() { return this->current_event.release(); }
 } // namespace bugsnag

@@ -28,7 +28,7 @@ public:
   std::string get_features();
   void clear_features();
 
-  std::unique_ptr<Event> move_event();
+  Event *release_event();
 
   std::string event_dir;
 

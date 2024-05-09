@@ -22,6 +22,11 @@ void Event::configure(std::string api_key) {
   bsg_set_event_app(this->payload, "bundle_id", "dev", "apptype", "version");
 }
 
+void Event::set_exception(const char *class_arg, const char *message_arg,
+                          const char *type_arg) {
+  bsg_set_event_exception(this->payload, class_arg, message_arg, type_arg);
+}
+
 void Event::leave_breadcrumb(bsg_breadcrumb_type type, std::string message,
                              std::string metadata, time_t timestamp) {
   this->breadcrumb_buffer.add(type, message, metadata, timestamp);
