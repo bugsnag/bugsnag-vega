@@ -13,6 +13,15 @@ Event::Event(int max_breadcrumbs)
 
 Event::~Event() { bsg_free_event_payload(this->payload); }
 
+void Event::configure(std::string api_key) {
+  this->payload = bsg_new_event_payload(api_key.c_str(), "4");
+
+  // TODO fill with proper data
+  bsg_set_event_notifier_info(this->payload, "kepler", "version", "url");
+  bsg_set_event_user(this->payload, "id", "email", "name");
+  bsg_set_event_app(this->payload, "bundle_id", "dev", "apptype", "version");
+}
+
 void Event::leave_breadcrumb(bsg_breadcrumb_type type, std::string message,
                              std::string metadata, time_t timestamp) {
   this->breadcrumb_buffer.add(type, message, metadata, timestamp);

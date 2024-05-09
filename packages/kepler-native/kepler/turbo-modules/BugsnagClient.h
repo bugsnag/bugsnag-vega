@@ -6,7 +6,7 @@
 #include "BugsnagEvent.h"
 namespace bugsnag {
 struct Configuration {
-  char api_key[64];
+  std::string api_key;
   std::string storage_dir;
   int max_breadcrumbs = BUGSNAG_CRUMBS_MAX;
 };

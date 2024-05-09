@@ -70,6 +70,10 @@ BugsnagKeplerNative::configure(utils::json::JsonContainer config) {
   auto bsg_config = std::make_unique<Configuration>();
   bsg_config->storage_dir = std::string("/data/");
 
+  std::string empty = "";
+  auto api_key = config["apiKey"].getValue(empty);
+  bsg_config->api_key = api_key;
+
   this->bugsnag = new Client(std::move(bsg_config));
   global_client = this->bugsnag;
 

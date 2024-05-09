@@ -11,6 +11,8 @@ public:
   Event(int max_breadcrumbs);
   ~Event();
 
+  void configure(std::string api_key);
+
   void leave_breadcrumb(bsg_breadcrumb_type type, std::string message,
                         std::string metadata, time_t timestamp);
 

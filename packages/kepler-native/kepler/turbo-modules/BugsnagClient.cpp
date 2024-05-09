@@ -8,6 +8,7 @@ Client::Client(std::unique_ptr<Configuration> config)
     : event_dir(config->storage_dir), is_launching(true),
       current_event(std::make_unique<Event>(config->max_breadcrumbs)) {
   this->config = std::move(config);
+  this->current_event->configure(this->config->api_key);
 }
 
 void Client::mark_launch_completed() {
