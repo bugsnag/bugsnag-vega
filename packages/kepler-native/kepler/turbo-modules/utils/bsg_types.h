@@ -7,9 +7,9 @@
 extern "C" {
 #endif
 
-const int ERROR_CLASS_SIZE = 64;
-const int ERROR_MESSAGE_SIZE = 256;
-const int ERROR_TYPE_SIZE = 32;
+static const int ERROR_CLASS_SIZE = 64;
+static const int ERROR_MESSAGE_SIZE = 256;
+static const int ERROR_TYPE_SIZE = 32;
 
 typedef enum {
   BSG_SEVERITY_ERR,

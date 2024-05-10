@@ -27,6 +27,15 @@ void Event::set_exception(const char *class_arg, const char *message_arg,
   bsg_set_event_exception(this->payload, class_arg, message_arg, type_arg);
 }
 
+void Event::set_app_duration(time_t app_startup) {
+  auto now = std::chrono::system_clock::now();
+  time_t now_time = std::chrono::system_clock::to_time_t(now);
+  time_t time_from_start = difftime(now_time, app_startup);
+  // TODO Calculate time in foreground
+  bsg_set_event_app_duration(this->payload, time_from_start, time_from_start,
+                             true);
+}
+
 void Event::leave_breadcrumb(bsg_breadcrumb_type type, std::string message,
                              std::string metadata, time_t timestamp) {
   this->breadcrumb_buffer.add(type, message, metadata, timestamp);

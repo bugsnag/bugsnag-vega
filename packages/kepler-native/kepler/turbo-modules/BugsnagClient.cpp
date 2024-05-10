@@ -68,4 +68,6 @@ void Client::clear_features() {
 }
 
 Event *Client::release_event() { return this->current_event.release(); }
+
+time_t Client::get_app_start_time() { return this->start_time; }
 } // namespace bugsnag

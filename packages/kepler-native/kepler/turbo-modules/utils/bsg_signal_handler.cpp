@@ -118,6 +118,7 @@ static void bsg_handle_signal(int signum, siginfo_t *info, void *user_context) {
   current_event = client->release_event();
   current_event->set_exception(bsg_native_signal_names[signum],
                                bsg_native_signal_msgs[signum], "c");
+  current_event->set_app_duration(client->get_app_start_time());
   // TODO write event to file
 
   // This is horrible code, and must be removed before this handler is used
