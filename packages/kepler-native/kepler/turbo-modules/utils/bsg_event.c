@@ -9,12 +9,8 @@ bsg_event_payload *bsg_new_event_payload(const char *api_key,
   bsg_event_payload *new_payload =
       (bsg_event_payload *)calloc(1, sizeof(bsg_event_payload));
 
-  if (api_key != NULL) {
-    new_payload->api_key = strdup(api_key);
-  }
-  if (payload_ver != NULL) {
-    new_payload->payload_version = strdup(payload_ver);
-  }
+  bsg_strdup(new_payload->api_key, api_key);
+  bsg_strdup(new_payload->payload_version, payload_ver);
 
   new_payload->event.severity = BSG_SEVERITY_ERR;
   new_payload->event.unhandled = true;
@@ -28,15 +24,9 @@ void bsg_set_event_notifier_info(bsg_event_payload *payload,
     return;
   }
 
-  if (name_arg != NULL) {
-    payload->notifier.name = strdup(name_arg);
-  }
-  if (ver_arg != NULL) {
-    payload->notifier.version = strdup(ver_arg);
-  }
-  if (url_arg != NULL) {
-    payload->notifier.url = strdup(url_arg);
-  }
+  bsg_strdup(payload->notifier.name, name_arg);
+  bsg_strdup(payload->notifier.version, ver_arg);
+  bsg_strdup(payload->notifier.url, url_arg);
 }
 
 void bsg_set_event_severity(bsg_event_payload *payload, const char *type_arg) {
@@ -44,9 +34,7 @@ void bsg_set_event_severity(bsg_event_payload *payload, const char *type_arg) {
     return;
   }
 
-  if (type_arg != NULL) {
-    payload->event.severity_reason.type = strdup(type_arg);
-  }
+  bsg_strdup(payload->event.severity_reason.type, type_arg);
 }
 
 void bsg_set_event_user(bsg_event_payload *payload, const char *id_arg,
@@ -55,15 +43,9 @@ void bsg_set_event_user(bsg_event_payload *payload, const char *id_arg,
     return;
   }
 
-  if (id_arg != NULL) {
-    payload->event.user.id = strdup(id_arg);
-  }
-  if (email_arg != NULL) {
-    payload->event.user.email = strdup(email_arg);
-  }
-  if (name_arg != NULL) {
-    payload->event.user.name = strdup(name_arg);
-  }
+  bsg_strdup(payload->event.user.id, id_arg);
+  bsg_strdup(payload->event.user.email, email_arg);
+  bsg_strdup(payload->event.user.name, name_arg);
 }
 
 void bsg_set_event_device(bsg_event_payload *payload, const char *id,
@@ -71,37 +53,18 @@ void bsg_set_event_device(bsg_event_payload *payload, const char *id,
                           const char *manufacturer, const char *model,
                           const char *modelnr, const char *orient,
                           const char *osname, const char *osver) {
-
   if (payload == NULL) {
     return;
   }
-  if (id != NULL) {
-    payload->event.device.id = strdup(id);
-  }
-  if (host != NULL) {
-    payload->event.device.hostname = strdup(host);
-  }
-  if (locale != NULL) {
-    payload->event.device.locale = strdup(locale);
-  }
-  if (manufacturer != NULL) {
-    payload->event.device.manufacturer = strdup(manufacturer);
-  }
-  if (model != NULL) {
-    payload->event.device.model = strdup(model);
-  }
-  if (modelnr != NULL) {
-    payload->event.device.model_number = strdup(modelnr);
-  }
-  if (orient != NULL) {
-    payload->event.device.orientation = strdup(orient);
-  }
-  if (osname != NULL) {
-    payload->event.device.os_name = strdup(osname);
-  }
-  if (osver != NULL) {
-    payload->event.device.os_version = strdup(osver);
-  }
+  bsg_strdup(payload->event.device.id, id);
+  bsg_strdup(payload->event.device.hostname, host);
+  bsg_strdup(payload->event.device.locale, locale);
+  bsg_strdup(payload->event.device.manufacturer, manufacturer);
+  bsg_strdup(payload->event.device.model, model);
+  bsg_strdup(payload->event.device.model_number, modelnr);
+  bsg_strdup(payload->event.device.orientation, orient);
+  bsg_strdup(payload->event.device.os_name, osname);
+  bsg_strdup(payload->event.device.os_version, osver);
 }
 
 void bsg_set_event_device_time(bsg_event_payload *payload, time_t time_arg) {
@@ -117,18 +80,10 @@ void bsg_set_event_app(bsg_event_payload *payload, const char *bundle_id,
     return;
   }
 
-  if (bundle_id != NULL) {
-    payload->event.app.code_bundle_id = strdup(bundle_id);
-  }
-  if (stage != NULL) {
-    payload->event.app.release_stage = strdup(stage);
-  }
-  if (type != NULL) {
-    payload->event.app.type = strdup(type);
-  }
-  if (ver != NULL) {
-    payload->event.app.version = strdup(ver);
-  }
+  bsg_strdup(payload->event.app.code_bundle_id, bundle_id);
+  bsg_strdup(payload->event.app.release_stage, stage);
+  bsg_strdup(payload->event.app.type, type);
+  bsg_strdup(payload->event.app.version, ver);
 }
 
 void bsg_set_event_app_duration(bsg_event_payload *payload, int duration,
@@ -255,4 +210,9 @@ size_t bsg_strncpy(char *dst, const char *src, size_t dst_size) {
     return strlcat(dst, src, dst_size);
   }
   return 0;
+}
+
+void bsg_strdup(char *dst, const char *src) {
+  free(dst);
+  dst = src != NULL ? strdup(src) : NULL;
 }
