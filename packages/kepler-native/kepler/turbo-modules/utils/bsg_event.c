@@ -9,8 +9,8 @@ bsg_event_payload *bsg_new_event_payload(const char *api_key,
   bsg_event_payload *new_payload =
       (bsg_event_payload *)calloc(1, sizeof(bsg_event_payload));
 
-  bsg_strdup(new_payload->api_key, api_key);
-  bsg_strdup(new_payload->payload_version, payload_ver);
+  bsg_free_and_strdup(&(new_payload->api_key), api_key);
+  bsg_free_and_strdup(&(new_payload->payload_version), payload_ver);
 
   new_payload->event.severity = BSG_SEVERITY_ERR;
   new_payload->event.unhandled = true;
@@ -24,9 +24,9 @@ void bsg_set_event_notifier_info(bsg_event_payload *payload,
     return;
   }
 
-  bsg_strdup(payload->notifier.name, name_arg);
-  bsg_strdup(payload->notifier.version, ver_arg);
-  bsg_strdup(payload->notifier.url, url_arg);
+  bsg_free_and_strdup(&(payload->notifier.name), name_arg);
+  bsg_free_and_strdup(&(payload->notifier.version), ver_arg);
+  bsg_free_and_strdup(&(payload->notifier.url), url_arg);
 }
 
 void bsg_set_event_severity(bsg_event_payload *payload, const char *type_arg) {
@@ -34,7 +34,7 @@ void bsg_set_event_severity(bsg_event_payload *payload, const char *type_arg) {
     return;
   }
 
-  bsg_strdup(payload->event.severity_reason.type, type_arg);
+  bsg_free_and_strdup(&(payload->event.severity_reason.type), type_arg);
 }
 
 void bsg_set_event_user(bsg_event_payload *payload, const char *id_arg,
@@ -43,9 +43,9 @@ void bsg_set_event_user(bsg_event_payload *payload, const char *id_arg,
     return;
   }
 
-  bsg_strdup(payload->event.user.id, id_arg);
-  bsg_strdup(payload->event.user.email, email_arg);
-  bsg_strdup(payload->event.user.name, name_arg);
+  bsg_free_and_strdup(&(payload->event.user.id), id_arg);
+  bsg_free_and_strdup(&(payload->event.user.email), email_arg);
+  bsg_free_and_strdup(&(payload->event.user.name), name_arg);
 }
 
 void bsg_set_event_device(bsg_event_payload *payload, const char *id,
@@ -56,15 +56,15 @@ void bsg_set_event_device(bsg_event_payload *payload, const char *id,
   if (payload == NULL) {
     return;
   }
-  bsg_strdup(payload->event.device.id, id);
-  bsg_strdup(payload->event.device.hostname, host);
-  bsg_strdup(payload->event.device.locale, locale);
-  bsg_strdup(payload->event.device.manufacturer, manufacturer);
-  bsg_strdup(payload->event.device.model, model);
-  bsg_strdup(payload->event.device.model_number, modelnr);
-  bsg_strdup(payload->event.device.orientation, orient);
-  bsg_strdup(payload->event.device.os_name, osname);
-  bsg_strdup(payload->event.device.os_version, osver);
+  bsg_free_and_strdup(&(payload->event.device.id), id);
+  bsg_free_and_strdup(&(payload->event.device.hostname), host);
+  bsg_free_and_strdup(&(payload->event.device.locale), locale);
+  bsg_free_and_strdup(&(payload->event.device.manufacturer), manufacturer);
+  bsg_free_and_strdup(&(payload->event.device.model), model);
+  bsg_free_and_strdup(&(payload->event.device.model_number), modelnr);
+  bsg_free_and_strdup(&(payload->event.device.orientation), orient);
+  bsg_free_and_strdup(&(payload->event.device.os_name), osname);
+  bsg_free_and_strdup(&(payload->event.device.os_version), osver);
 }
 
 void bsg_set_event_device_time(bsg_event_payload *payload, time_t time_arg) {
@@ -80,10 +80,10 @@ void bsg_set_event_app(bsg_event_payload *payload, const char *bundle_id,
     return;
   }
 
-  bsg_strdup(payload->event.app.code_bundle_id, bundle_id);
-  bsg_strdup(payload->event.app.release_stage, stage);
-  bsg_strdup(payload->event.app.type, type);
-  bsg_strdup(payload->event.app.version, ver);
+  bsg_free_and_strdup(&(payload->event.app.code_bundle_id), bundle_id);
+  bsg_free_and_strdup(&(payload->event.app.release_stage), stage);
+  bsg_free_and_strdup(&(payload->event.app.type), type);
+  bsg_free_and_strdup(&(payload->event.app.version), ver);
 }
 
 void bsg_set_event_app_duration(bsg_event_payload *payload, int duration,
@@ -212,7 +212,7 @@ size_t bsg_strncpy(char *dst, const char *src, size_t dst_size) {
   return 0;
 }
 
-void bsg_strdup(char *dst, const char *src) {
-  free(dst);
-  dst = src != NULL ? strdup(src) : NULL;
+void bsg_free_and_strdup(char **dst, const char *src) {
+  free(*dst);
+  *dst = src != NULL ? strdup(src) : NULL;
 }
