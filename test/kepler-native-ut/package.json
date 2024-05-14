@@ -17,8 +17,7 @@
     "local-npm:publish": "npm publish --registry http://localhost:5539"
   },
   "dependencies": {
-    "@amzn/keplerscript-turbomodule-api": "^1.0.0",
-    "react-native-tscodegen-types": "0.71.0"
+    "@amzn/keplerscript-turbomodule-api": "^1.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
