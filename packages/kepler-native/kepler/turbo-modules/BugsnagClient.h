@@ -3,10 +3,10 @@
 #include <memory>
 #include <string>
 
-#include "BugsnagBreadcrumbBuffer.h"
+#include "BugsnagEvent.h"
 namespace bugsnag {
 struct Configuration {
-  char api_key[64];
+  std::string api_key;
   std::string storage_dir;
   int max_breadcrumbs = BUGSNAG_CRUMBS_MAX;
 };
@@ -28,14 +28,17 @@ public:
   std::string get_features();
   void clear_features();
 
+  Event *release_event();
+
+  time_t get_app_start_time();
+
   std::string event_dir;
 
 private:
+  time_t start_time;
   std::atomic<bool> is_launching;
   std::unique_ptr<Configuration> config;
-  BreadcrumbBuffer breadcrumb_buffer;
-  SignalSafePtr<char> metadata;
-  SignalSafePtr<char> features;
+  std::unique_ptr<Event> current_event;
 };
 
 extern Client *global_client;

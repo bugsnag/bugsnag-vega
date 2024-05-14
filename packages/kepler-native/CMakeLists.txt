@@ -17,15 +17,19 @@ set(HEADERS
   kepler/turbo-modules/utils/bsg_reference_guard.h
   kepler/turbo-modules/utils/bsg_signal_handler.h
   kepler/turbo-modules/utils/bsg_breadcrumb.h
+  kepler/turbo-modules/utils/bsg_types.h
+  kepler/turbo-modules/utils/bsg_event.h
   kepler/turbo-modules/BugsnagKeplerNative.h
   kepler/turbo-modules/BugsnagSignalSafePtr.h
   kepler/turbo-modules/BugsnagBreadcrumbBuffer.h
 )
 set(SOURCES
-    kepler/turbo-modules/utils/bsg_reference_guard.cpp
+    kepler/turbo-modules/utils/bsg_reference_guard.c
     kepler/turbo-modules/utils/bsg_signal_handler.cpp
-    kepler/turbo-modules/utils/bsg_breadcrumb.cpp
+    kepler/turbo-modules/utils/bsg_breadcrumb.c
+    kepler/turbo-modules/utils/bsg_event.c
     kepler/turbo-modules/BugsnagClient.cpp
+    kepler/turbo-modules/BugsnagEvent.cpp
     kepler/turbo-modules/BugsnagFileIO.cpp
     kepler/turbo-modules/BugsnagKeplerNative.cpp
     kepler/turbo-modules/BugsnagBreadcrumbBuffer.cpp

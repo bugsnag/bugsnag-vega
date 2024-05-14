@@ -3,8 +3,9 @@
 
 #include "bsg_breadcrumb.h"
 
-bsg_breadcrumb *new_breadcrumb(bsg_breadcrumb_type type, const char *message,
-                               const char *metadata, time_t timestamp) {
+bsg_breadcrumb *new_breadcrumb(enum bsg_breadcrumb_type type,
+                               const char *message, const char *metadata,
+                               time_t timestamp) {
   bsg_breadcrumb *crumb = (bsg_breadcrumb *)calloc(1, sizeof(bsg_breadcrumb));
   crumb->message = strdup(message);
   crumb->metadata = strdup(metadata);
