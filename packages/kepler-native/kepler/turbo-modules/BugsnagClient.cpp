@@ -8,7 +8,8 @@ Client::Client(std::unique_ptr<Configuration> config)
     : event_dir(config->storage_dir), is_launching(true),
       current_event(std::make_unique<Event>(config->max_breadcrumbs)) {
   this->config = std::move(config);
-  this->current_event->configure(this->config->api_key);
+  this->current_event->configure(this->config->api_key,
+                                 this->config->storage_dir);
 }
 
 void Client::mark_launch_completed() {
@@ -70,4 +71,6 @@ void Client::clear_features() {
 Event *Client::release_event() { return this->current_event.release(); }
 
 time_t Client::get_app_start_time() { return this->start_time; }
+
+bool Client::get_is_launching() { return this->is_launching.load(); }
 } // namespace bugsnag

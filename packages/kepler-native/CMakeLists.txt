@@ -19,6 +19,10 @@ set(HEADERS
   kepler/turbo-modules/utils/bsg_breadcrumb.h
   kepler/turbo-modules/utils/bsg_types.h
   kepler/turbo-modules/utils/bsg_event.h
+  kepler/turbo-modules/utils/serializer/bsg_buffered_writer.h
+  kepler/turbo-modules/utils/serializer/bsg_event_writer.h
+  kepler/turbo-modules/utils/serializer/BSG_KSCrashStringConversion.h
+  kepler/turbo-modules/utils/serializer/BSG_KSJSONCodec.h
   kepler/turbo-modules/BugsnagKeplerNative.h
   kepler/turbo-modules/BugsnagSignalSafePtr.h
   kepler/turbo-modules/BugsnagBreadcrumbBuffer.h
@@ -28,6 +32,10 @@ set(SOURCES
     kepler/turbo-modules/utils/bsg_signal_handler.cpp
     kepler/turbo-modules/utils/bsg_breadcrumb.c
     kepler/turbo-modules/utils/bsg_event.c
+    kepler/turbo-modules/utils/serializer/bsg_buffered_writer.c
+    kepler/turbo-modules/utils/serializer/bsg_event_writer.c
+    kepler/turbo-modules/utils/serializer/BSG_KSCrashStringConversion.c
+    kepler/turbo-modules/utils/serializer/BSG_KSJSONCodec.c
     kepler/turbo-modules/BugsnagClient.cpp
     kepler/turbo-modules/BugsnagEvent.cpp
     kepler/turbo-modules/BugsnagFileIO.cpp

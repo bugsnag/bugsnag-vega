@@ -1,6 +1,7 @@
 #ifndef BUGSNAG_EVENT_H
 #define BUGSNAG_EVENT_H
 
+#include "bsg_breadcrumb.h"
 #include "bsg_types.h"
 
 #ifdef __cplusplus
@@ -20,11 +21,20 @@ typedef struct {
 typedef struct {
   char *api_key;
   char *payload_version;
+  char *event_path;
+  char *metadata;
+  char *features;
+  bsg_breadcrumb **breadcrumbs;
+  int max_breadcrumbs_size;
+  int breadcrumbs_size;
+  time_t start_time;
+  bool is_launching;
   bsg_notifier_info notifier;
   bsg_event event;
 } bsg_event_payload;
 
 bsg_event_payload *bsg_new_event_payload(const char *api_key,
+                                         const char *event_dir,
                                          const char *payload_ver);
 void bsg_set_event_notifier_info(bsg_event_payload *payload,
                                  const char *name_arg, const char *ver_arg,
@@ -44,6 +54,8 @@ void bsg_set_event_app_duration(bsg_event_payload *payload, int duration,
                                 int duration_foreground, bool in_foreground);
 void bsg_set_event_exception(bsg_event_payload *payload, const char *class_arg,
                              const char *message_arg, const char *type_arg);
+void bsg_set_event_is_launching(bsg_event_payload *payload, bool is_launching);
+void bsg_set_notifier_start_time(bsg_event_payload *payload, time_t time_arg);
 
 void bsg_free_event_app(bsg_app *app);
 void bsg_free_event_device(bsg_device *device);

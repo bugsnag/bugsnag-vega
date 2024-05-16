@@ -1,6 +1,7 @@
 #ifndef BUGSNAG_ERRORTYPE_H
 #define BUGSNAG_ERRORTYPE_H
 
+#include <stdbool.h>
 #include <time.h>
 
 #ifdef __cplusplus

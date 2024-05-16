@@ -31,6 +31,7 @@ public:
   Event *release_event();
 
   time_t get_app_start_time();
+  bool get_is_launching();
 
   std::string event_dir;
 

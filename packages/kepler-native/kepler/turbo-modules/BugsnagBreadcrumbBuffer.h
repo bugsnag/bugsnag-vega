@@ -21,12 +21,17 @@ public:
   void add(bsg_breadcrumb_type type, std::string message, std::string metadata,
            time_t timestamp);
 
+  void fill_buffer(bsg_breadcrumb **crumb_buffer);
+  int get_buffer_max_size();
+  int get_buffer_filled_count();
+
 private:
   int get_breadcrumb_index();
 
   SignalSafePtr<bsg_breadcrumb, decltype(free_breadcrumb_fields)> *buffer;
   atomic_int index;
   int max_breadcrumbs;
+  int crumb_count;
 };
 
 } // namespace bugsnag

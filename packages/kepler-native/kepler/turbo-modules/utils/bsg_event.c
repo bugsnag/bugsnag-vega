@@ -5,11 +5,13 @@
 #include "bsg_event.h"
 
 bsg_event_payload *bsg_new_event_payload(const char *api_key,
+                                         const char *event_dir,
                                          const char *payload_ver) {
   bsg_event_payload *new_payload =
       (bsg_event_payload *)calloc(1, sizeof(bsg_event_payload));
 
   bsg_free_and_strdup(&(new_payload->api_key), api_key);
+  bsg_free_and_strdup(&(new_payload->event_path), event_dir);
   bsg_free_and_strdup(&(new_payload->payload_version), payload_ver);
 
   new_payload->event.severity = BSG_SEVERITY_ERR;
@@ -116,6 +118,14 @@ void bsg_set_event_exception(bsg_event_payload *payload, const char *class_arg,
   }
 }
 
+void bsg_set_event_is_launching(bsg_event_payload *payload, bool is_launching) {
+  payload->is_launching = is_launching;
+}
+
+void bsg_set_notifier_start_time(bsg_event_payload *payload, time_t time_arg) {
+  payload->start_time = time_arg;
+}
+
 void bsg_free_event_app(bsg_app *app) {
   if (app == NULL) {
     return;
@@ -201,6 +211,10 @@ bsg_error_types bsg_error_types_all_enabled() {
   return et;
 }
 
+/*
+ * Copy null terminated c-string from src to dst
+ * dst_size should include null-terminator
+ */
 size_t bsg_strncpy(char *dst, const char *src, size_t dst_size) {
   if (dst == NULL || dst_size == 0) {
     return 0;

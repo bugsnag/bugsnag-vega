@@ -13,8 +13,9 @@ Event::Event(int max_breadcrumbs)
 
 Event::~Event() { bsg_free_event_payload(this->payload); }
 
-void Event::configure(std::string api_key) {
-  this->payload = bsg_new_event_payload(api_key.c_str(), "4");
+void Event::configure(std::string api_key, std::string event_dir) {
+  this->payload =
+      bsg_new_event_payload(api_key.c_str(), event_dir.c_str(), "4");
 
   // TODO fill with proper data
   bsg_set_event_notifier_info(this->payload, "kepler", "version", "url");
@@ -27,14 +28,29 @@ void Event::set_exception(const char *class_arg, const char *message_arg,
   bsg_set_event_exception(this->payload, class_arg, message_arg, type_arg);
 }
 
-void Event::set_app_duration(time_t app_startup) {
+void Event::prepare_payload(time_t app_startup, bool is_launching,
+                            bsg_breadcrumb **crumb_buffer) {
+  this->payload->metadata = this->metadata.acquire();
+  this->payload->features = this->features.acquire();
+  this->payload->breadcrumbs_size =
+      this->breadcrumb_buffer.get_buffer_filled_count();
+  this->payload->max_breadcrumbs_size =
+      this->breadcrumb_buffer.get_buffer_max_size();
+  this->breadcrumb_buffer.fill_buffer(crumb_buffer);
+  this->payload->breadcrumbs = crumb_buffer;
+
   auto now = std::chrono::system_clock::now();
   time_t now_time = std::chrono::system_clock::to_time_t(now);
   time_t time_from_start = difftime(now_time, app_startup);
   // TODO Calculate time in foreground
   bsg_set_event_app_duration(this->payload, time_from_start, time_from_start,
                              true);
+  bsg_set_event_device_time(this->payload, now_time);
+  bsg_set_notifier_start_time(this->payload, app_startup);
+  bsg_set_event_is_launching(this->payload, is_launching);
 }
+
+bsg_event_payload *Event::get_payload() { return this->payload; }
 
 void Event::leave_breadcrumb(bsg_breadcrumb_type type, std::string message,
                              std::string metadata, time_t timestamp) {
