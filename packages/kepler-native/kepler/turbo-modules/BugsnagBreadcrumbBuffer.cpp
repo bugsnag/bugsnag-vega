@@ -40,7 +40,7 @@ void BreadcrumbBuffer::add(bsg_breadcrumb_type type, std::string message,
 
 void BreadcrumbBuffer::fill_buffer(bsg_breadcrumb **crumb_buffer) {
   for (int i = 0; i < this->max_breadcrumbs; ++i) {
-    crumb_buffer[i] = this->buffer[i].acquire();
+    crumb_buffer[i] = this->buffer[i].acquire_and_move();
   }
 }
 

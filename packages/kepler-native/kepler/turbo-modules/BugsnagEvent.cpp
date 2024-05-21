@@ -21,6 +21,8 @@ void Event::configure(std::string api_key, std::string event_dir) {
   bsg_set_event_notifier_info(this->payload, "kepler", "version", "url");
   bsg_set_event_user(this->payload, "id", "email", "name");
   bsg_set_event_app(this->payload, "bundle_id", "dev", "apptype", "version");
+  bsg_set_event_device(this->payload, "deviceID", "host", "pl", "amazon",
+                       "model", "modelnr", "horizontal", "kepler", "keplerver");
 }
 
 void Event::set_exception(const char *class_arg, const char *message_arg,
@@ -30,8 +32,9 @@ void Event::set_exception(const char *class_arg, const char *message_arg,
 
 void Event::prepare_payload(time_t app_startup, bool is_launching,
                             bsg_breadcrumb **crumb_buffer) {
-  this->payload->metadata = this->metadata.acquire();
-  this->payload->features = this->features.acquire();
+  this->payload->metadata = this->metadata.acquire_and_move();
+  this->payload->features = this->features.acquire_and_move();
+
   this->payload->breadcrumbs_size =
       this->breadcrumb_buffer.get_buffer_filled_count();
   this->payload->max_breadcrumbs_size =

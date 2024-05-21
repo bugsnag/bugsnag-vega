@@ -39,6 +39,25 @@ void *bsg_ref_guard_acquire(bsg_ref_guard *guard) {
   return guard->protected_ptr;
 }
 
+void *bsg_ref_guard_acquire_and_move(bsg_ref_guard *guard) {
+  uint_fast64_t current = atomic_load(&guard->counter);
+  for (;;) {
+    if (current == 0) {
+      // released by another thread, so there is no valid ptr
+      return NULL;
+    }
+
+    if (atomic_compare_exchange_strong(&guard->counter, &current,
+                                       current + 1)) {
+      break;
+    }
+  }
+
+  void *ptr = guard->protected_ptr;
+  guard->protected_ptr = NULL;
+  return ptr;
+}
+
 // Release your mark on ptr, return true if it was properly freed
 bool bsg_ref_guard_release(bsg_ref_guard *guard) {
   uint_fast64_t current = atomic_load(&guard->counter);

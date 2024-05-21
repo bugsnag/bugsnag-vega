@@ -60,6 +60,12 @@ public:
     return casted;
   }
 
+  T *acquire_and_move() {
+    void *ptr = bsg_ref_guard_acquire_and_move(this->ref_guard);
+    T *casted = static_cast<T *>(ptr);
+    return casted;
+  }
+
   bool release() { return bsg_ref_guard_release(this->ref_guard); }
 
 private:

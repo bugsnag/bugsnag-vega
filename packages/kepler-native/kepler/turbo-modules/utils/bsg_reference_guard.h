@@ -17,6 +17,7 @@ extern atomic_bool is_signal_handler_running;
 void bsg_ref_guard_init(bsg_ref_guard *guard, void *ptr);
 void bsg_ref_guard_init_copy(bsg_ref_guard *guard, bsg_ref_guard *other);
 void *bsg_ref_guard_acquire(bsg_ref_guard *guard);
+void *bsg_ref_guard_acquire_and_move(bsg_ref_guard *guard);
 bool bsg_ref_guard_release(bsg_ref_guard *guard);
 
 #ifdef __cplusplus
