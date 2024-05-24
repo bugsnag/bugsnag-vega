@@ -54,6 +54,8 @@ void bsg_set_event_app_duration(bsg_event_payload *payload, int duration,
                                 int duration_foreground, bool in_foreground);
 void bsg_set_event_exception(bsg_event_payload *payload, const char *class_arg,
                              const char *message_arg, const char *type_arg);
+bsg_stackframe *bsg_get_event_stacktrace(bsg_event_payload *payload);
+void bsg_set_event_stacktrace_size(bsg_event_payload *payload, int size);
 void bsg_set_event_is_launching(bsg_event_payload *payload, bool is_launching);
 void bsg_set_notifier_start_time(bsg_event_payload *payload, time_t time_arg);
 

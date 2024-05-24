@@ -32,6 +32,11 @@ static inline bool string_is_empty(const char *restrict s) {
   return (*(s) == 0);
 }
 
+// we use a single buffer for all of the hex encoded strings
+// the bsg_uint64_to_hex doesn't prefix the '0x' so we pre-place that in the
+// buffer, and then overwrite the rest of the buffer
+static char hex_str[2 /* '0x' */ + 20 /* number */ + 1 /* NULL */] = "0x";
+
 static bool bsg_write_metadata(BSG_KSJSONEncodeContext *json, char *metadata);
 static bool bsg_write_severity_reason(BSG_KSJSONEncodeContext *json,
                                       bsg_event *event);
@@ -197,6 +202,69 @@ error:
   return false;
 }
 
+static char *bsg_uint64_to_prefixed_hex(uint64_t value) {
+  char *hex_output_buffer = &hex_str[2];
+  bsg_uint64_to_hex(value, hex_output_buffer, 1);
+  return hex_str;
+}
+
+static bool bsg_write_stackframe(BSG_KSJSONEncodeContext *json,
+                                 bsg_stackframe *frame, bool isPC) {
+
+  CHECKED(bsg_ksjsonbeginObject(json, NULL));
+  {
+    CHECKED(JSON_LIMITED_STRING_ELEMENT(
+        "frameAddress", bsg_uint64_to_prefixed_hex(frame->frame_address)));
+    CHECKED(JSON_LIMITED_STRING_ELEMENT(
+        "symbolAddress", bsg_uint64_to_prefixed_hex(frame->symbol_address)));
+    CHECKED(JSON_LIMITED_STRING_ELEMENT(
+        "loadAddress", bsg_uint64_to_prefixed_hex(frame->load_address)));
+
+    CHECKED(
+        bsg_ksjsonaddUIntegerElement(json, "lineNumber", frame->line_number));
+
+    if (isPC) {
+      CHECKED(bsg_ksjsonaddBooleanElement(json, "isPC", true));
+    }
+
+    if (string_is_not_empty(frame->filename)) {
+      CHECKED(JSON_LIMITED_STRING_ELEMENT("file", frame->filename));
+    }
+
+    if (string_is_not_empty(frame->method)) {
+      CHECKED(JSON_LIMITED_STRING_ELEMENT("method", frame->method));
+    } else {
+      CHECKED(JSON_LIMITED_STRING_ELEMENT(
+          "method", bsg_uint64_to_prefixed_hex(frame->symbol_address)));
+    }
+
+    if (string_is_not_empty(frame->code_identifier)) {
+      CHECKED(JSON_LIMITED_STRING_ELEMENT("codeIdentifier",
+                                          frame->code_identifier));
+    }
+  }
+  CHECKED(bsg_ksjsonendContainer(json));
+
+  return true;
+error:
+  return false;
+}
+
+static bool bsg_write_stacktrace(BSG_KSJSONEncodeContext *json,
+                                 bsg_stackframe *stacktrace,
+                                 size_t frame_count) {
+
+  for (int findex = 0; findex < frame_count; findex++) {
+    if (!bsg_write_stackframe(json, &stacktrace[findex], findex == 0)) {
+      goto error;
+    }
+  }
+
+  return true;
+error:
+  return false;
+}
+
 static bool bsg_write_error(BSG_KSJSONEncodeContext *json, bsg_error *error) {
   CHECKED(bsg_ksjsonbeginArray(json, "exceptions"));
   {
@@ -205,6 +273,21 @@ static bool bsg_write_error(BSG_KSJSONEncodeContext *json, bsg_error *error) {
       CHECKED(JSON_LIMITED_STRING_ELEMENT("errorClass", error->error_class));
       CHECKED(JSON_LIMITED_STRING_ELEMENT("message", error->error_message));
       CHECKED(JSON_CONSTANT_ELEMENT("type", "c"));
+
+      const ssize_t frame_count = error->frame_count;
+      // assuming that the initial frame is the program counter. This logic will
+      // need to be revisited if (for example) we add more intelligent
+      // processing for stack overflow-type errors, like discarding the top
+      // frames, which would mean no stored frame is the program counter.
+      if (frame_count > 0) {
+        CHECKED(bsg_ksjsonbeginArray(json, "stacktrace"));
+        {
+          if (!bsg_write_stacktrace(json, error->stacktrace, frame_count)) {
+            goto error;
+          }
+        }
+        CHECKED(bsg_ksjsonendContainer(json));
+      }
     }
     CHECKED(bsg_ksjsonendContainer(json));
   }

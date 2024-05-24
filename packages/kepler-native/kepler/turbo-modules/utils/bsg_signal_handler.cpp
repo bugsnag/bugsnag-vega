@@ -12,6 +12,8 @@
 #include "../BugsnagClient.h"
 #include "./serializer/bsg_event_writer.h"
 #include "bsg_reference_guard.h"
+#include "bsg_stack_unwinder.h"
+#include "bsg_types.h"
 
 #define BSG_HANDLED_SIGNAL_COUNT 6
 
@@ -93,11 +95,15 @@ static void bsg_handle_signal(int signum, siginfo_t *info, void *user_context) {
     goto call_previous_handler;
   }
   bsg_breadcrumb *crumb_buffer[BUGSNAG_CRUMBS_MAX];
+  int stackframe_count;
+  bsg_fill_stack_info(current_event->get_exception_stackframe(),
+                      &stackframe_count);
   current_event->prepare_payload(client->get_app_start_time(),
                                  client->get_is_launching(), crumb_buffer,
                                  BUGSNAG_CRUMBS_MAX);
   current_event->set_exception(bsg_native_signal_names[signal_idx],
-                               bsg_native_signal_msgs[signal_idx], "c");
+                               bsg_native_signal_msgs[signal_idx], "c",
+                               stackframe_count);
   bsg_event_write(current_event->get_payload());
 
 call_previous_handler:

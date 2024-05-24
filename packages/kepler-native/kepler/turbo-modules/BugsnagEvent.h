@@ -13,7 +13,8 @@ public:
 
   void configure(std::string api_key, std::string event_dir);
   void set_exception(const char *class_arg, const char *message_arg,
-                     const char *type_arg);
+                     const char *type_arg, int stackframe_count);
+  bsg_stackframe *get_exception_stackframe();
   void prepare_payload(time_t app_startup, bool is_launching,
                        bsg_breadcrumb **crumb_buffer, int crumb_buffer_size);
   bsg_event_payload *get_payload();

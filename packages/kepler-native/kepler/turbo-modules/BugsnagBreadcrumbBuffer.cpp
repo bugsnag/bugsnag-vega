@@ -16,8 +16,8 @@ BreadcrumbBuffer::~BreadcrumbBuffer() {
   if (this->buffer == nullptr) {
     return;
   }
-    // safe shared_ptr destructor will take care of freeing crumb itself
-    delete[] this->buffer;
+  // safe shared_ptr destructor will take care of freeing crumb itself
+  delete[] this->buffer;
 }
 
 void BreadcrumbBuffer::add(bsg_breadcrumb_type type, std::string message,
