@@ -14,7 +14,6 @@
 #include "bsg_reference_guard.h"
 
 #define BSG_HANDLED_SIGNAL_COUNT 6
-#define BSG_MAX_STACK_FRAMES 512
 
 static const int bsg_native_signals[BSG_HANDLED_SIGNAL_COUNT + 1] = {
     SIGILL, SIGTRAP, SIGABRT, SIGBUS, SIGFPE, SIGSEGV};
@@ -123,7 +122,8 @@ static void bsg_handle_signal(int signum, siginfo_t *info, void *user_context) {
   }
   bsg_breadcrumb *crumb_buffer[BUGSNAG_CRUMBS_MAX];
   current_event->prepare_payload(client->get_app_start_time(),
-                                 client->get_is_launching(), crumb_buffer);
+                                 client->get_is_launching(), crumb_buffer,
+                                 BUGSNAG_CRUMBS_MAX);
   current_event->set_exception(bsg_native_signal_names[signum],
                                bsg_native_signal_msgs[signum], "c");
   bsg_event_write(current_event->get_payload());

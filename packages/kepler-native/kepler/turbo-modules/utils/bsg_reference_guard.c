@@ -7,19 +7,20 @@ atomic_bool is_signal_handler_running = false;
 
 // We are the first owner of ptr
 void bsg_ref_guard_init(bsg_ref_guard *guard, void *ptr) {
-  guard->protected_ptr = ptr;
-
   if (ptr == NULL) {
     atomic_init(&guard->counter, 0uLL);
+    atomic_init(&guard->protected_ptr, 0uL);
   } else {
     atomic_init(&guard->counter, 1uLL);
+    atomic_init(&guard->protected_ptr, (uintptr_t)ptr);
   }
 }
 
 // We are the next owner of ptr, need to acquire officially
 void bsg_ref_guard_init_copy(bsg_ref_guard *guard, bsg_ref_guard *other) {
   atomic_exchange(&guard->counter, other->counter);
-  guard->protected_ptr = bsg_ref_guard_acquire(guard);
+  void *received = bsg_ref_guard_acquire(guard);
+  atomic_exchange(&guard->protected_ptr, (uintptr_t)received);
 }
 
 // Mark that pointer as being read/written, return ptr to use
@@ -36,10 +37,11 @@ void *bsg_ref_guard_acquire(bsg_ref_guard *guard) {
       break;
     }
   }
-  return guard->protected_ptr;
+  void *ptr = (void *)atomic_load(&guard->protected_ptr);
+  return ptr;
 }
 
-void *bsg_ref_guard_acquire_and_move(bsg_ref_guard *guard) {
+void *bsg_ref_guard_move(bsg_ref_guard *guard) {
   uint_fast64_t current = atomic_load(&guard->counter);
   for (;;) {
     if (current == 0) {
@@ -47,14 +49,12 @@ void *bsg_ref_guard_acquire_and_move(bsg_ref_guard *guard) {
       return NULL;
     }
 
-    if (atomic_compare_exchange_strong(&guard->counter, &current,
-                                       current + 1)) {
+    if (atomic_compare_exchange_strong(&guard->counter, &current, 0)) {
       break;
     }
   }
 
-  void *ptr = guard->protected_ptr;
-  guard->protected_ptr = NULL;
+  void *ptr = (void *)atomic_exchange(&guard->protected_ptr, 0uL);
   return ptr;
 }
 
@@ -80,7 +80,8 @@ bool bsg_ref_guard_release(bsg_ref_guard *guard) {
       return false;
     }
 
-    free(guard->protected_ptr);
+    void *ptr = (void *)atomic_load(&guard->protected_ptr);
+    free(ptr);
     return true;
   }
 

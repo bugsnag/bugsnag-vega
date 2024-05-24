@@ -15,7 +15,7 @@ public:
   void set_exception(const char *class_arg, const char *message_arg,
                      const char *type_arg);
   void prepare_payload(time_t app_startup, bool is_launching,
-                       bsg_breadcrumb **crumb_buffer);
+                       bsg_breadcrumb **crumb_buffer, int crumb_buffer_size);
   bsg_event_payload *get_payload();
 
   void leave_breadcrumb(bsg_breadcrumb_type type, std::string message,

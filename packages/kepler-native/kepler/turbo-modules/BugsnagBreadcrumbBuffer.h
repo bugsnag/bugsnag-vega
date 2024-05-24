@@ -21,7 +21,7 @@ public:
   void add(bsg_breadcrumb_type type, std::string message, std::string metadata,
            time_t timestamp);
 
-  void fill_buffer(bsg_breadcrumb **crumb_buffer);
+  void fill_buffer(bsg_breadcrumb **crumb_buffer, int crumb_buffer_size);
   int get_buffer_max_size();
   int get_buffer_filled_count();
 

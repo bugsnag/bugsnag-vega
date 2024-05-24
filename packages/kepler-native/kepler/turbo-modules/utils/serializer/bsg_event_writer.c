@@ -22,9 +22,15 @@
   bsg_ksjsonaddStringElement(json, (name), (value),                            \
                              strnlen((value), sizeof((value))))
 
-#define STRING_NOT_EMPTY(s) (*(s) != 0)
-#define STRING_IS_EMPTY(s) (*(s) == 0)
 #define STR_CONST_CAT(dst, src) bsg_strncpy((dst), (src), sizeof(src))
+
+static inline bool string_is_not_empty(const char *restrict s) {
+  return (*(s) != 0);
+}
+
+static inline bool string_is_empty(const char *restrict s) {
+  return (*(s) == 0);
+}
 
 static bool bsg_write_metadata(BSG_KSJSONEncodeContext *json, char *metadata);
 static bool bsg_write_severity_reason(BSG_KSJSONEncodeContext *json,
@@ -50,7 +56,7 @@ static int bsg_write(const char *data, size_t length, void *userData) {
  * "[timestamp]_[apiKey].json"
  */
 static size_t build_filename(bsg_event_payload *payload, char *out) {
-  int length = strnlen(payload->event_path, sizeof(payload->event_path));
+  int length = strnlen(payload->event_path, 4096);
   memcpy(out, payload->event_path, length);
   out[length++] = '/';
 
@@ -210,9 +216,9 @@ error:
 }
 
 static bool bsg_write_user(BSG_KSJSONEncodeContext *json, bsg_user *user) {
-  const bool has_id = STRING_NOT_EMPTY(user->id);
-  const bool has_name = STRING_NOT_EMPTY(user->name);
-  const bool has_email = STRING_NOT_EMPTY(user->email);
+  const bool has_id = string_is_not_empty(user->id);
+  const bool has_name = string_is_not_empty(user->name);
+  const bool has_email = string_is_not_empty(user->email);
 
   const bool has_user = has_id || has_name || has_email;
   if (has_user) {
@@ -362,7 +368,6 @@ error:
 static bool bsg_write_breadcrumbs(BSG_KSJSONEncodeContext *json,
                                   bsg_breadcrumb **breadcrumbs, int crumb_count,
                                   int max_crumb_count) {
-
   CHECKED(bsg_ksjsonbeginArray(json, "breadcrumbs"));
   {
     for (int i = 0; i < crumb_count; ++i) {
@@ -383,6 +388,7 @@ static bool bsg_write_feature_flags(BSG_KSJSONEncodeContext *json,
   if (!features) {
     return true;
   }
+
   CHECKED(bsg_ksjsonbeginArray(json, "featureFlags"));
   { CHECKED(bsg_ksjsonaddRawJSONData(json, features, strlen(features))); }
   CHECKED(bsg_ksjsonendContainer(json));
