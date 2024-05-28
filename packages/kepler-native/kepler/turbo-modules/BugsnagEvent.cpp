@@ -36,11 +36,10 @@ void Event::prepare_payload(time_t app_startup, bool is_launching,
   this->payload->metadata = this->metadata.move();
   this->payload->features = this->features.move();
 
-  this->payload->breadcrumbs_size =
-      this->breadcrumb_buffer.get_buffer_filled_count();
   this->payload->max_breadcrumbs_size =
       this->breadcrumb_buffer.get_buffer_max_size();
-  this->breadcrumb_buffer.fill_buffer(crumb_buffer, crumb_buffer_size);
+  this->payload->breadcrumbs_size =
+      this->breadcrumb_buffer.fill_buffer(crumb_buffer, crumb_buffer_size);
   this->payload->breadcrumbs = crumb_buffer;
 
   auto now = std::chrono::system_clock::now();

@@ -57,37 +57,6 @@ static void bsg_invoke_previous_signal_handler(int signum, siginfo_t *info,
   }
 }
 
-static char *itoa(int value, char *result, int base) {
-  // check that the base if valid
-  if (base < 2 || base > 36) {
-    *result = '\0';
-    return result;
-  }
-
-  char *ptr = result, *ptr1 = result, tmp_char;
-  int tmp_value;
-
-  do {
-    tmp_value = value;
-    value /= base;
-    *ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrst"
-             "uvwxyz"[35 + (tmp_value - value * base)];
-  } while (value);
-
-  // Apply negative sign
-  if (tmp_value < 0)
-    *ptr++ = '-';
-  *ptr-- = '\0';
-
-  // Reverse the string
-  while (ptr1 < ptr) {
-    tmp_char = *ptr;
-    *ptr-- = *ptr1;
-    *ptr1++ = tmp_char;
-  }
-  return result;
-}
-
 void bsg_handler_uninstall_signal() {
   for (int i = 0; i < BSG_HANDLED_SIGNAL_COUNT; i++) {
     const int signal = bsg_native_signals[i];
@@ -104,9 +73,12 @@ static void bsg_handle_signal(int signum, siginfo_t *info, void *user_context) {
   static const char tab[] = "\t";
   static const char lf[] = "\n";
 
-  void *stacktrace[BSG_MAX_STACK_FRAMES];
-  Dl_info sym_info;
-  int fd, stack_size, i;
+  int signal_idx = 0;
+  for (signal_idx = 0; signal_idx < BSG_HANDLED_SIGNAL_COUNT; ++signal_idx) {
+    if (bsg_native_signals[signal_idx] == signum) {
+      break;
+    }
+  }
 
   bugsnag::Event *current_event;
   bugsnag::Client *client = bugsnag::global_client;
@@ -124,8 +96,8 @@ static void bsg_handle_signal(int signum, siginfo_t *info, void *user_context) {
   current_event->prepare_payload(client->get_app_start_time(),
                                  client->get_is_launching(), crumb_buffer,
                                  BUGSNAG_CRUMBS_MAX);
-  current_event->set_exception(bsg_native_signal_names[signum],
-                               bsg_native_signal_msgs[signum], "c");
+  current_event->set_exception(bsg_native_signal_names[signal_idx],
+                               bsg_native_signal_msgs[signal_idx], "c");
   bsg_event_write(current_event->get_payload());
 
 call_previous_handler:

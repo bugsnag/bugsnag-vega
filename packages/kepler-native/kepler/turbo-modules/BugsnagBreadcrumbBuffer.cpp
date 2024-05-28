@@ -3,7 +3,7 @@
 namespace bugsnag {
 
 BreadcrumbBuffer::BreadcrumbBuffer(int max_breadcrumbs)
-    : max_breadcrumbs{max_breadcrumbs}, crumb_count{0} {
+    : max_breadcrumbs{max_breadcrumbs} {
   atomic_init(&this->index, 0);
 
   // TODO Limit max breadcrumbs to BUGSNAG_CRUMBS_MAX
@@ -26,11 +26,6 @@ void BreadcrumbBuffer::add(bsg_breadcrumb_type type, std::string message,
     return;
   }
 
-  (this->crumb_count)++;
-  if (this->crumb_count > this->max_breadcrumbs) {
-    this->crumb_count = this->max_breadcrumbs;
-  }
-
   bsg_breadcrumb *crumb =
       new_breadcrumb(type, message.c_str(), metadata.c_str(), timestamp);
 
@@ -38,21 +33,32 @@ void BreadcrumbBuffer::add(bsg_breadcrumb_type type, std::string message,
   this->buffer[position].reset(crumb);
 }
 
-void BreadcrumbBuffer::fill_buffer(bsg_breadcrumb **crumb_buffer,
-                                   int crumb_buffer_size) {
-  int crumb_copy_count = this->crumb_count;
-  if (crumb_copy_count > crumb_buffer_size) {
-    crumb_copy_count = crumb_buffer_size;
+int BreadcrumbBuffer::fill_buffer(bsg_breadcrumb **crumb_buffer,
+                                  int crumb_buffer_size) {
+  int crumb_copy_count = crumb_buffer_size;
+
+  // lock access to buffer before getting pointers
+  int last_idx_value = -1;
+  while (last_idx_value == -1) {
+    last_idx_value = atomic_exchange(&this->index, -1);
   }
 
-  for (int i = 0; i < crumb_copy_count; ++i) {
-    crumb_buffer[i] = this->buffer[i].move();
+  for (int i = 0; i < crumb_buffer_size; ++i) {
+    bsg_breadcrumb *ptr = this->buffer[i].move();
+    if (ptr == NULL) {
+      crumb_copy_count = i;
+      break;
+    }
+    crumb_buffer[i] = ptr;
   }
+
+  // return index to previous value
+  atomic_exchange(&this->index, last_idx_value);
+
+  return crumb_copy_count;
 }
 
 int BreadcrumbBuffer::get_buffer_max_size() { return this->max_breadcrumbs; }
-
-int BreadcrumbBuffer::get_buffer_filled_count() { return this->crumb_count; }
 
 int BreadcrumbBuffer::get_breadcrumb_index() {
   while (true) {
