@@ -1,15 +1,20 @@
 #ifndef BUGSNAG_ERRORTYPE_H
 #define BUGSNAG_ERRORTYPE_H
 
+#include <stdbool.h>
 #include <time.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#define BSG_MAX_STACK_FRAMES 512
+
 static const int ERROR_CLASS_SIZE = 64;
 static const int ERROR_MESSAGE_SIZE = 256;
 static const int ERROR_TYPE_SIZE = 32;
+static const int STACKFRAME_NAME = 256;
+static const int STACKFRAME_CODE = 65;
 
 typedef enum {
   BSG_SEVERITY_ERR,

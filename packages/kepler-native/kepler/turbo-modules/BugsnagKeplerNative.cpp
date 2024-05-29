@@ -73,6 +73,9 @@ BugsnagKeplerNative::configure(utils::json::JsonContainer config) {
   std::string empty = "";
   auto api_key = config["apiKey"].getValue(empty);
   bsg_config->api_key = api_key;
+  if (bsg_config->max_breadcrumbs > BUGSNAG_CRUMBS_MAX) {
+    bsg_config->max_breadcrumbs = BUGSNAG_CRUMBS_MAX;
+  }
 
   this->bugsnag = new Client(std::move(bsg_config));
   global_client = this->bugsnag;

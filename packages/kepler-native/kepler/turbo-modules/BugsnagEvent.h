@@ -11,10 +11,12 @@ public:
   Event(int max_breadcrumbs);
   ~Event();
 
-  void configure(std::string api_key);
+  void configure(std::string api_key, std::string event_dir);
   void set_exception(const char *class_arg, const char *message_arg,
                      const char *type_arg);
-  void set_app_duration(time_t app_startup);
+  void prepare_payload(time_t app_startup, bool is_launching,
+                       bsg_breadcrumb **crumb_buffer, int crumb_buffer_size);
+  bsg_event_payload *get_payload();
 
   void leave_breadcrumb(bsg_breadcrumb_type type, std::string message,
                         std::string metadata, time_t timestamp);

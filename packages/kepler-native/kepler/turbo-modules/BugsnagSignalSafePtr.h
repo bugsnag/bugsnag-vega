@@ -22,7 +22,7 @@ public:
 
   ~SignalSafePtr() {
     if (this->deallocator) {
-      void *ptr = this->ref_guard->protected_ptr;
+      void *ptr = (void *)atomic_load(&this->ref_guard->protected_ptr);
       T *casted = static_cast<T *>(ptr);
       (*this->deallocator)(casted);
     }
@@ -56,6 +56,12 @@ public:
 
   T *acquire() {
     void *ptr = bsg_ref_guard_acquire(this->ref_guard);
+    T *casted = static_cast<T *>(ptr);
+    return casted;
+  }
+
+  T *move() {
+    void *ptr = bsg_ref_guard_move(this->ref_guard);
     T *casted = static_cast<T *>(ptr);
     return casted;
   }
