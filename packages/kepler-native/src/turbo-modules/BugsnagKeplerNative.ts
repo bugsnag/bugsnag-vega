@@ -21,6 +21,19 @@ interface BugsnagBreadcrumb {
   timestamp: number
 }
 
+interface BugsnagUserInfo {
+  id: string
+  name: string
+  email: string
+}
+
+interface BugsnagAppInfo {
+  bundleId: string
+  releaseStage: string
+  type: string
+  version: string
+}
+
 export interface BugsnagKeplerNative extends KeplerTurboModule {
   // Exported methods.
   configure: (configuration: BugsnagConfiguration) => BugsnagNativeStaticInfo
@@ -33,6 +46,9 @@ export interface BugsnagKeplerNative extends KeplerTurboModule {
   clearMetadata(): () => void
   setFeatures(): (featuresStr: string) => void
   clearFeatures(): () => void
+  setUser(): (userInfo: BugsnagUserInfo) => void
+  clearUser(): () => void
+  setApp(): (appInfo: BugsnagAppInfo) => void
   nativeCrash: () => void
 }
 

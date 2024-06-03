@@ -42,12 +42,13 @@ void bsg_set_event_notifier_info(bsg_event_payload *payload,
 void bsg_set_event_severity(bsg_event_payload *payload, const char *type_arg);
 void bsg_set_event_user(bsg_event_payload *payload, const char *id_arg,
                         const char *email_arg, const char *name_arg);
-void bsg_set_event_device(bsg_event_payload *payload, const char *id,
-                          const char *host, const char *locale,
-                          const char *manufacturer, const char *model,
-                          const char *modelnr, const char *orient,
-                          const char *osname, const char *osver);
+void bsg_set_event_device(bsg_event_payload *payload, const char *host,
+                          const char *locale, const char *manufacturer,
+                          const char *model, const char *modelnr,
+                          const char *orient, const char *osname,
+                          const char *osver);
 void bsg_set_event_device_time(bsg_event_payload *payload, time_t time_arg);
+void bsg_set_event_device_id(bsg_event_payload *payload, const char *id);
 void bsg_set_event_app(bsg_event_payload *payload, const char *bundle_id,
                        const char *stage, const char *type, const char *ver);
 void bsg_set_event_app_duration(bsg_event_payload *payload, int duration,

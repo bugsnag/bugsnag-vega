@@ -28,6 +28,11 @@ public:
   void set_features(std::string features_str);
   void clear_features();
 
+  void set_user_data(utils::json::JsonContainer user_data);
+  void clear_user_data();
+
+  void set_app_data(utils::json::JsonContainer app_data);
+
 private:
   Client *bugsnag;
   std::string device_id;
