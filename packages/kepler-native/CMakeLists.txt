@@ -19,6 +19,7 @@ set(HEADERS
   kepler/turbo-modules/utils/bsg_breadcrumb.h
   kepler/turbo-modules/utils/bsg_types.h
   kepler/turbo-modules/utils/bsg_event.h
+  kepler/turbo-modules/utils/bsg_stack_unwinder.h
   kepler/turbo-modules/utils/serializer/bsg_buffered_writer.h
   kepler/turbo-modules/utils/serializer/bsg_event_writer.h
   kepler/turbo-modules/utils/serializer/BSG_KSCrashStringConversion.h
@@ -32,6 +33,7 @@ set(SOURCES
     kepler/turbo-modules/utils/bsg_signal_handler.cpp
     kepler/turbo-modules/utils/bsg_breadcrumb.c
     kepler/turbo-modules/utils/bsg_event.c
+    kepler/turbo-modules/utils/bsg_stack_unwinder.c
     kepler/turbo-modules/utils/serializer/bsg_buffered_writer.c
     kepler/turbo-modules/utils/serializer/bsg_event_writer.c
     kepler/turbo-modules/utils/serializer/BSG_KSCrashStringConversion.c
@@ -54,6 +56,6 @@ if (CMAKE_SYSTEM_NAME STREQUAL Android)
     list(APPEND LIBRARIES
         android log)
 endif()
-target_link_libraries(BugsnagKeplerNative PRIVATE ${LIBRARIES})
+target_link_libraries(BugsnagKeplerNative PRIVATE ${LIBRARIES} ${CMAKE_DL_LIBS})
 
 install(TARGETS BugsnagKeplerNative)

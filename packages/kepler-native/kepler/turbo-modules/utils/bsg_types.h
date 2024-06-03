@@ -2,6 +2,7 @@
 #define BUGSNAG_ERRORTYPE_H
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <time.h>
 
 #ifdef __cplusplus
@@ -9,12 +10,11 @@ extern "C" {
 #endif
 
 #define BSG_MAX_STACK_FRAMES 512
-
-static const int ERROR_CLASS_SIZE = 64;
-static const int ERROR_MESSAGE_SIZE = 256;
-static const int ERROR_TYPE_SIZE = 32;
-static const int STACKFRAME_NAME = 256;
-static const int STACKFRAME_CODE = 65;
+#define ERROR_CLASS_SIZE 64
+#define ERROR_MESSAGE_SIZE 256
+#define ERROR_TYPE_SIZE 32
+#define STACKFRAME_NAME 256
+#define STACKFRAME_CODE 65
 
 typedef enum {
   BSG_SEVERITY_ERR,
@@ -74,9 +74,30 @@ typedef struct {
 } bsg_notifier_info;
 
 typedef struct {
+  uintptr_t frame_address;
+  uintptr_t symbol_address;
+  uintptr_t load_address;
+  uintptr_t line_number;
+
+  char filename[STACKFRAME_NAME];
+  char method[STACKFRAME_NAME];
+  char code_identifier[STACKFRAME_CODE];
+} bsg_stackframe;
+
+typedef struct {
   char error_class[ERROR_CLASS_SIZE];
   char error_message[ERROR_MESSAGE_SIZE];
   char type[ERROR_TYPE_SIZE];
+
+  /**
+   * The number of frames used in the stacktrace. Must be less than
+   * BSG_MAX_STACK_FRAMES.
+   */
+  ssize_t frame_count;
+  /**
+   * An ordered list of stack frames from the oldest to the most recent
+   */
+  bsg_stackframe stacktrace[BSG_MAX_STACK_FRAMES];
 } bsg_error;
 
 #ifdef __cplusplus

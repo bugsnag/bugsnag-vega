@@ -118,6 +118,20 @@ void bsg_set_event_exception(bsg_event_payload *payload, const char *class_arg,
   }
 }
 
+bsg_stackframe *bsg_get_event_stacktrace(bsg_event_payload *payload) {
+  if (payload == NULL) {
+    return NULL;
+  }
+  return payload->event.exception.stacktrace;
+}
+
+void bsg_set_event_stacktrace_size(bsg_event_payload *payload, int size) {
+  if (payload == NULL) {
+    return;
+  }
+  payload->event.exception.frame_count = size;
+}
+
 void bsg_set_event_is_launching(bsg_event_payload *payload, bool is_launching) {
   payload->is_launching = is_launching;
 }

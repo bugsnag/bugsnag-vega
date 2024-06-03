@@ -9,6 +9,7 @@
 #include "BSG_KSCrashStringConversion.h"
 #include <math.h>
 #include <memory.h>
+#include <string.h>
 #include <time.h>
 
 // Max uint64 is 18446744073709551615

@@ -26,13 +26,28 @@ void Event::configure(std::string api_key, std::string event_dir) {
 }
 
 void Event::set_exception(const char *class_arg, const char *message_arg,
-                          const char *type_arg) {
+                          const char *type_arg, int stackframe_count) {
+  if (!this->payload) {
+    return;
+  }
+
   bsg_set_event_exception(this->payload, class_arg, message_arg, type_arg);
+  bsg_set_event_stacktrace_size(this->payload, stackframe_count);
+}
+
+bsg_stackframe *Event::get_exception_stackframe() {
+  if (!this->payload) {
+    return nullptr;
+  }
+  return this->payload->event.exception.stacktrace;
 }
 
 void Event::prepare_payload(time_t app_startup, bool is_launching,
                             bsg_breadcrumb **crumb_buffer,
                             int crumb_buffer_size) {
+  if (!this->payload) {
+    return;
+  }
   this->payload->metadata = this->metadata.move();
   this->payload->features = this->features.move();
 
