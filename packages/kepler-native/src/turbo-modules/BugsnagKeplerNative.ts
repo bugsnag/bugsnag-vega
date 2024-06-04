@@ -4,6 +4,7 @@ import {TurboModuleRegistry} from '@amzn/keplerscript-turbomodule-api'
 interface BugsnagConfiguration {
   apiKey: string
   appVersion?: string
+  persistenceDirectory: string
 }
 
 interface NativeStaticApp {

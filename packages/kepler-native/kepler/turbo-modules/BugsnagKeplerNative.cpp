@@ -65,18 +65,17 @@ void BugsnagKeplerNative::aggregateMethods(
   methodAggregator.addMethod("clearUser", 0,
                              &BugsnagKeplerNative::clear_user_data);
   methodAggregator.addMethod("setApp", 1, &BugsnagKeplerNative::set_app_data);
-  methodAggregator.addMethod("nativeCrash", 0,
-                             &BugsnagKeplerNative::native_crash);
 }
 
 utils::json::JsonContainer
 BugsnagKeplerNative::configure(utils::json::JsonContainer config) {
   auto bsg_config = std::make_unique<Configuration>();
-  bsg_config->storage_dir = std::string("/data/");
 
   std::string empty = "";
   auto api_key = config["apiKey"].getValue(empty);
+  auto persistenceDir = config["persistenceDirectory"].getValue(empty);
   bsg_config->api_key = api_key;
+  bsg_config->storage_dir = persistenceDir + "/errors";
   if (bsg_config->max_breadcrumbs > BUGSNAG_CRUMBS_MAX) {
     bsg_config->max_breadcrumbs = BUGSNAG_CRUMBS_MAX;
   }
@@ -208,15 +207,5 @@ void BugsnagKeplerNative::set_app_data(utils::json::JsonContainer app_data) {
   auto ver = app_data["version"].getValue(empty);
 
   this->bugsnag->set_app_data(id, stage, type, ver);
-}
-
-// Temporary native crash that can be used for testing:
-
-static void __attribute__((used)) somefakefunc(void) {}
-
-void BugsnagKeplerNative::native_crash() {
-  // Write to a read-only page
-  volatile char *ptr = (char *)somefakefunc;
-  *ptr = 0;
 }
 } // namespace bugsnag

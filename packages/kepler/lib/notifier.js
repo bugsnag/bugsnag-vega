@@ -52,7 +52,8 @@ export const Bugsnag = {
     // configure a client with user supplied options
     const bugsnag = new Client(opts, schema, internalPlugins, { name, version, url })
     const nativeStaticInfo = BugsnagKeplerNative.configure({
-      apiKey: opts.apiKey
+      apiKey: opts.apiKey,
+      persistenceDirectory: bugsnag._config.persistenceDirectory
     })
 
     nativeBreadcrumbs.register(bugsnag)

@@ -20,7 +20,6 @@ public:
   std::string generate_uuid();
   std::string get_device_id();
   void set_device_id(std::string device_id);
-  void native_crash();
 
   void leave_breadcrumb(utils::json::JsonContainer crumb);
   void set_metadata(std::string metadata_str);
