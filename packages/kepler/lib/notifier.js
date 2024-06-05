@@ -17,6 +17,8 @@ import pluginDevice from './device'
 import nativeBreadcrumbs from './breadcrumb_native'
 import nativeMetadata from './metadata_native'
 import nativeFeatureFlags from './features_native'
+import nativeUser from './user_native'
+import nativeApp from './app_info_native'
 
 const name = 'Bugsnag Kepler'
 const url = 'https://github.com/bugsnag/bugsnag-kepler'
@@ -50,12 +52,16 @@ export const Bugsnag = {
     // configure a client with user supplied options
     const bugsnag = new Client(opts, schema, internalPlugins, { name, version, url })
     const nativeStaticInfo = BugsnagKeplerNative.configure({
-      apiKey: opts.apiKey
+      dummyStrValue: opts.apiKey,
+      apikey: opts.apiKey,
+      persistenceDirectory: bugsnag._config.persistenceDirectory
     })
 
     nativeBreadcrumbs.register(bugsnag)
     nativeMetadata.register()
     nativeFeatureFlags.register()
+    nativeUser.register()
+    nativeApp.register()
 
     Event.create = keplerEventFactory(Event.create, nativeStaticInfo)
 

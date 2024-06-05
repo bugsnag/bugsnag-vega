@@ -68,6 +68,22 @@ void Client::clear_features() {
   this->current_event->clear_features();
 }
 
+void Client::set_device_id(std::string device_id) {
+  this->current_event->set_device_id(device_id);
+}
+
+void Client::set_app_data(std::string bundle_id, std::string stage,
+                          std::string type, std::string ver) {
+  this->current_event->set_app_data(bundle_id, stage, type, ver);
+}
+
+void Client::set_user_data(std::string id, std::string email,
+                           std::string name) {
+  this->current_event->set_user_data(id, email, name);
+}
+
+void Client::clear_user_data() { this->current_event->clear_user_data(); }
+
 Event *Client::release_event() { return this->current_event.release(); }
 
 time_t Client::get_app_start_time() { return this->start_time; }

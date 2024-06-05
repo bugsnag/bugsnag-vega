@@ -50,15 +50,15 @@ void bsg_set_event_user(bsg_event_payload *payload, const char *id_arg,
   bsg_free_and_strdup(&(payload->event.user.name), name_arg);
 }
 
-void bsg_set_event_device(bsg_event_payload *payload, const char *id,
-                          const char *host, const char *locale,
-                          const char *manufacturer, const char *model,
-                          const char *modelnr, const char *orient,
-                          const char *osname, const char *osver) {
+void bsg_set_event_device(bsg_event_payload *payload, const char *host,
+                          const char *locale, const char *manufacturer,
+                          const char *model, const char *modelnr,
+                          const char *orient, const char *osname,
+                          const char *osver) {
   if (payload == NULL) {
     return;
   }
-  bsg_free_and_strdup(&(payload->event.device.id), id);
+
   bsg_free_and_strdup(&(payload->event.device.hostname), host);
   bsg_free_and_strdup(&(payload->event.device.locale), locale);
   bsg_free_and_strdup(&(payload->event.device.manufacturer), manufacturer);
@@ -74,6 +74,13 @@ void bsg_set_event_device_time(bsg_event_payload *payload, time_t time_arg) {
     return;
   }
   payload->event.device.time = time_arg;
+}
+
+void bsg_set_event_device_id(bsg_event_payload *payload, const char *id) {
+  if (payload == NULL) {
+    return;
+  }
+  bsg_free_and_strdup(&(payload->event.device.id), id);
 }
 
 void bsg_set_event_app(bsg_event_payload *payload, const char *bundle_id,

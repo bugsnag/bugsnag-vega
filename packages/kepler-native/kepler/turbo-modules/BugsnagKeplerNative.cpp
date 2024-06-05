@@ -61,24 +61,37 @@ void BugsnagKeplerNative::aggregateMethods(
                              &BugsnagKeplerNative::set_features);
   methodAggregator.addMethod("clearFeatures", 0,
                              &BugsnagKeplerNative::clear_features);
-  methodAggregator.addMethod("nativeCrash", 0,
-                             &BugsnagKeplerNative::native_crash);
+  methodAggregator.addMethod("setUser", 1, &BugsnagKeplerNative::set_user_data);
+  methodAggregator.addMethod("clearUser", 0,
+                             &BugsnagKeplerNative::clear_user_data);
+  methodAggregator.addMethod("setApp", 1, &BugsnagKeplerNative::set_app_data);
 }
 
 utils::json::JsonContainer
 BugsnagKeplerNative::configure(utils::json::JsonContainer config) {
   auto bsg_config = std::make_unique<Configuration>();
-  bsg_config->storage_dir = std::string("/data/");
+
+  std::string dummy = "lalala";
+  std::string dummy_str = config["dummyStrValue"].getValue(dummy);
+  // TMWARN("[bugsnag] got dummy string value");
+  // TMWARN(dummy_str);
 
   std::string empty = "";
-  auto api_key = config["apiKey"].getValue(empty);
+  std::string api_key = config["apikey"].getValue(empty);
+  // TMWARN("[bugsnag] got api key");
+  // TMWARN(api_key);
   bsg_config->api_key = api_key;
+
+  std::string persistence_dir = config["persistenceDirectory"].getValue(empty);
+  bsg_config->storage_dir = persistence_dir + "/errors";
+
   if (bsg_config->max_breadcrumbs > BUGSNAG_CRUMBS_MAX) {
     bsg_config->max_breadcrumbs = BUGSNAG_CRUMBS_MAX;
   }
 
   this->bugsnag = new Client(std::move(bsg_config));
   global_client = this->bugsnag;
+  this->bugsnag->set_device_id(this->device_id);
 
   install_signal_handlers();
 
@@ -114,9 +127,17 @@ std::string BugsnagKeplerNative::get_device_id() { return this->device_id; }
 
 void BugsnagKeplerNative::set_device_id(std::string device_id) {
   this->device_id = device_id;
+  if (this->bugsnag == nullptr) {
+    return;
+  }
+  this->bugsnag->set_device_id(device_id);
 }
 
 void BugsnagKeplerNative::leave_breadcrumb(utils::json::JsonContainer crumb) {
+  if (this->bugsnag == nullptr) {
+    return;
+  }
+
   auto type = crumb["type"].getValue(0);
   bsg_breadcrumb_type casted_type = static_cast<bsg_breadcrumb_type>(type);
 
@@ -135,24 +156,65 @@ void BugsnagKeplerNative::leave_breadcrumb(utils::json::JsonContainer crumb) {
 }
 
 void BugsnagKeplerNative::set_metadata(std::string metadata_str) {
+  if (this->bugsnag == nullptr) {
+    return;
+  }
+
   this->bugsnag->set_metadata(metadata_str);
 }
 
-void BugsnagKeplerNative::clear_metadata() { this->bugsnag->clear_metadata(); }
+void BugsnagKeplerNative::clear_metadata() {
+  if (this->bugsnag == nullptr) {
+    return;
+  }
+  this->bugsnag->clear_metadata();
+}
 
 void BugsnagKeplerNative::set_features(std::string features_str) {
+  if (this->bugsnag == nullptr) {
+    return;
+  }
+
   this->bugsnag->set_features(features_str);
 }
 
-void BugsnagKeplerNative::clear_features() { this->bugsnag->clear_features(); }
+void BugsnagKeplerNative::clear_features() {
+  if (this->bugsnag == nullptr) {
+    return;
+  }
+  this->bugsnag->clear_features();
+}
 
-// Temporary native crash that can be used for testing:
+void BugsnagKeplerNative::set_user_data(utils::json::JsonContainer user_data) {
+  if (this->bugsnag == nullptr) {
+    return;
+  }
 
-static void __attribute__((used)) somefakefunc(void) {}
+  std::string empty = "";
+  auto id = user_data["id"].getValue(empty);
+  auto email = user_data["email"].getValue(empty);
+  auto name = user_data["name"].getValue(empty);
+  this->bugsnag->set_user_data(id, email, name);
+}
 
-void BugsnagKeplerNative::native_crash() {
-  // Write to a read-only page
-  volatile char *ptr = (char *)somefakefunc;
-  *ptr = 0;
+void BugsnagKeplerNative::clear_user_data() {
+  if (this->bugsnag == nullptr) {
+    return;
+  }
+  this->bugsnag->clear_user_data();
+}
+
+void BugsnagKeplerNative::set_app_data(utils::json::JsonContainer app_data) {
+  if (this->bugsnag == nullptr) {
+    return;
+  }
+
+  std::string empty = "";
+  auto id = app_data["bundleId"].getValue(empty);
+  auto stage = app_data["releaseStage"].getValue(empty);
+  auto type = app_data["type"].getValue(empty);
+  auto ver = app_data["version"].getValue(empty);
+
+  this->bugsnag->set_app_data(id, stage, type, ver);
 }
 } // namespace bugsnag

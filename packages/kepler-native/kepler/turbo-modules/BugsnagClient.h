@@ -28,6 +28,13 @@ public:
   std::string get_features();
   void clear_features();
 
+  void set_device_id(std::string device_id);
+  void set_app_data(std::string bundle_id, std::string stage, std::string type,
+                    std::string ver);
+
+  void set_user_data(std::string id, std::string email, std::string name);
+  void clear_user_data();
+
   Event *release_event();
 
   time_t get_app_start_time();

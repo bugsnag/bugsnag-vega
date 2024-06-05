@@ -19,10 +19,8 @@ void Event::configure(std::string api_key, std::string event_dir) {
 
   // TODO fill with proper data
   bsg_set_event_notifier_info(this->payload, "kepler", "version", "url");
-  bsg_set_event_user(this->payload, "id", "email", "name");
-  bsg_set_event_app(this->payload, "bundle_id", "dev", "apptype", "version");
-  bsg_set_event_device(this->payload, "deviceID", "host", "pl", "amazon",
-                       "model", "modelnr", "horizontal", "kepler", "keplerver");
+  bsg_set_event_device(this->payload, "host", "pl", "amazon", "model",
+                       "modelnr", "horizontal", "kepler", "keplerver");
 }
 
 void Event::set_exception(const char *class_arg, const char *message_arg,
@@ -112,4 +110,34 @@ std::string Event::get_features() {
 }
 
 void Event::clear_features() { this->features.reset(nullptr); }
+
+void Event::set_user_data(std::string id, std::string email, std::string name) {
+  if (!this->payload) {
+    return;
+  }
+  bsg_set_event_user(this->payload, id.c_str(), email.c_str(), name.c_str());
+}
+
+void Event::clear_user_data() {
+  if (!this->payload) {
+    return;
+  }
+  bsg_set_event_user(this->payload, NULL, NULL, NULL);
+}
+
+void Event::set_device_id(std::string device_id) {
+  if (!this->payload) {
+    return;
+  }
+  bsg_set_event_device_id(this->payload, device_id.c_str());
+}
+
+void Event::set_app_data(std::string bundle_id, std::string stage,
+                         std::string type, std::string ver) {
+  if (!this->payload) {
+    return;
+  }
+  bsg_set_event_app(this->payload, bundle_id.c_str(), stage.c_str(),
+                    type.c_str(), ver.c_str());
+}
 } // namespace bugsnag
