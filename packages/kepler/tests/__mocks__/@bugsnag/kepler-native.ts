@@ -14,4 +14,13 @@ export const BugsnagKeplerNative = {
   getDeviceID: jest.fn(),
   setDeviceID: jest.fn(),
   generateUUID: jest.fn(),
+  leaveBreadcrumb: jest.fn(),
+  setMetadata: jest.fn(),
+  clearMetadata: jest.fn(),
+  setFeatures: jest.fn(),
+  clearFeatures: jest.fn(),
+  setUser: jest.fn(),
+  clearUser: jest.fn(),
+  setApp: jest.fn(),
+  nativeCrash: jest.fn(),
 }

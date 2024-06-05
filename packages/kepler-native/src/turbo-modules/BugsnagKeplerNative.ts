@@ -2,7 +2,8 @@ import type {KeplerTurboModule} from '@amzn/keplerscript-turbomodule-api'
 import {TurboModuleRegistry} from '@amzn/keplerscript-turbomodule-api'
 
 interface BugsnagConfiguration {
-  apiKey: string
+  dummyStrValue: string
+  apikey: string
   appVersion?: string
   persistenceDirectory: string
 }
@@ -43,13 +44,13 @@ export interface BugsnagKeplerNative extends KeplerTurboModule {
   setDeviceID: (id: string) => void
   generateUUID: () => string
   leaveBreadcrumb: (crumb: BugsnagBreadcrumb) => void
-  setMetadata(): (metadataStr: string) => void
-  clearMetadata(): () => void
-  setFeatures(): (featuresStr: string) => void
-  clearFeatures(): () => void
-  setUser(): (userInfo: BugsnagUserInfo) => void
-  clearUser(): () => void
-  setApp(): (appInfo: BugsnagAppInfo) => void
+  setMetadata: (metadataStr: string) => void
+  clearMetadata: () => void
+  setFeatures: (featuresStr: string) => void
+  clearFeatures: () => void
+  setUser: (userInfo: BugsnagUserInfo) => void
+  clearUser: () => void
+  setApp: (appInfo: BugsnagAppInfo) => void
   nativeCrash: () => void
 }
 

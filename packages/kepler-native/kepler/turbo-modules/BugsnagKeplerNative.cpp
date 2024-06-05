@@ -71,11 +71,20 @@ utils::json::JsonContainer
 BugsnagKeplerNative::configure(utils::json::JsonContainer config) {
   auto bsg_config = std::make_unique<Configuration>();
 
+  std::string dummy = "lalala";
+  std::string dummy_str = config["dummyStrValue"].getValue(dummy);
+  // TMWARN("[bugsnag] got dummy string value");
+  // TMWARN(dummy_str);
+
   std::string empty = "";
-  auto api_key = config["apiKey"].getValue(empty);
-  auto persistenceDir = config["persistenceDirectory"].getValue(empty);
+  std::string api_key = config["apikey"].getValue(empty);
+  // TMWARN("[bugsnag] got api key");
+  // TMWARN(api_key);
   bsg_config->api_key = api_key;
-  bsg_config->storage_dir = persistenceDir + "/errors";
+
+  std::string persistence_dir = config["persistenceDirectory"].getValue(empty);
+  bsg_config->storage_dir = persistence_dir + "/errors";
+
   if (bsg_config->max_breadcrumbs > BUGSNAG_CRUMBS_MAX) {
     bsg_config->max_breadcrumbs = BUGSNAG_CRUMBS_MAX;
   }
