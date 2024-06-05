@@ -3,7 +3,6 @@ import { Client } from '@bugsnag/core'
 
 const nativeAppInfo = {
   register: () => {
-    // wrap add single and multiple
     const origConfigure = Client.prototype._configure
     Client.prototype._configure = function (...args) {
       origConfigure.apply(this, args)
