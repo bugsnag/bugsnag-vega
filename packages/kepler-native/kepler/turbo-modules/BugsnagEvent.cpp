@@ -18,7 +18,8 @@ void Event::configure(std::string api_key, std::string event_dir) {
       bsg_new_event_payload(api_key.c_str(), event_dir.c_str(), "4");
 
   // TODO fill with proper data
-  bsg_set_event_notifier_info(this->payload, "kepler", "version", "url");
+  bsg_set_event_notifier_info(this->payload, "Bugsnag Kepler", "0.0.0",
+                              "https://github.com/bugsnag/bugsnag-kepler");
   bsg_set_event_device(this->payload, "host", "pl", "amazon", "model",
                        "modelnr", "horizontal", "kepler", "keplerver");
 }

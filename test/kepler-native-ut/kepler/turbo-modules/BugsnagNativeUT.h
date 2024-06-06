@@ -19,8 +19,12 @@ namespace bugsnag
 
         void configure(std::string path);
         int runUnitTests();
+        void read_only_memory_crash();
+        void nullptr_dereference_crash();
+        void manual_abort_crash();
+        void throw_exception_crash();
 
-    private:
+      private:
         doctest::Context context;
         std::ofstream utOutput;
     };

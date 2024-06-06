@@ -19,6 +19,14 @@ void BugsnagNativeUT::aggregateMethods(
         &methodAggregator) const noexcept {
   methodAggregator.addMethod("configure", 1, &BugsnagNativeUT::configure);
   methodAggregator.addMethod("runUnitTests", 0, &BugsnagNativeUT::runUnitTests);
+  methodAggregator.addMethod("readOnlyMemoryCrash", 0,
+                             &BugsnagNativeUT::read_only_memory_crash);
+  methodAggregator.addMethod("nullptrCrash", 0,
+                             &BugsnagNativeUT::nullptr_dereference_crash);
+  methodAggregator.addMethod("manualAbortCrash", 0,
+                             &BugsnagNativeUT::manual_abort_crash);
+  methodAggregator.addMethod("throwExceptionCrash", 0,
+                             &BugsnagNativeUT::throw_exception_crash);
 }
 
 void BugsnagNativeUT::configure(std::string path) {
@@ -43,4 +51,22 @@ TEST_CASE("testing the factorial function") {
   CHECK(factorial(3) == 6);
   CHECK(factorial(10) == 3628800);
 }
+
+static void __attribute__((used)) somefakefunc(void) {}
+
+void BugsnagNativeUT::read_only_memory_crash() {
+  // Write to a read-only page
+  volatile char *ptr = (char *)somefakefunc;
+  *ptr = 0;
+}
+
+void BugsnagNativeUT::nullptr_dereference_crash() {
+  int *p = nullptr;
+  *p = 1;
+}
+
+void BugsnagNativeUT::manual_abort_crash() { abort(); }
+
+void BugsnagNativeUT::throw_exception_crash() { throw std::bad_exception(); }
+
 } // namespace bugsnag

@@ -23,6 +23,10 @@ When('I restart the test fixture') do
   Maze::Runner.run_command("kepler device launch-app -d Simulator -a com.bugsnag.fixtures.keplertestapp.main")
 end
 
+When('I copy error file') do
+  Maze::Runner.run_command("kepler device copy-from -d Simulator --source /home/app_user/packages/com.bugsnag.fixtures.keplertestapp/data/bugsnag/errors/* --destination maze_output/")
+end
+
 Then("the exception {string} equals one of:") do |keypath, possible_values|
   value = Maze::Helper.read_key_path(Maze::Server.errors.current[:body], "events.0.exceptions.0.#{keypath}")
   Maze.check.include(possible_values.raw.flatten, value)

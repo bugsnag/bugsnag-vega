@@ -37,6 +37,8 @@ static inline bool string_is_empty(const char *restrict s) {
 // buffer, and then overwrite the rest of the buffer
 static char hex_str[2 /* '0x' */ + 20 /* number */ + 1 /* NULL */] = "0x";
 
+static bool bsg_write_notifier_info(BSG_KSJSONEncodeContext *json,
+                                    bsg_notifier_info *notifier);
 static bool bsg_write_metadata(BSG_KSJSONEncodeContext *json, char *metadata);
 static bool bsg_write_severity_reason(BSG_KSJSONEncodeContext *json,
                                       bsg_event *event);
@@ -100,39 +102,56 @@ bool bsg_write_event_file(bsg_event_payload *payload, const char *filename) {
 
   CHECKED(bsg_ksjsonbeginObject(json, NULL));
   {
-    if (!bsg_write_metadata(json, payload->metadata)) {
+    CHECKED(bsg_ksjsonaddStringElement(json, "apiKey", payload->api_key,
+                                       BSG_KSJSON_SIZE_AUTOMATIC));
+    if (!bsg_write_notifier_info(json, &payload->notifier)) {
       goto error;
     }
 
-    if (!bsg_write_severity_reason(json, event)) {
-      goto error;
-    }
+    CHECKED(bsg_ksjsonbeginArray(json, "events"));
+    {
+      CHECKED(bsg_ksjsonbeginObject(json, NULL));
+      {
+        CHECKED(bsg_ksjsonaddStringElement(json, "payloadVersion", "4",
+                                           BSG_KSJSON_SIZE_AUTOMATIC));
 
-    // Write the exception / error info
-    if (!bsg_write_error(json, &event->exception)) {
-      goto error;
-    }
+        if (!bsg_write_metadata(json, payload->metadata)) {
+          goto error;
+        }
 
-    // Write user info
-    if (!bsg_write_user(json, &event->user)) {
-      goto error;
-    }
+        if (!bsg_write_severity_reason(json, event)) {
+          goto error;
+        }
 
-    // Write diagnostics
-    if (!bsg_write_app(json, &event->app, payload->is_launching)) {
-      goto error;
+        // Write the exception / error info
+        if (!bsg_write_error(json, &event->exception)) {
+          goto error;
+        }
+
+        // Write user info
+        if (!bsg_write_user(json, &event->user)) {
+          goto error;
+        }
+
+        // Write diagnostics
+        if (!bsg_write_app(json, &event->app, payload->is_launching)) {
+          goto error;
+        }
+        if (!bsg_write_device(json, &event->device)) {
+          goto error;
+        }
+        if (!bsg_write_breadcrumbs(json, payload->breadcrumbs,
+                                   payload->breadcrumbs_size,
+                                   payload->max_breadcrumbs_size)) {
+          goto error;
+        }
+        if (!bsg_write_feature_flags(json, payload->features)) {
+          goto error;
+        }
+      }
+      CHECKED(bsg_ksjsonendContainer(json));
     }
-    if (!bsg_write_device(json, &event->device)) {
-      goto error;
-    }
-    if (!bsg_write_breadcrumbs(json, payload->breadcrumbs,
-                               payload->breadcrumbs_size,
-                               payload->max_breadcrumbs_size)) {
-      goto error;
-    }
-    if (!bsg_write_feature_flags(json, payload->features)) {
-      goto error;
-    }
+    CHECKED(bsg_ksjsonendContainer(json));
   }
   CHECKED(bsg_ksjsonendContainer(json));
 
@@ -141,6 +160,23 @@ bool bsg_write_event_file(bsg_event_payload *payload, const char *filename) {
   return true;
 error:
   writer.dispose(&writer);
+  return false;
+}
+
+static bool bsg_write_notifier_info(BSG_KSJSONEncodeContext *json,
+                                    bsg_notifier_info *notifier) {
+  CHECKED(bsg_ksjsonbeginObject(json, "notifier"));
+  {
+    CHECKED(bsg_ksjsonaddStringElement(json, "name", notifier->name,
+                                       BSG_KSJSON_SIZE_AUTOMATIC));
+    CHECKED(bsg_ksjsonaddStringElement(json, "version", notifier->version,
+                                       BSG_KSJSON_SIZE_AUTOMATIC));
+    CHECKED(bsg_ksjsonaddStringElement(json, "url", notifier->url,
+                                       BSG_KSJSON_SIZE_AUTOMATIC));
+  }
+  CHECKED(bsg_ksjsonendContainer(json));
+  return true;
+error:
   return false;
 }
 
@@ -472,10 +508,8 @@ static bool bsg_write_feature_flags(BSG_KSJSONEncodeContext *json,
     return true;
   }
 
-  CHECKED(bsg_ksjsonbeginArray(json, "featureFlags"));
-  { CHECKED(bsg_ksjsonaddRawJSONData(json, features, strlen(features))); }
-  CHECKED(bsg_ksjsonendContainer(json));
-
+  CHECKED(bsg_ksjsonaddJSONElement(json, "featureFlags", features,
+                                   strlen(features)));
   return true;
 error:
   return false;
