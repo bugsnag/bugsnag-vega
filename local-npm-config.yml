@@ -12,6 +12,7 @@ uplinks:
       token_env: AMZN_AUTHENTICATION
 log:
   level: trace
+max_body_size: 100mb
 packages:
   '@bugsnag/safe-json-stringify':
     access: $anonymous

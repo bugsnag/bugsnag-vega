@@ -8,8 +8,8 @@ BeforeAll do
   Maze::Runner.run_command("kepler device start-log-stream -d Simulator > device.log", blocking: false)
 
   # install the app
-  Maze::Runner.run_command("kepler device uninstall-app -d Simulator -a com.bugsnag.fixtures.keplertestapp.main")
-  Maze::Runner.run_command("kepler device install-app -d Simulator --dir features/fixtures/keplertestapp")
+  Maze::Runner.run_command("kepler device uninstall-app -d Simulator --appName com.bugsnag.fixtures.keplertestapp.main")
+  Maze::Runner.run_command("kepler device install-app -p ./features/fixtures/keplertestapp/build/vega-tv2023-aarch64-release/keplertestapp_aarch64.vpkg -d Simulator")
 end
 
 AfterAll do
@@ -22,13 +22,13 @@ end
 
 Maze.hooks.before do
   # launch the app
-  Maze::Runner.run_command("kepler device launch-app -d Simulator -a com.bugsnag.fixtures.keplertestapp.main")
+  Maze::Runner.run_command("kepler run-kepler ./features/fixtures/keplertestapp/build/vega-tv2023-aarch64-release/keplertestapp_aarch64.vpkg com.bugsnag.fixtures.keplertestapp.main -s")
 end
 
 Maze.hooks.after do
   # terminate the app
   Maze::Runner.run_command("kepler device copy-from -d Simulator --source /home/app_user/packages/com.bugsnag.fixtures.keplertestapp/data/bugsnag/utOutput.txt --destination maze_output/")
-  Maze::Runner.run_command("kepler device terminate-app -d Simulator -a com.bugsnag.fixtures.keplertestapp.main")
+  Maze::Runner.run_command("kepler device terminate-app -d Simulator --appName com.bugsnag.fixtures.keplertestapp.main")
   Maze::Runner.run_command("kepler device run-cmd --command 'rm -r /home/app_user/packages/com.bugsnag.fixtures.keplertestapp/data/bugsnag'")
 end
 
