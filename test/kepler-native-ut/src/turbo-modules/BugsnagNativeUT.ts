@@ -6,6 +6,10 @@ import { TurboModuleRegistry } from '@amzn/keplerscript-turbomodule-api';
 export interface BugsnagNativeUT extends KeplerTurboModule {
   configure: (path: string) => void;
   runUnitTests: () => number;
+  readOnlyMemoryCrash: () => void;
+  nullptrCrash: () => void;
+  manualAbortCrash: () => void;
+  throwExceptionCrash: () => void;
 }
 
 // prettier-ignore

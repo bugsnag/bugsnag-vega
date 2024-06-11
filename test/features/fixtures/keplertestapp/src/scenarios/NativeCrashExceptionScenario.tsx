@@ -1,0 +1,31 @@
+import { BugsnagNativeUT } from '@bugsnag/kepler-native-ut'
+import Bugsnag, { type KeplerConfig } from '@bugsnag/kepler'
+import React, { useEffect } from 'react'
+import { Text, View } from "react-native"
+import { getStyles } from '../utils/defaultStyle'
+
+const config: Partial<KeplerConfig> = {
+  apiKey: '12345678901234567890123456789012'
+}
+
+const App = () => {
+  const styles = getStyles()
+
+  useEffect(() => {
+    const utOutputFile = (config.persistenceDirectory ? config.persistenceDirectory : '/data/bugsnag') + '/utOutput.txt'
+    BugsnagNativeUT.configure(utOutputFile)
+    BugsnagNativeUT.throwExceptionCrash()
+  }, [])
+
+  return (
+    <View style={styles.background}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>NativeCrashExceptionScenario</Text>
+      </View>
+    </View>
+  )
+}
+
+export default { App, config }
+
+

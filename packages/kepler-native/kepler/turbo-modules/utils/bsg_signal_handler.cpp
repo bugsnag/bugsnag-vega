@@ -19,8 +19,8 @@
 
 static const int bsg_native_signals[BSG_HANDLED_SIGNAL_COUNT + 1] = {
     SIGILL, SIGTRAP, SIGABRT, SIGBUS, SIGFPE, SIGSEGV};
-static const char bsg_native_signal_names[BSG_HANDLED_SIGNAL_COUNT + 1][9] = {
-    "SIGILL\n", "SIGTRAP\n", "SIGABRT\n", "SIGBUS\n", "SIGFPE\n", "SIGSEGV\n"};
+static const char bsg_native_signal_names[BSG_HANDLED_SIGNAL_COUNT + 1][8] = {
+    "SIGILL", "SIGTRAP", "SIGABRT", "SIGBUS", "SIGFPE", "SIGSEGV"};
 static struct sigaction bsg_previous_signal_handles[BSG_HANDLED_SIGNAL_COUNT];
 static const char bsg_native_signal_msgs[BSG_HANDLED_SIGNAL_COUNT + 1][60] = {
     "Illegal instruction",

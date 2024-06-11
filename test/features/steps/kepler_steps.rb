@@ -20,7 +20,11 @@ end
 
 When('I restart the test fixture') do
   Maze::Runner.run_command("kepler device terminate-app -d Simulator -a com.bugsnag.fixtures.keplertestapp.main")
-  Maze::Runner.run_command("kepler device launch-app -d Simulator -a com.bugsnag.fixtures.keplertestapp.main")
+  Maze::Runner.run_command("kepler run-kepler ./features/fixtures/keplertestapp/build/vega-tv2023-aarch64-release/keplertestapp_aarch64.vpkg com.bugsnag.fixtures.keplertestapp.main -s")
+end
+
+When('I copy error file') do
+  Maze::Runner.run_command("kepler device copy-from -d Simulator --source /home/app_user/packages/com.bugsnag.fixtures.keplertestapp/data/bugsnag/errors/* --destination maze_output/")
 end
 
 Then("the exception {string} equals one of:") do |keypath, possible_values|

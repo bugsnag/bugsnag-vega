@@ -30,3 +30,8 @@ export { default as SetUserScenario } from './SetUserScenario';
 export { default as NoUserScenario } from './NoUserScenario';
 export { default as SetUserNotPersistedScenario } from './SetUserNotPersistedScenario';
 export { default as RunNativeUnitTestsScenario } from './RunNativeUnitTestsScenario';
+export { default as NativeCrashScenario } from './NativeCrashScenario';
+export { default as NativeCrashFullConfigScenario } from './NativeCrashFullConfigScenario';
+export { default as NativeCrashAbortScenario } from './NativeCrashAbortScenario';
+export { default as NativeCrashNullptrScenario } from './NativeCrashNullptrScenario';
+export { default as NativeCrashExceptionScenario } from './NativeCrashExceptionScenario';
