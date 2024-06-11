@@ -60,10 +60,9 @@ void BugsnagNativeUT::read_only_memory_crash() {
   *ptr = 0;
 }
 
-void BugsnagNativeUT::nullptr_dereference_crash() {
-  int *p = nullptr;
-  *p = 1;
-}
+int *global_ptr = nullptr;
+
+void BugsnagNativeUT::nullptr_dereference_crash() { *global_ptr = 1; }
 
 void BugsnagNativeUT::manual_abort_crash() { abort(); }
 
