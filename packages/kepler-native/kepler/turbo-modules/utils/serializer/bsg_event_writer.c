@@ -72,10 +72,11 @@ static size_t build_filename(bsg_event_payload *payload, char *out) {
 
   // append the api_key to the filename
   out[length++] = '_';
-  length +=
-      bsg_strncpy(out + length, payload->api_key, strlen(payload->api_key) + 1);
+  bsg_strncpy(out + length, payload->api_key, strlen(payload->api_key) + 1);
+  length += strlen(payload->api_key);
 
-  length += bsg_strncpy(out + length, ".json", strlen(".json") + 1);
+  bsg_strncpy(out + length, ".json", strlen(".json") + 1);
+  length += strlen(".json") + 1;
 
   return length;
 }

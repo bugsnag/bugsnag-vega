@@ -236,15 +236,14 @@ bsg_error_types bsg_error_types_all_enabled() {
  * Copy null terminated c-string from src to dst
  * dst_size should include null-terminator
  */
-size_t bsg_strncpy(char *dst, const char *src, size_t dst_size) {
+void bsg_strncpy(char *dst, const char *src, size_t dst_size) {
   if (dst == NULL || dst_size == 0) {
-    return 0;
+    return;
   }
   dst[0] = '\0';
   if (src != NULL) {
-    return strlcat(dst, src, dst_size);
+    strncat(dst, src, dst_size);
   }
-  return 0;
 }
 
 void bsg_free_and_strdup(char **dst, const char *src) {
