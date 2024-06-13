@@ -3,7 +3,6 @@ import { Client, Event } from '@bugsnag/core'
 import { schema } from './config'
 import delivery from './delivery'
 import createUserStore from './user_store'
-import createDeviceStore from './device_store'
 import BugsnagPluginReact from '@bugsnag/plugin-react'
 import createBugsnagGlobalErrorHandlerPlugin from '@bugsnag/plugin-react-native-global-error-handler'
 import { BugsnagKeplerNative } from '@bugsnag/kepler-native'
@@ -13,12 +12,12 @@ import pluginAppDuration from '@bugsnag/plugin-app-duration'
 import createPluginNetworkBreadcrumbs from '@bugsnag/plugin-network-breadcrumbs'
 import pluginSession from '@bugsnag/plugin-browser-session'
 import React from 'react'
-import pluginDevice from './device'
 import nativeBreadcrumbs from './breadcrumb_native'
 import nativeMetadata from './metadata_native'
 import nativeFeatureFlags from './features_native'
 import nativeUser from './user_native'
 import nativeApp from './app_info_native'
+import nativeDevice from './device_info_native'
 
 const name = 'Bugsnag Kepler'
 const url = 'https://github.com/bugsnag/bugsnag-kepler'
@@ -44,7 +43,6 @@ export const Bugsnag = {
       pluginConsoleBreadcrumbs,
       createPluginNetworkBreadcrumbs(),
       pluginSession,
-      pluginDevice,
       pluginAppDuration,
       new BugsnagPluginReact(React)
     ]
@@ -62,16 +60,13 @@ export const Bugsnag = {
     nativeFeatureFlags.register()
     nativeUser.register()
     nativeApp.register()
+    nativeDevice.register(bugsnag)
 
     Event.create = keplerEventFactory(Event.create, nativeStaticInfo)
 
     const userStore = createUserStore(bugsnag._config.persistenceDirectory, bugsnag._config.persistUser)
     const user = userStore.load(bugsnag._config.user)
     bugsnag.setUser(user.id, user.email, user.name)
-
-    const deviceStore = createDeviceStore(bugsnag._config.persistenceDirectory)
-    const deviceInfo = deviceStore.load()
-    pluginDevice.setDeviceID(deviceInfo.id)
 
     bugsnag._setDelivery(delivery)
     bugsnag.markLaunchComplete = () => {

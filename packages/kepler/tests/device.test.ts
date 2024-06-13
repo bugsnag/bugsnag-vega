@@ -1,15 +1,20 @@
-import plugin from '../lib/device'
+import nativeDevice from '../lib/device_info_native'
 import { Client } from '@bugsnag/core'
+import { BugsnagFileIO } from "@bugsnag/kepler-native"
 
 // @ts-expect-error cannot find global
 global.HermesInternal = {}
 
 interface Device {
+  id: string,
+  manufacturer: string,
+  model: string,
   osName: string,
-    runtimeVersions: {
-      reactNative: string,
-      reactNativeJsEngine: string
-    }
+  osVersion: string,
+  runtimeVersions: {
+    reactNative: string,
+    reactNativeJsEngine: string
+  }
 }
 
 interface DeviceWithState extends Device {
@@ -28,30 +33,41 @@ interface EventPayload {
   events: EventWithDevice[]
 }
 
+(BugsnagFileIO.readTextFile as jest.Mock).mockReturnValue(
+  { content: `{ "id": "ab0c1482-2ffe-11eb-adc1-0242ac120002" }` }
+)
+
 describe('device plugin', () => {
   it('should add an onError callback which captures device information', () => {
     // @ts-expect-error client constructor is protected
-    const client = new Client({ apiKey: 'API_KEY_YEAH' }, undefined, [plugin])
-    const payloads: EventPayload[] = []
-
+    const client = new Client({ apiKey: 'API_KEY_YEAH', persistenceDirectory: '/tmp/user' }, undefined, [])
+    nativeDevice.register(client)
     expect(client._cbs.e).toHaveLength(1)
 
-    // 
+    const payloads: EventPayload[] = []
     client._setDelivery(() => ({ sendEvent: (payload: EventPayload) => payloads.push(payload), sendSession: () => {} }))
     client.notify(new Error('noooo'))
 
     expect(payloads.length).toEqual(1)
     expect(payloads[0].events[0].device).toBeDefined()
-    expect(payloads[0].events[0].device.time instanceof Date).toBe(true)
+    expect(payloads[0].events[0].device.id).toBe('ab0c1482-2ffe-11eb-adc1-0242ac120002')
+    expect(payloads[0].events[0].device.manufacturer).toBe('Amazon')
+    expect(payloads[0].events[0].device.model).toBe('Tv Simulator')
+    expect(payloads[0].events[0].device.osName).toBe('Kepler')
+    expect(payloads[0].events[0].device.osVersion).toBe('1.1')
     expect(payloads[0].events[0].device.runtimeVersions).toBeDefined()
     expect(payloads[0].events[0].device.runtimeVersions.reactNative).toBe('0.72.0')
     expect(payloads[0].events[0].device.runtimeVersions.reactNativeJsEngine).toBe('hermes')
-    expect(payloads[0].events[0].device.osName).toBe('kepler')
+    expect(payloads[0].events[0].device.time instanceof Date).toBe(true)
+    
   })
 
   it('should add an onSession callback which captures device information', () => {
     // @ts-expect-error client constructor is protected
-    const client = new Client({ apiKey: 'API_KEY_YEAH' }, undefined, [plugin])
+    const client = new Client({ apiKey: 'API_KEY_YEAH', persistenceDirectory: '/tmp/user' }, undefined, [])
+    nativeDevice.register(client)
+    expect(client._cbs.s).toHaveLength(1)
+
     const payloads: SessionWithDevice[] = []
     client._sessionDelegate = {
       startSession: (client: any, session: SessionWithDevice) => {
@@ -61,16 +77,18 @@ describe('device plugin', () => {
       }
     }
 
-    expect(client._cbs.s).toHaveLength(1)
-
     client._setDelivery(() => ({ sendEvent: () => {}, sendSession: (payload: SessionWithDevice) => payloads.push(payload) }))
     client.startSession()
 
     expect(payloads.length).toEqual(1)
     expect(payloads[0].device).toBeDefined()
+    expect(payloads[0].device.id).toBe('ab0c1482-2ffe-11eb-adc1-0242ac120002')
+    expect(payloads[0].device.manufacturer).toBe('Amazon')
+    expect(payloads[0].device.model).toBe('Tv Simulator')
+    expect(payloads[0].device.osName).toBe('Kepler')
+    expect(payloads[0].device.osVersion).toBe('1.1')
     expect(payloads[0].device.runtimeVersions).toBeDefined()
     expect(payloads[0].device.runtimeVersions.reactNative).toBe('0.72.0')
     expect(payloads[0].device.runtimeVersions.reactNativeJsEngine).toBe('hermes')
-    expect(payloads[0].device.osName).toBe('kepler')
   })
 })

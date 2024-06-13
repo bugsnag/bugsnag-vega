@@ -1,4 +1,6 @@
 import { Platform } from 'react-native'
+import DeviceInfo from '@amzn/react-native-device-info'
+import createDeviceStore from './device_store'
 
 const getEngine = () => global.HermesInternal ? 'hermes' : 'unknown'
 
@@ -7,12 +9,17 @@ const getReactNativeVersion = () => {
   return `${major}.${minor}.${patch}`
 }
 
-let deviceID
+const nativeDeviceInfo = {
+  register: (client) => {
+    const deviceStore = createDeviceStore(client._config.persistenceDirectory)
+    const { id } = deviceStore.load()
 
-const pluginDevice = {
-  load: (client) => {
     const device = {
-      osName: 'kepler',
+      id,
+      manufacturer: DeviceInfo.getManufacturerSync(),
+      model: DeviceInfo.getModel(),
+      osName: DeviceInfo.getSystemName(),
+      osVersion: DeviceInfo.getSystemVersion(),
       runtimeVersions: {
         reactNative: getReactNativeVersion(),
         reactNativeJsEngine: getEngine()
@@ -22,8 +29,7 @@ const pluginDevice = {
     client.addOnSession(session => {
       session.device = {
         ...session.device,
-        ...device,
-        id: deviceID
+        ...device
       }
     })
 
@@ -31,14 +37,12 @@ const pluginDevice = {
       event.device = {
         ...event.device,
         ...device,
-        id: deviceID,
         time: new Date()
       }
     }, true)
-  },
-  setDeviceID: (id) => {
-    deviceID = id
+
+    // TODO: sync with native
   }
 }
 
-export default pluginDevice
+export default nativeDeviceInfo
