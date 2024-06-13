@@ -186,6 +186,11 @@ static bool bsg_write_metadata(BSG_KSJSONEncodeContext *json, char *metadata) {
     return true;
   }
 
+  if (strlen(metadata) == 0) {
+    CHECKED(bsg_ksjsonaddJSONElement(json, "metaData", "{}", strlen("{}")));
+    return true;
+  }
+
   CHECKED(
       bsg_ksjsonaddJSONElement(json, "metaData", metadata, strlen(metadata)));
   return true;

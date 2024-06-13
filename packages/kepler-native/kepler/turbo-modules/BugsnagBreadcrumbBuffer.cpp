@@ -26,10 +26,9 @@ void BreadcrumbBuffer::add(bsg_breadcrumb_type type, std::string message,
     return;
   }
 
+  int position = get_breadcrumb_index();
   bsg_breadcrumb *crumb =
       new_breadcrumb(type, message.c_str(), metadata.c_str(), timestamp);
-
-  int position = get_breadcrumb_index();
   this->buffer[position].reset(crumb);
 }
 
