@@ -91,6 +91,7 @@ export const Bugsnag = {
       return Bugsnag._client
     }
     Bugsnag._client = Bugsnag.createClient(opts)
+    Bugsnag._client.markLaunchComplete()
     return Bugsnag._client
   },
   isStarted: () => {
