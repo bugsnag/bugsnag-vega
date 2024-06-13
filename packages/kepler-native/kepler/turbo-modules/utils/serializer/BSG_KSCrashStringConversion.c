@@ -103,13 +103,13 @@ static size_t positive_double_to_string(const double value, char *dst,
 
   // isnan() is basically ((x) != (x))
   if (isnan(value)) {
-    strlcpy(dst, "nan", 4);
+    strncpy(dst, "nan", 4);
     return 3;
   }
 
   // isinf() is a compiler intrinsic.
   if (isinf(value)) {
-    strlcpy(dst, "inf", 4);
+    strncpy(dst, "inf", 4);
     return 3;
   }
 
