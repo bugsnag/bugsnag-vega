@@ -20,7 +20,11 @@ end
 
 When('I restart the test fixture') do
   Maze::Runner.run_command("kepler device terminate-app -d Simulator -a com.bugsnag.fixtures.keplertestapp.main")
-  Maze::Runner.run_command("kepler run-kepler ./features/fixtures/keplertestapp/build/vega-tv2023-aarch64-release/keplertestapp_aarch64.vpkg com.bugsnag.fixtures.keplertestapp.main -s")
+  Maze::Runner.run_command("kepler device launch-app -a com.bugsnag.fixtures.keplertestapp.main")
+end
+
+When('I print error folder contents') do
+  Maze::Runner.run_command("kepler device run-cmd --command 'ls -la /home/app_user/packages/com.bugsnag.fixtures.keplertestapp/data/bugsnag/errors'")
 end
 
 When('I copy error file') do

@@ -29,15 +29,13 @@ BugsnagFileIO::BugsnagFileIO()
 void BugsnagFileIO::aggregateMethods(
     TM_API_NAMESPACE::MethodAggregator<TM_API_NAMESPACE::KeplerTurboModule>
         &methodAggregator) const noexcept {
-  methodAggregator.addMethod("readTextFile", 1, &BugsnagFileIO::read_text_file);
-  methodAggregator.addMethod("readFile", 1, &BugsnagFileIO::read_file);
-  methodAggregator.addMethod("writeTextFile", 2,
-                             &BugsnagFileIO::write_text_file);
-  methodAggregator.addMethod("listDirectory", 1,
-                             &BugsnagFileIO::list_directory);
-  methodAggregator.addMethod("mkdir", 1, &BugsnagFileIO::mkdir);
-  methodAggregator.addMethod("deleteFile", 1, &BugsnagFileIO::delete_file);
-  methodAggregator.addMethod("sha1", 1, &BugsnagFileIO::sha1);
+  methodAggregator.addMethod("readTextFile", &BugsnagFileIO::read_text_file);
+  methodAggregator.addMethod("readFile", &BugsnagFileIO::read_file);
+  methodAggregator.addMethod("writeTextFile", &BugsnagFileIO::write_text_file);
+  methodAggregator.addMethod("listDirectory", &BugsnagFileIO::list_directory);
+  methodAggregator.addMethod("mkdir", &BugsnagFileIO::mkdir);
+  methodAggregator.addMethod("deleteFile", &BugsnagFileIO::delete_file);
+  methodAggregator.addMethod("sha1", &BugsnagFileIO::sha1);
 }
 
 utils::json::JsonContainer BugsnagFileIO::read_text_file(std::string path) {
