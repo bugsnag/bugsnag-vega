@@ -78,12 +78,37 @@ Scenario: Modifying sessions via onSession callbacks
 
 Scenario: Sessions are stored when the network is unreachable, only maxPersistedSessions sent
   # make the network unreachable
-  Given I configure the endpoints to "127.0.0.1:8000"
+  # cannot set for just one return code because we are also sending events
+  Given I set the HTTP status code to 429
   When I run "MaxPersistedSessionsScenario"
-  Then I should receive no sessions
-  And I should receive no errors
+
+  And I wait to receive 10 sessions
+  And I wait to receive 10 errors
+
+  And I discard the oldest session
+  And I discard the oldest session
+  And I discard the oldest session
+  And I discard the oldest session
+  And I discard the oldest session
+  And I discard the oldest session
+  And I discard the oldest session
+  And I discard the oldest session
+  And I discard the oldest session
+  And I discard the oldest session
+
+  And I discard the oldest error
+  And I discard the oldest error
+  And I discard the oldest error
+  And I discard the oldest error
+  And I discard the oldest error
+  And I discard the oldest error
+  And I discard the oldest error
+  And I discard the oldest error
+  And I discard the oldest error
+  And I discard the oldest error
+
+  And I set the HTTP status code to 200
   And I restart the test fixture
-  And I configure the endpoints to default
   And I start bugsnag for "MaxPersistedSessionsScenario"
   Then I wait to receive 3 sessions
   And I wait to receive 10 errors
