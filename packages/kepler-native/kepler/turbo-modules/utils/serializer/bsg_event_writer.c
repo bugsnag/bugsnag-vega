@@ -113,6 +113,7 @@ bool bsg_write_event_file(bsg_event_payload *payload, const char *filename) {
   {
     CHECKED(bsg_ksjsonaddStringElement(json, "apiKey", payload->api_key,
                                        BSG_KSJSON_SIZE_AUTOMATIC));
+
     CHECKED(bsg_write_notifier_info(json, &payload->notifier));
 
     CHECKED(bsg_ksjsonbeginArray(json, "events"));
@@ -149,6 +150,10 @@ error:
 
 static int bsg_write_notifier_info(BSG_KSJSONEncodeContext *json,
                                    bsg_notifier_info *notifier) {
+  if (!notifier) {
+    return BSG_KSJSON_OK;
+  }
+
   RETURN_ERROR(bsg_ksjsonbeginObject(json, "notifier"));
   {
     RETURN_ERROR(bsg_ksjsonaddStringElement(json, "name", notifier->name,
@@ -231,6 +236,10 @@ static char *bsg_uint64_to_prefixed_hex(uint64_t value) {
 static int bsg_write_stackframe(BSG_KSJSONEncodeContext *json,
                                 bsg_stackframe *frame, bool isPC) {
 
+  if (!frame) {
+    return BSG_KSJSON_OK;
+  }
+
   RETURN_ERROR(bsg_ksjsonbeginObject(json, NULL));
   {
     RETURN_ERROR(JSON_LIMITED_STRING_ELEMENT(
@@ -271,6 +280,10 @@ static int bsg_write_stacktrace(BSG_KSJSONEncodeContext *json,
                                 bsg_stackframe *stacktrace,
                                 size_t frame_count) {
 
+  if (!stacktrace) {
+    return BSG_KSJSON_OK;
+  }
+
   for (int findex = 0; findex < frame_count; findex++) {
     RETURN_ERROR(bsg_write_stackframe(json, &stacktrace[findex], findex == 0));
   }
@@ -279,6 +292,9 @@ static int bsg_write_stacktrace(BSG_KSJSONEncodeContext *json,
 }
 
 static int bsg_write_error(BSG_KSJSONEncodeContext *json, bsg_error *error) {
+  if (!error) {
+    return BSG_KSJSON_OK;
+  }
   RETURN_ERROR(bsg_ksjsonbeginArray(json, "exceptions"));
   {
     RETURN_ERROR(bsg_ksjsonbeginObject(json, NULL));
@@ -311,9 +327,15 @@ static int bsg_write_error(BSG_KSJSONEncodeContext *json, bsg_error *error) {
 }
 
 static int bsg_write_user(BSG_KSJSONEncodeContext *json, bsg_user *user) {
-  const bool has_id = string_is_not_empty(user->id);
-  const bool has_name = string_is_not_empty(user->name);
-  const bool has_email = string_is_not_empty(user->email);
+  if (!user) {
+    return BSG_KSJSON_OK;
+  }
+
+  const bool has_id = user->id != NULL ? string_is_not_empty(user->id) : false;
+  const bool has_name =
+      user->name != NULL ? string_is_not_empty(user->name) : false;
+  const bool has_email =
+      user->email != NULL ? string_is_not_empty(user->email) : false;
 
   const bool has_user = has_id || has_name || has_email;
   if (has_user) {
@@ -336,11 +358,15 @@ static int bsg_write_user(BSG_KSJSONEncodeContext *json, bsg_user *user) {
     }
     RETURN_ERROR(bsg_ksjsonendContainer(json));
   }
+
   return BSG_KSJSON_OK;
 }
 
 static int bsg_write_app(BSG_KSJSONEncodeContext *json, bsg_app *app,
                          bool is_launching) {
+  if (!app) {
+    return BSG_KSJSON_OK;
+  }
   RETURN_ERROR(bsg_ksjsonbeginObject(json, "app"));
   {
     RETURN_ERROR(bsg_ksjsonaddStringElement(json, "version", app->version,
@@ -365,6 +391,9 @@ static int bsg_write_app(BSG_KSJSONEncodeContext *json, bsg_app *app,
 }
 
 static int bsg_write_device(BSG_KSJSONEncodeContext *json, bsg_device *device) {
+  if (!device) {
+    return BSG_KSJSON_OK;
+  }
 
   RETURN_ERROR(bsg_ksjsonbeginObject(json, "device"));
   {
@@ -449,6 +478,10 @@ static int bsg_write_breadcrumb(BSG_KSJSONEncodeContext *json,
 static int bsg_write_breadcrumbs(BSG_KSJSONEncodeContext *json,
                                  bsg_breadcrumb **breadcrumbs, int crumb_count,
                                  int max_crumb_count) {
+
+  if (!breadcrumbs) {
+    return BSG_KSJSON_OK;
+  }
   RETURN_ERROR(bsg_ksjsonbeginArray(json, "breadcrumbs"));
   {
     for (int i = 0; i < crumb_count; ++i) {
