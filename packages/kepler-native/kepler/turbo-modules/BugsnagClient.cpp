@@ -72,6 +72,14 @@ void Client::set_device_id(std::string device_id) {
   this->current_event->set_device_id(device_id);
 }
 
+void Client::set_device_data(std::string manufacturer, std::string model,
+                             std::string os_name, std::string os_version,
+                             std::string rn_version, std::string js_engine) {
+  this->current_event->set_device_data(manufacturer, model,
+                                        os_name, os_version,
+                                        rn_version, js_engine);
+}
+
 void Client::set_app_data(std::string bundle_id, std::string stage,
                           std::string type, std::string ver) {
   this->current_event->set_app_data(bundle_id, stage, type, ver);

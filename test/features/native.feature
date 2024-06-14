@@ -10,6 +10,18 @@ Scenario: Run native crash - readonly memory location
   And the exception "errorClass" equals "SIGSEGV"
   And the exception "message" equals "Segmentation violation (invalid memory reference)"
   And the event "unhandled" is true
+  
+  # Device data
+  And the event "device.id" is not null
+  And the event "device.id" matches "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+  And the event "device.manufacturer" equals "Amazon"
+  And the event "device.model" is not null
+  And the event "device.osName" equals "Kepler"
+  And the event "device.osVersion" is not null
+  And the event "device.runtimeVersions" is not null
+  And the event "device.runtimeVersions.reactNative" is not null
+  And the event "device.runtimeVersions.reactNativeJsEngine" equals "hermes"
+  And the event "device.time" is not null
 
 Scenario: Run native crash - readonly memory location, with full config
   When I run "NativeCrashFullConfigScenario"

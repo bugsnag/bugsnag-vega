@@ -5,9 +5,15 @@ Scenario: Automatic sessions enabled by default
   And I wait to receive a session
   Then the session is valid for the session reporting API version "1" for the "Bugsnag Kepler" notifier
   And the session payload has a valid sessions array
+
+  # Device data
+  And the session payload field "device.id" matches the regex "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+  And the session payload field "device.manufacturer" equals "Amazon"
+  And the session payload field "device.model" is not null
+  And the session payload field "device.osName" equals "Kepler"
+  And the session payload field "device.osVersion" is not null
   And the session payload field "device.runtimeVersions.reactNative" is not null
   And the session payload field "device.runtimeVersions.reactNativeJsEngine" equals "hermes"
-  And the session payload field "device.osName" equals "kepler"
 
 Scenario: Automatic sessions disabled
   When I run "SessionAutoDisabledScenario"

@@ -30,5 +30,8 @@
     "@bugsnag/plugin-react-native-global-error-handler": "^7.22.3",
     "@bugsnag/plugin-react-native-unhandled-rejection": "^7.19.0",
     "iserror": "^0.0.2"
+  },
+  "peerDependencies": {
+    "@amzn/react-native-device-info": "~2.0.0"
   }
 }

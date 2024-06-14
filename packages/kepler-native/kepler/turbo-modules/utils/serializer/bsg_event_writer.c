@@ -368,21 +368,26 @@ static int bsg_write_device(BSG_KSJSONEncodeContext *json, bsg_device *device) {
 
   RETURN_ERROR(bsg_ksjsonbeginObject(json, "device"));
   {
-    RETURN_ERROR(bsg_ksjsonaddStringElement(json, "osName", device->os_name,
-                                            BSG_KSJSON_SIZE_AUTOMATIC));
     RETURN_ERROR(bsg_ksjsonaddStringElement(json, "id", device->id,
                                             BSG_KSJSON_SIZE_AUTOMATIC));
-    RETURN_ERROR(bsg_ksjsonaddStringElement(json, "locale", device->locale,
+    RETURN_ERROR(bsg_ksjsonaddStringElement( json, "manufacturer", device->manufacturer,
                                             BSG_KSJSON_SIZE_AUTOMATIC));
-    RETURN_ERROR(bsg_ksjsonaddStringElement(
-        json, "osVersion", device->os_version, BSG_KSJSON_SIZE_AUTOMATIC));
-    RETURN_ERROR(bsg_ksjsonaddStringElement(
-        json, "manufacturer", device->manufacturer, BSG_KSJSON_SIZE_AUTOMATIC));
     RETURN_ERROR(bsg_ksjsonaddStringElement(json, "model", device->model,
                                             BSG_KSJSON_SIZE_AUTOMATIC));
-    RETURN_ERROR(bsg_ksjsonaddStringElement(
-        json, "orientation", device->orientation, BSG_KSJSON_SIZE_AUTOMATIC));
+    RETURN_ERROR(bsg_ksjsonaddStringElement(json, "osName", device->os_name,
+                                            BSG_KSJSON_SIZE_AUTOMATIC));
+    RETURN_ERROR(bsg_ksjsonaddStringElement(json, "osVersion", device->os_version,
+                                            BSG_KSJSON_SIZE_AUTOMATIC));
 
+    RETURN_ERROR(bsg_ksjsonbeginObject(json, "runtimeVersions"));
+    {
+      RETURN_ERROR(bsg_ksjsonaddStringElement(json, "reactNative", device->rn_version,
+                                            BSG_KSJSON_SIZE_AUTOMATIC));
+      RETURN_ERROR(bsg_ksjsonaddStringElement(json, "reactNativeJsEngine", device->js_engine,
+                                            BSG_KSJSON_SIZE_AUTOMATIC));
+    }
+    RETURN_ERROR(bsg_ksjsonendContainer(json));
+  
     if (device->time > 0) {
       char buffer[sizeof "2018-10-08T12:07:09Z"];
       bsg_time_to_simplified_iso8601_string(device->time, buffer);

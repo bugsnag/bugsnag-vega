@@ -20,8 +20,6 @@ void Event::configure(std::string api_key, std::string event_dir) {
   // TODO fill with proper data
   bsg_set_event_notifier_info(this->payload, "Bugsnag Kepler", "0.0.0",
                               "https://github.com/bugsnag/bugsnag-kepler");
-  bsg_set_event_device(this->payload, "host", "pl", "amazon", "model",
-                       "modelnr", "horizontal", "kepler", "keplerver");
 }
 
 void Event::set_exception(const char *class_arg, const char *message_arg,
@@ -141,4 +139,15 @@ void Event::set_app_data(std::string bundle_id, std::string stage,
   bsg_set_event_app(this->payload, bundle_id.c_str(), stage.c_str(),
                     type.c_str(), ver.c_str());
 }
+
+void Event::set_device_data(std::string manufacturer, std::string model,
+                         std::string os_name, std::string os_version,
+                         std::string rn_version, std::string js_engine) {
+  if (!this->payload) {
+    return;
+  }
+  bsg_set_event_device(this->payload, manufacturer.c_str(), model.c_str(),
+                    os_name.c_str(), os_version.c_str(), rn_version.c_str(), js_engine.c_str());
+}
+
 } // namespace bugsnag

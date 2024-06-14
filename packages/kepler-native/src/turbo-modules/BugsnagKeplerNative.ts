@@ -36,6 +36,18 @@ interface BugsnagAppInfo {
   version: string
 }
 
+interface BugsnagDevice {
+  id: string,
+  manufacturer: string
+  model: string
+  osName: string
+  osVersion: string
+  runtimeVersions: {
+    reactNative: string
+    reactNativeJsEngine: string
+  }
+}
+
 export interface BugsnagKeplerNative extends KeplerTurboModule {
   // Exported methods.
   configure: (configuration: BugsnagConfiguration) => BugsnagNativeStaticInfo
@@ -51,6 +63,7 @@ export interface BugsnagKeplerNative extends KeplerTurboModule {
   setUser: (userInfo: BugsnagUserInfo) => void
   clearUser: () => void
   setApp: (appInfo: BugsnagAppInfo) => void
+  setDevice: (deviceInfo: BugsnagDevice) => void
   nativeCrash: () => void
 }
 
