@@ -63,6 +63,7 @@ void BugsnagKeplerNative::aggregateMethods(
   methodAggregator.addMethod("clearUser",
                              &BugsnagKeplerNative::clear_user_data);
   methodAggregator.addMethod("setApp", &BugsnagKeplerNative::set_app_data);
+  methodAggregator.addMethod("setDevice", &BugsnagKeplerNative::set_device_data);
 }
 
 utils::json::JsonContainer
@@ -214,5 +215,25 @@ void BugsnagKeplerNative::set_app_data(utils::json::JsonContainer app_data) {
   auto ver = app_data["version"].getValue(empty);
 
   this->bugsnag->set_app_data(id, stage, type, ver);
+}
+
+void BugsnagKeplerNative::set_device_data(utils::json::JsonContainer device_data) {
+  if (this->bugsnag == nullptr) {
+    return;
+  }
+
+  std::string empty = "";
+  auto manufacturer = device_data["manufacturer"].getValue(empty);
+  auto model = device_data["model"].getValue(empty);
+  auto os_name = device_data["osName"].getValue(empty);
+  auto os_version = device_data["osVersion"].getValue(empty);
+
+  auto empty_object = utils::json::JsonContainer::createJsonObject();
+  auto runtime_versions = device_data["runtimeVersions"].getValue(empty_object);
+  auto rn_version = runtime_versions["reactNative"].getValue(empty);
+  auto js_engine = runtime_versions["reactNativeJsEngine"].getValue(empty);
+
+  this->bugsnag->set_device_data(manufacturer, model, os_name, os_version,
+                                 rn_version, js_engine);
 }
 } // namespace bugsnag

@@ -1,6 +1,7 @@
 import { Platform } from 'react-native'
 import DeviceInfo from '@amzn/react-native-device-info'
 import createDeviceStore from './device_store'
+import { BugsnagKeplerNative } from '@bugsnag/kepler-native'
 
 const getEngine = () => global.HermesInternal ? 'hermes' : 'unknown'
 
@@ -41,7 +42,7 @@ const nativeDeviceInfo = {
       }
     }, true)
 
-    // TODO: sync with native
+    BugsnagKeplerNative.setDevice(device)
   }
 }
 

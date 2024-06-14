@@ -22,5 +22,6 @@ export const BugsnagKeplerNative = {
   setUser: jest.fn(),
   clearUser: jest.fn(),
   setApp: jest.fn(),
+  setDevice: jest.fn(),
   markLaunchCompleted: jest.fn(),
 }

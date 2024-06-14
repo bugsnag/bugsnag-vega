@@ -46,14 +46,12 @@ typedef struct {
 
 typedef struct {
   char *id;
-  char *hostname;
-  char *locale;
   char *manufacturer;
   char *model;
-  char *model_number;
-  char *orientation;
   char *os_name;
   char *os_version;
+  char *rn_version;
+  char *js_engine;
   time_t time;
 } bsg_device;
 

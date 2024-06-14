@@ -50,23 +50,20 @@ void bsg_set_event_user(bsg_event_payload *payload, const char *id_arg,
   bsg_free_and_strdup(&(payload->event.user.name), name_arg);
 }
 
-void bsg_set_event_device(bsg_event_payload *payload, const char *host,
-                          const char *locale, const char *manufacturer,
-                          const char *model, const char *modelnr,
-                          const char *orient, const char *osname,
-                          const char *osver) {
+void bsg_set_event_device(bsg_event_payload *payload,
+                          const char *manufacturer, const char *model,
+                          const char *osname, const char *osver,
+                          const char *rnver, const char *js_engine) {
   if (payload == NULL) {
     return;
   }
 
-  bsg_free_and_strdup(&(payload->event.device.hostname), host);
-  bsg_free_and_strdup(&(payload->event.device.locale), locale);
   bsg_free_and_strdup(&(payload->event.device.manufacturer), manufacturer);
   bsg_free_and_strdup(&(payload->event.device.model), model);
-  bsg_free_and_strdup(&(payload->event.device.model_number), modelnr);
-  bsg_free_and_strdup(&(payload->event.device.orientation), orient);
   bsg_free_and_strdup(&(payload->event.device.os_name), osname);
   bsg_free_and_strdup(&(payload->event.device.os_version), osver);
+  bsg_free_and_strdup(&(payload->event.device.rn_version), rnver);
+  bsg_free_and_strdup(&(payload->event.device.js_engine), js_engine);
 }
 
 void bsg_set_event_device_time(bsg_event_payload *payload, time_t time_arg) {
@@ -164,14 +161,12 @@ void bsg_free_event_device(bsg_device *device) {
   }
 
   free(device->id);
-  free(device->hostname);
-  free(device->locale);
   free(device->manufacturer);
   free(device->model);
-  free(device->model_number);
-  free(device->orientation);
   free(device->os_name);
   free(device->os_version);
+  free(device->rn_version);
+  free(device->js_engine);
 }
 
 void bsg_free_event_user(bsg_user *user) {

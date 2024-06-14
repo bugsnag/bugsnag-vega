@@ -1,6 +1,6 @@
 import nativeDevice from '../lib/device_info_native'
 import { Client } from '@bugsnag/core'
-import { BugsnagFileIO } from "@bugsnag/kepler-native"
+import { BugsnagFileIO, BugsnagKeplerNative } from "@bugsnag/kepler-native"
 
 // @ts-expect-error cannot find global
 global.HermesInternal = {}
@@ -59,7 +59,6 @@ describe('device plugin', () => {
     expect(payloads[0].events[0].device.runtimeVersions.reactNative).toBe('0.72.0')
     expect(payloads[0].events[0].device.runtimeVersions.reactNativeJsEngine).toBe('hermes')
     expect(payloads[0].events[0].device.time instanceof Date).toBe(true)
-    
   })
 
   it('should add an onSession callback which captures device information', () => {
@@ -90,5 +89,26 @@ describe('device plugin', () => {
     expect(payloads[0].device.runtimeVersions).toBeDefined()
     expect(payloads[0].device.runtimeVersions.reactNative).toBe('0.72.0')
     expect(payloads[0].device.runtimeVersions.reactNativeJsEngine).toBe('hermes')
+  })
+
+  it('syncs device info with native layer', () => {
+    (BugsnagKeplerNative.setDevice as jest.Mock).mockClear()
+    const setDevice = BugsnagKeplerNative.setDevice as jest.Mock
+    expect(setDevice).not.toHaveBeenCalled()
+    // @ts-expect-error client constructor is protected
+    const client = new Client({ apiKey: 'API_KEY_YEAH', persistenceDirectory: '/tmp/user' }, undefined, [])
+    nativeDevice.register(client)
+    expect(setDevice).toHaveBeenCalledTimes(1)
+    expect(setDevice).toHaveBeenCalledWith({
+      id: 'ab0c1482-2ffe-11eb-adc1-0242ac120002',
+      manufacturer: 'Amazon',
+      model: 'Tv Simulator',
+      osName: 'Kepler',
+      osVersion: '1.1',
+      runtimeVersions: {
+        reactNative: '0.72.0',
+        reactNativeJsEngine: 'hermes'
+      }
+    })
   })
 })
