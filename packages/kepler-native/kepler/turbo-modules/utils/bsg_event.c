@@ -242,7 +242,11 @@ void bsg_strncpy(char *dst, const char *src, size_t dst_size) {
   }
   dst[0] = '\0';
   if (src != NULL) {
-    strncat(dst, src, dst_size);
+    // strncat is dangerous because it actually copies dst_size + 1
+    // if src_length >= dst_size
+    // we do -1 to make sure null terminator
+    // will be appended safely to resulting string
+    strncat(dst, src, dst_size - 1);
   }
 }
 
