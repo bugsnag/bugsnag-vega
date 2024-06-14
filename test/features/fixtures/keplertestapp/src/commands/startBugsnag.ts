@@ -1,4 +1,4 @@
-import Busgnag from '@bugsnag/kepler'
+import Bugsnag from '@bugsnag/kepler'
 import * as Scenarios from '../scenarios'
 
 type ScenarioName = keyof typeof Scenarios
@@ -14,5 +14,5 @@ export async function startBugsnag(scenarioName: string, apiKey: string, notify:
   }
 
   console.log(`[Bugsnag] Calling Bugsnag.start with config: ${JSON.stringify(config)}`)
-  Busgnag.start(config)
+  Bugsnag.start(config)
 }

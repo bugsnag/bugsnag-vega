@@ -17,15 +17,15 @@ BugsnagNativeUT::BugsnagNativeUT()
 void BugsnagNativeUT::aggregateMethods(
     TM_API_NAMESPACE::MethodAggregator<TM_API_NAMESPACE::KeplerTurboModule>
         &methodAggregator) const noexcept {
-  methodAggregator.addMethod("configure", 1, &BugsnagNativeUT::configure);
-  methodAggregator.addMethod("runUnitTests", 0, &BugsnagNativeUT::runUnitTests);
-  methodAggregator.addMethod("readOnlyMemoryCrash", 0,
+  methodAggregator.addMethod("configure", &BugsnagNativeUT::configure);
+  methodAggregator.addMethod("runUnitTests", &BugsnagNativeUT::runUnitTests);
+  methodAggregator.addMethod("readOnlyMemoryCrash",
                              &BugsnagNativeUT::read_only_memory_crash);
-  methodAggregator.addMethod("nullptrCrash", 0,
+  methodAggregator.addMethod("nullptrCrash",
                              &BugsnagNativeUT::nullptr_dereference_crash);
-  methodAggregator.addMethod("manualAbortCrash", 0,
+  methodAggregator.addMethod("manualAbortCrash",
                              &BugsnagNativeUT::manual_abort_crash);
-  methodAggregator.addMethod("throwExceptionCrash", 0,
+  methodAggregator.addMethod("throwExceptionCrash",
                              &BugsnagNativeUT::throw_exception_crash);
 }
 

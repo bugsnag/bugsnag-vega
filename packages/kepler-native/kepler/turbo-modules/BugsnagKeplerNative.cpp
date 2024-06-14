@@ -42,29 +42,27 @@ BugsnagKeplerNative::BugsnagKeplerNative()
 void BugsnagKeplerNative::aggregateMethods(
     TM_API_NAMESPACE::MethodAggregator<TM_API_NAMESPACE::KeplerTurboModule>
         &methodAggregator) const noexcept {
-  methodAggregator.addMethod("configure", 1, &BugsnagKeplerNative::configure);
-  methodAggregator.addMethod("markLaunchCompleted", 0,
+  methodAggregator.addMethod("configure", &BugsnagKeplerNative::configure);
+  methodAggregator.addMethod("markLaunchCompleted",
                              &BugsnagKeplerNative::mark_launch_completed);
-  methodAggregator.addMethod("getDeviceID", 0,
+  methodAggregator.addMethod("getDeviceID",
                              &BugsnagKeplerNative::get_device_id);
-  methodAggregator.addMethod("setDeviceID", 1,
+  methodAggregator.addMethod("setDeviceID",
                              &BugsnagKeplerNative::set_device_id);
-  methodAggregator.addMethod("generateUUID", 0,
+  methodAggregator.addMethod("generateUUID",
                              &BugsnagKeplerNative::generate_uuid);
-  methodAggregator.addMethod("leaveBreadcrumb", 1,
+  methodAggregator.addMethod("leaveBreadcrumb",
                              &BugsnagKeplerNative::leave_breadcrumb);
-  methodAggregator.addMethod("setMetadata", 1,
-                             &BugsnagKeplerNative::set_metadata);
-  methodAggregator.addMethod("clearMetadata", 0,
+  methodAggregator.addMethod("setMetadata", &BugsnagKeplerNative::set_metadata);
+  methodAggregator.addMethod("clearMetadata",
                              &BugsnagKeplerNative::clear_metadata);
-  methodAggregator.addMethod("setFeatures", 1,
-                             &BugsnagKeplerNative::set_features);
-  methodAggregator.addMethod("clearFeatures", 0,
+  methodAggregator.addMethod("setFeatures", &BugsnagKeplerNative::set_features);
+  methodAggregator.addMethod("clearFeatures",
                              &BugsnagKeplerNative::clear_features);
-  methodAggregator.addMethod("setUser", 1, &BugsnagKeplerNative::set_user_data);
-  methodAggregator.addMethod("clearUser", 0,
+  methodAggregator.addMethod("setUser", &BugsnagKeplerNative::set_user_data);
+  methodAggregator.addMethod("clearUser",
                              &BugsnagKeplerNative::clear_user_data);
-  methodAggregator.addMethod("setApp", 1, &BugsnagKeplerNative::set_app_data);
+  methodAggregator.addMethod("setApp", &BugsnagKeplerNative::set_app_data);
 }
 
 utils::json::JsonContainer

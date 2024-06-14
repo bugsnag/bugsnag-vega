@@ -19,24 +19,39 @@ Scenario: Calling notify() with a caught Error
 
 Scenario: Errors are stored when the network is unreachable
   # make the network unreachable
-  Given I configure the endpoints to "127.0.0.1:8000"
+  # cannot set for just one return code because we are also sending sessions
+  Given I set the HTTP status code to 429
   When I run "HandledJsErrorScenario"
-  * I should receive no errors
-  * I restart the test fixture
-  * I configure the endpoints to default
-  * I start bugsnag for "HandledJsErrorScenario"
-  * I wait to receive an error
-  * the exception "errorClass" equals "Error"
-  * the exception "message" equals "HandledJSError"
-  * the event "unhandled" is false
+  And I wait to receive 1 errors
+  And I discard the oldest error
+  And I set the HTTP status code to 200
+  And I restart the test fixture
+  And I start bugsnag for "HandledJsErrorScenario"
+  And I wait to receive 1 errors
+  And the exception "errorClass" equals "Error"
+  And the exception "message" equals "HandledJSError"
+  And the event "unhandled" is false
 
 Scenario: Errors are stored when the network is unreachable, only maxPersistedEvents sent
   # make the network unreachable
-  Given I configure the endpoints to "127.0.0.1:8000"
+  # cannot set for just one return code because we are also sending sessions
+  Given I set the HTTP status code to 429
   When I run "MaxPersistedEventsScenario"
-  Then I should receive no errors
+  And I wait to receive 10 errors
+
+  And I discard the oldest error
+  And I discard the oldest error
+  And I discard the oldest error
+  And I discard the oldest error
+  And I discard the oldest error
+  And I discard the oldest error
+  And I discard the oldest error
+  And I discard the oldest error
+  And I discard the oldest error
+  And I discard the oldest error
+
+  And I set the HTTP status code to 200
   And I restart the test fixture
-  And I configure the endpoints to default
   And I start bugsnag for "MaxPersistedEventsScenario"
   Then I wait to receive 3 errors
   And the exception "errorClass" equals "Error"

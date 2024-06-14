@@ -15,6 +15,14 @@
     goto error;                                                                \
   }
 
+#define RETURN_ERROR(e)                                                        \
+  {                                                                            \
+    int result = (e);                                                          \
+    if (result != BSG_KSJSON_OK) {                                             \
+      return result;                                                           \
+    }                                                                          \
+  }
+
 #define JSON_CONSTANT_ELEMENT(name, value)                                     \
   bsg_ksjsonaddStringElement(json, name, value,                                \
                              sizeof(value) - 1 /* remove terminator */)
@@ -37,21 +45,21 @@ static inline bool string_is_empty(const char *restrict s) {
 // buffer, and then overwrite the rest of the buffer
 static char hex_str[2 /* '0x' */ + 20 /* number */ + 1 /* NULL */] = "0x";
 
-static bool bsg_write_notifier_info(BSG_KSJSONEncodeContext *json,
-                                    bsg_notifier_info *notifier);
-static bool bsg_write_metadata(BSG_KSJSONEncodeContext *json, char *metadata);
-static bool bsg_write_severity_reason(BSG_KSJSONEncodeContext *json,
-                                      bsg_event *event);
-static bool bsg_write_user(BSG_KSJSONEncodeContext *json, bsg_user *user);
-static bool bsg_write_error(BSG_KSJSONEncodeContext *json, bsg_error *error);
-static bool bsg_write_app(BSG_KSJSONEncodeContext *json, bsg_app *app,
-                          bool is_launching);
-static bool bsg_write_device(BSG_KSJSONEncodeContext *json, bsg_device *device);
-static bool bsg_write_breadcrumbs(BSG_KSJSONEncodeContext *json,
-                                  bsg_breadcrumb **breadcrumbs, int crumb_count,
-                                  int max_crumb_count);
-static bool bsg_write_feature_flags(BSG_KSJSONEncodeContext *json,
-                                    char *features);
+static int bsg_write_notifier_info(BSG_KSJSONEncodeContext *json,
+                                   bsg_notifier_info *notifier);
+static int bsg_write_metadata(BSG_KSJSONEncodeContext *json, char *metadata);
+static int bsg_write_severity_reason(BSG_KSJSONEncodeContext *json,
+                                     bsg_event *event);
+static int bsg_write_user(BSG_KSJSONEncodeContext *json, bsg_user *user);
+static int bsg_write_error(BSG_KSJSONEncodeContext *json, bsg_error *error);
+static int bsg_write_app(BSG_KSJSONEncodeContext *json, bsg_app *app,
+                         bool is_launching);
+static int bsg_write_device(BSG_KSJSONEncodeContext *json, bsg_device *device);
+static int bsg_write_breadcrumbs(BSG_KSJSONEncodeContext *json,
+                                 bsg_breadcrumb **breadcrumbs, int crumb_count,
+                                 int max_crumb_count);
+static int bsg_write_feature_flags(BSG_KSJSONEncodeContext *json,
+                                   char *features);
 static int bsg_write(const char *data, size_t length, void *userData) {
   bsg_buffered_writer *writer = userData;
   return writer->write(writer, data, length) ? BSG_KSJSON_OK
@@ -72,10 +80,11 @@ static size_t build_filename(bsg_event_payload *payload, char *out) {
 
   // append the api_key to the filename
   out[length++] = '_';
-  length +=
-      bsg_strncpy(out + length, payload->api_key, strlen(payload->api_key) + 1);
+  bsg_strncpy(out + length, payload->api_key, strlen(payload->api_key) + 1);
+  length += strlen(payload->api_key);
 
-  length += bsg_strncpy(out + length, ".json", strlen(".json") + 1);
+  bsg_strncpy(out + length, ".json", strlen(".json") + 1);
+  length += strlen(".json") + 1;
 
   return length;
 }
@@ -104,9 +113,7 @@ bool bsg_write_event_file(bsg_event_payload *payload, const char *filename) {
   {
     CHECKED(bsg_ksjsonaddStringElement(json, "apiKey", payload->api_key,
                                        BSG_KSJSON_SIZE_AUTOMATIC));
-    if (!bsg_write_notifier_info(json, &payload->notifier)) {
-      goto error;
-    }
+    CHECKED(bsg_write_notifier_info(json, &payload->notifier));
 
     CHECKED(bsg_ksjsonbeginArray(json, "events"));
     {
@@ -115,39 +122,16 @@ bool bsg_write_event_file(bsg_event_payload *payload, const char *filename) {
         CHECKED(bsg_ksjsonaddStringElement(json, "payloadVersion", "4",
                                            BSG_KSJSON_SIZE_AUTOMATIC));
 
-        if (!bsg_write_metadata(json, payload->metadata)) {
-          goto error;
-        }
-
-        if (!bsg_write_severity_reason(json, event)) {
-          goto error;
-        }
-
-        // Write the exception / error info
-        if (!bsg_write_error(json, &event->exception)) {
-          goto error;
-        }
-
-        // Write user info
-        if (!bsg_write_user(json, &event->user)) {
-          goto error;
-        }
-
-        // Write diagnostics
-        if (!bsg_write_app(json, &event->app, payload->is_launching)) {
-          goto error;
-        }
-        if (!bsg_write_device(json, &event->device)) {
-          goto error;
-        }
-        if (!bsg_write_breadcrumbs(json, payload->breadcrumbs,
-                                   payload->breadcrumbs_size,
-                                   payload->max_breadcrumbs_size)) {
-          goto error;
-        }
-        if (!bsg_write_feature_flags(json, payload->features)) {
-          goto error;
-        }
+        CHECKED(bsg_write_metadata(json, payload->metadata));
+        CHECKED(bsg_write_severity_reason(json, event));
+        CHECKED(bsg_write_error(json, &event->exception));
+        CHECKED(bsg_write_user(json, &event->user));
+        CHECKED(bsg_write_app(json, &event->app, payload->is_launching));
+        CHECKED(bsg_write_device(json, &event->device));
+        CHECKED(bsg_write_breadcrumbs(json, payload->breadcrumbs,
+                                      payload->breadcrumbs_size,
+                                      payload->max_breadcrumbs_size));
+        CHECKED(bsg_write_feature_flags(json, payload->features));
       }
       CHECKED(bsg_ksjsonendContainer(json));
     }
@@ -163,79 +147,79 @@ error:
   return false;
 }
 
-static bool bsg_write_notifier_info(BSG_KSJSONEncodeContext *json,
-                                    bsg_notifier_info *notifier) {
-  CHECKED(bsg_ksjsonbeginObject(json, "notifier"));
+static int bsg_write_notifier_info(BSG_KSJSONEncodeContext *json,
+                                   bsg_notifier_info *notifier) {
+  RETURN_ERROR(bsg_ksjsonbeginObject(json, "notifier"));
   {
-    CHECKED(bsg_ksjsonaddStringElement(json, "name", notifier->name,
-                                       BSG_KSJSON_SIZE_AUTOMATIC));
-    CHECKED(bsg_ksjsonaddStringElement(json, "version", notifier->version,
-                                       BSG_KSJSON_SIZE_AUTOMATIC));
-    CHECKED(bsg_ksjsonaddStringElement(json, "url", notifier->url,
-                                       BSG_KSJSON_SIZE_AUTOMATIC));
+    RETURN_ERROR(bsg_ksjsonaddStringElement(json, "name", notifier->name,
+                                            BSG_KSJSON_SIZE_AUTOMATIC));
+    RETURN_ERROR(bsg_ksjsonaddStringElement(json, "version", notifier->version,
+                                            BSG_KSJSON_SIZE_AUTOMATIC));
+    RETURN_ERROR(bsg_ksjsonaddStringElement(json, "url", notifier->url,
+                                            BSG_KSJSON_SIZE_AUTOMATIC));
   }
-  CHECKED(bsg_ksjsonendContainer(json));
-  return true;
-error:
-  return false;
+  RETURN_ERROR(bsg_ksjsonendContainer(json));
+  return BSG_KSJSON_OK;
 }
 
-static bool bsg_write_metadata(BSG_KSJSONEncodeContext *json, char *metadata) {
+static int bsg_write_metadata(BSG_KSJSONEncodeContext *json, char *metadata) {
   if (!metadata) {
-    return true;
+    return BSG_KSJSON_OK;
   }
 
-  CHECKED(
+  if (strlen(metadata) == 0) {
+    RETURN_ERROR(
+        bsg_ksjsonaddJSONElement(json, "metaData", "{}", strlen("{}")));
+    return BSG_KSJSON_OK;
+  }
+
+  RETURN_ERROR(
       bsg_ksjsonaddJSONElement(json, "metaData", metadata, strlen(metadata)));
-  return true;
-error:
-  return false;
+  return BSG_KSJSON_OK;
 }
 
-static bool bsg_write_severity(BSG_KSJSONEncodeContext *json,
-                               bsg_severity severity) {
+static int bsg_write_severity(BSG_KSJSONEncodeContext *json,
+                              bsg_severity severity) {
 
   switch (severity) {
   case BSG_SEVERITY_ERR:
-    CHECKED(JSON_CONSTANT_ELEMENT("severity", "error"));
+    RETURN_ERROR(JSON_CONSTANT_ELEMENT("severity", "error"));
     break;
   case BSG_SEVERITY_WARN:
-    CHECKED(JSON_CONSTANT_ELEMENT("severity", "warning"));
+    RETURN_ERROR(JSON_CONSTANT_ELEMENT("severity", "warning"));
     break;
   case BSG_SEVERITY_INFO:
-    CHECKED(JSON_CONSTANT_ELEMENT("severity", "info"));
+    RETURN_ERROR(JSON_CONSTANT_ELEMENT("severity", "info"));
     break;
   }
-  return true;
-error:
-  return false;
+  return BSG_KSJSON_OK;
 }
 
-static bool bsg_write_severity_reason(BSG_KSJSONEncodeContext *json,
-                                      bsg_event *event) {
+static int bsg_write_severity_reason(BSG_KSJSONEncodeContext *json,
+                                     bsg_event *event) {
 
-  if (!bsg_write_severity(json, event->severity)) {
-    goto error;
-  }
-  CHECKED(bsg_ksjsonaddBooleanElement(json, "unhandled", event->unhandled));
+  RETURN_ERROR(bsg_write_severity(json, event->severity));
+  RETURN_ERROR(
+      bsg_ksjsonaddBooleanElement(json, "unhandled", event->unhandled));
 
-  CHECKED(bsg_ksjsonbeginObject(json, "severityReason"));
+  RETURN_ERROR(bsg_ksjsonbeginObject(json, "severityReason"));
   {
     // unhandled == false always means that the state has been overridden by the
     // user, as this codepath is only executed for unhandled native errors
-    CHECKED(bsg_ksjsonaddBooleanElement(json, "unhandledOverridden",
-                                        !event->unhandled));
-    CHECKED(JSON_CONSTANT_ELEMENT("type", "signal"));
+    RETURN_ERROR(bsg_ksjsonaddBooleanElement(json, "unhandledOverridden",
+                                             !event->unhandled));
+    RETURN_ERROR(JSON_CONSTANT_ELEMENT("type", "signal"));
 
     bsg_error *error = &event->exception;
-    CHECKED(bsg_ksjsonbeginObject(json, "attributes"));
-    { CHECKED(JSON_LIMITED_STRING_ELEMENT("signalType", error->error_class)); }
-    CHECKED(bsg_ksjsonendContainer(json));
+    RETURN_ERROR(bsg_ksjsonbeginObject(json, "attributes"));
+    {
+      RETURN_ERROR(
+          JSON_LIMITED_STRING_ELEMENT("signalType", error->error_class));
+    }
+    RETURN_ERROR(bsg_ksjsonendContainer(json));
   }
-  CHECKED(bsg_ksjsonendContainer(json));
-  return true;
-error:
-  return false;
+  RETURN_ERROR(bsg_ksjsonendContainer(json));
+  return BSG_KSJSON_OK;
 }
 
 static char *bsg_uint64_to_prefixed_hex(uint64_t value) {
@@ -244,71 +228,66 @@ static char *bsg_uint64_to_prefixed_hex(uint64_t value) {
   return hex_str;
 }
 
-static bool bsg_write_stackframe(BSG_KSJSONEncodeContext *json,
-                                 bsg_stackframe *frame, bool isPC) {
+static int bsg_write_stackframe(BSG_KSJSONEncodeContext *json,
+                                bsg_stackframe *frame, bool isPC) {
 
-  CHECKED(bsg_ksjsonbeginObject(json, NULL));
+  RETURN_ERROR(bsg_ksjsonbeginObject(json, NULL));
   {
-    CHECKED(JSON_LIMITED_STRING_ELEMENT(
+    RETURN_ERROR(JSON_LIMITED_STRING_ELEMENT(
         "frameAddress", bsg_uint64_to_prefixed_hex(frame->frame_address)));
-    CHECKED(JSON_LIMITED_STRING_ELEMENT(
+    RETURN_ERROR(JSON_LIMITED_STRING_ELEMENT(
         "symbolAddress", bsg_uint64_to_prefixed_hex(frame->symbol_address)));
-    CHECKED(JSON_LIMITED_STRING_ELEMENT(
+    RETURN_ERROR(JSON_LIMITED_STRING_ELEMENT(
         "loadAddress", bsg_uint64_to_prefixed_hex(frame->load_address)));
-
-    CHECKED(
+    RETURN_ERROR(
         bsg_ksjsonaddUIntegerElement(json, "lineNumber", frame->line_number));
 
     if (isPC) {
-      CHECKED(bsg_ksjsonaddBooleanElement(json, "isPC", true));
+      RETURN_ERROR(bsg_ksjsonaddBooleanElement(json, "isPC", true));
     }
 
     if (string_is_not_empty(frame->filename)) {
-      CHECKED(JSON_LIMITED_STRING_ELEMENT("file", frame->filename));
+      RETURN_ERROR(JSON_LIMITED_STRING_ELEMENT("file", frame->filename));
     }
 
     if (string_is_not_empty(frame->method)) {
-      CHECKED(JSON_LIMITED_STRING_ELEMENT("method", frame->method));
+      RETURN_ERROR(JSON_LIMITED_STRING_ELEMENT("method", frame->method));
     } else {
-      CHECKED(JSON_LIMITED_STRING_ELEMENT(
+      RETURN_ERROR(JSON_LIMITED_STRING_ELEMENT(
           "method", bsg_uint64_to_prefixed_hex(frame->symbol_address)));
     }
 
     if (string_is_not_empty(frame->code_identifier)) {
-      CHECKED(JSON_LIMITED_STRING_ELEMENT("codeIdentifier",
-                                          frame->code_identifier));
+      RETURN_ERROR(JSON_LIMITED_STRING_ELEMENT("codeIdentifier",
+                                               frame->code_identifier));
     }
   }
-  CHECKED(bsg_ksjsonendContainer(json));
+  RETURN_ERROR(bsg_ksjsonendContainer(json));
 
-  return true;
-error:
-  return false;
+  return BSG_KSJSON_OK;
 }
 
-static bool bsg_write_stacktrace(BSG_KSJSONEncodeContext *json,
-                                 bsg_stackframe *stacktrace,
-                                 size_t frame_count) {
+static int bsg_write_stacktrace(BSG_KSJSONEncodeContext *json,
+                                bsg_stackframe *stacktrace,
+                                size_t frame_count) {
 
   for (int findex = 0; findex < frame_count; findex++) {
-    if (!bsg_write_stackframe(json, &stacktrace[findex], findex == 0)) {
-      goto error;
-    }
+    RETURN_ERROR(bsg_write_stackframe(json, &stacktrace[findex], findex == 0));
   }
 
-  return true;
-error:
-  return false;
+  return BSG_KSJSON_OK;
 }
 
-static bool bsg_write_error(BSG_KSJSONEncodeContext *json, bsg_error *error) {
-  CHECKED(bsg_ksjsonbeginArray(json, "exceptions"));
+static int bsg_write_error(BSG_KSJSONEncodeContext *json, bsg_error *error) {
+  RETURN_ERROR(bsg_ksjsonbeginArray(json, "exceptions"));
   {
-    CHECKED(bsg_ksjsonbeginObject(json, NULL));
+    RETURN_ERROR(bsg_ksjsonbeginObject(json, NULL));
     {
-      CHECKED(JSON_LIMITED_STRING_ELEMENT("errorClass", error->error_class));
-      CHECKED(JSON_LIMITED_STRING_ELEMENT("message", error->error_message));
-      CHECKED(JSON_CONSTANT_ELEMENT("type", "c"));
+      RETURN_ERROR(
+          JSON_LIMITED_STRING_ELEMENT("errorClass", error->error_class));
+      RETURN_ERROR(
+          JSON_LIMITED_STRING_ELEMENT("message", error->error_message));
+      RETURN_ERROR(JSON_CONSTANT_ELEMENT("type", "c"));
 
       const ssize_t frame_count = error->frame_count;
       // assuming that the initial frame is the program counter. This logic will
@@ -316,201 +295,178 @@ static bool bsg_write_error(BSG_KSJSONEncodeContext *json, bsg_error *error) {
       // processing for stack overflow-type errors, like discarding the top
       // frames, which would mean no stored frame is the program counter.
       if (frame_count > 0) {
-        CHECKED(bsg_ksjsonbeginArray(json, "stacktrace"));
+        RETURN_ERROR(bsg_ksjsonbeginArray(json, "stacktrace"));
         {
-          if (!bsg_write_stacktrace(json, error->stacktrace, frame_count)) {
-            goto error;
-          }
+          RETURN_ERROR(
+              bsg_write_stacktrace(json, error->stacktrace, frame_count));
         }
-        CHECKED(bsg_ksjsonendContainer(json));
+        RETURN_ERROR(bsg_ksjsonendContainer(json));
       }
     }
-    CHECKED(bsg_ksjsonendContainer(json));
+    RETURN_ERROR(bsg_ksjsonendContainer(json));
   }
-  CHECKED(bsg_ksjsonendContainer(json));
+  RETURN_ERROR(bsg_ksjsonendContainer(json));
 
-  return true;
-error:
-  return false;
+  return BSG_KSJSON_OK;
 }
 
-static bool bsg_write_user(BSG_KSJSONEncodeContext *json, bsg_user *user) {
+static int bsg_write_user(BSG_KSJSONEncodeContext *json, bsg_user *user) {
   const bool has_id = string_is_not_empty(user->id);
   const bool has_name = string_is_not_empty(user->name);
   const bool has_email = string_is_not_empty(user->email);
 
   const bool has_user = has_id || has_name || has_email;
   if (has_user) {
-    CHECKED(bsg_ksjsonbeginObject(json, "user"));
+    RETURN_ERROR(bsg_ksjsonbeginObject(json, "user"));
     {
       if (has_id) {
-        CHECKED(bsg_ksjsonaddStringElement(json, "id", user->id,
-                                           BSG_KSJSON_SIZE_AUTOMATIC));
+        RETURN_ERROR(bsg_ksjsonaddStringElement(json, "id", user->id,
+                                                BSG_KSJSON_SIZE_AUTOMATIC));
       }
 
       if (has_name) {
-        CHECKED(bsg_ksjsonaddStringElement(json, "name", user->name,
-                                           BSG_KSJSON_SIZE_AUTOMATIC));
+        RETURN_ERROR(bsg_ksjsonaddStringElement(json, "name", user->name,
+                                                BSG_KSJSON_SIZE_AUTOMATIC));
       }
 
       if (has_email) {
-        CHECKED(bsg_ksjsonaddStringElement(json, "email", user->email,
-                                           BSG_KSJSON_SIZE_AUTOMATIC));
+        RETURN_ERROR(bsg_ksjsonaddStringElement(json, "email", user->email,
+                                                BSG_KSJSON_SIZE_AUTOMATIC));
       }
     }
-    CHECKED(bsg_ksjsonendContainer(json));
+    RETURN_ERROR(bsg_ksjsonendContainer(json));
   }
-  return true;
-error:
-  return false;
+  return BSG_KSJSON_OK;
 }
 
-static bool bsg_write_app(BSG_KSJSONEncodeContext *json, bsg_app *app,
-                          bool is_launching) {
-  CHECKED(bsg_ksjsonbeginObject(json, "app"));
+static int bsg_write_app(BSG_KSJSONEncodeContext *json, bsg_app *app,
+                         bool is_launching) {
+  RETURN_ERROR(bsg_ksjsonbeginObject(json, "app"));
   {
-    CHECKED(bsg_ksjsonaddStringElement(json, "version", app->version,
-                                       BSG_KSJSON_SIZE_AUTOMATIC));
-    CHECKED(bsg_ksjsonaddStringElement(json, "id", app->code_bundle_id,
-                                       BSG_KSJSON_SIZE_AUTOMATIC));
-    CHECKED(bsg_ksjsonaddStringElement(json, "type", app->type,
-                                       BSG_KSJSON_SIZE_AUTOMATIC));
+    RETURN_ERROR(bsg_ksjsonaddStringElement(json, "version", app->version,
+                                            BSG_KSJSON_SIZE_AUTOMATIC));
+    RETURN_ERROR(bsg_ksjsonaddStringElement(json, "id", app->code_bundle_id,
+                                            BSG_KSJSON_SIZE_AUTOMATIC));
+    RETURN_ERROR(bsg_ksjsonaddStringElement(json, "type", app->type,
+                                            BSG_KSJSON_SIZE_AUTOMATIC));
 
-    CHECKED(bsg_ksjsonaddStringElement(json, "releaseStage", app->release_stage,
-                                       BSG_KSJSON_SIZE_AUTOMATIC));
-    CHECKED(bsg_ksjsonaddIntegerElement(json, "duration", app->duration));
-    CHECKED(bsg_ksjsonaddIntegerElement(json, "durationInForeground",
-                                        app->duration_in_foreground));
-    CHECKED(
+    RETURN_ERROR(bsg_ksjsonaddStringElement(
+        json, "releaseStage", app->release_stage, BSG_KSJSON_SIZE_AUTOMATIC));
+    RETURN_ERROR(bsg_ksjsonaddIntegerElement(json, "duration", app->duration));
+    RETURN_ERROR(bsg_ksjsonaddIntegerElement(json, "durationInForeground",
+                                             app->duration_in_foreground));
+    RETURN_ERROR(
         bsg_ksjsonaddBooleanElement(json, "inForeground", app->in_foreground));
-    CHECKED(bsg_ksjsonaddBooleanElement(json, "isLaunching", is_launching));
+    RETURN_ERROR(
+        bsg_ksjsonaddBooleanElement(json, "isLaunching", is_launching));
   }
-  CHECKED(bsg_ksjsonendContainer(json));
-  return true;
-error:
-  return false;
+  RETURN_ERROR(bsg_ksjsonendContainer(json));
+  return BSG_KSJSON_OK;
 }
 
-static bool bsg_write_device(BSG_KSJSONEncodeContext *json,
-                             bsg_device *device) {
+static int bsg_write_device(BSG_KSJSONEncodeContext *json, bsg_device *device) {
 
-  CHECKED(bsg_ksjsonbeginObject(json, "device"));
+  RETURN_ERROR(bsg_ksjsonbeginObject(json, "device"));
   {
-    CHECKED(bsg_ksjsonaddStringElement(json, "osName", device->os_name,
-                                       BSG_KSJSON_SIZE_AUTOMATIC));
-    CHECKED(bsg_ksjsonaddStringElement(json, "id", device->id,
-                                       BSG_KSJSON_SIZE_AUTOMATIC));
-    CHECKED(bsg_ksjsonaddStringElement(json, "locale", device->locale,
-                                       BSG_KSJSON_SIZE_AUTOMATIC));
-    CHECKED(bsg_ksjsonaddStringElement(json, "osVersion", device->os_version,
-                                       BSG_KSJSON_SIZE_AUTOMATIC));
-    CHECKED(bsg_ksjsonaddStringElement(
+    RETURN_ERROR(bsg_ksjsonaddStringElement(json, "osName", device->os_name,
+                                            BSG_KSJSON_SIZE_AUTOMATIC));
+    RETURN_ERROR(bsg_ksjsonaddStringElement(json, "id", device->id,
+                                            BSG_KSJSON_SIZE_AUTOMATIC));
+    RETURN_ERROR(bsg_ksjsonaddStringElement(json, "locale", device->locale,
+                                            BSG_KSJSON_SIZE_AUTOMATIC));
+    RETURN_ERROR(bsg_ksjsonaddStringElement(
+        json, "osVersion", device->os_version, BSG_KSJSON_SIZE_AUTOMATIC));
+    RETURN_ERROR(bsg_ksjsonaddStringElement(
         json, "manufacturer", device->manufacturer, BSG_KSJSON_SIZE_AUTOMATIC));
-    CHECKED(bsg_ksjsonaddStringElement(json, "model", device->model,
-                                       BSG_KSJSON_SIZE_AUTOMATIC));
-    CHECKED(bsg_ksjsonaddStringElement(json, "orientation", device->orientation,
-                                       BSG_KSJSON_SIZE_AUTOMATIC));
+    RETURN_ERROR(bsg_ksjsonaddStringElement(json, "model", device->model,
+                                            BSG_KSJSON_SIZE_AUTOMATIC));
+    RETURN_ERROR(bsg_ksjsonaddStringElement(
+        json, "orientation", device->orientation, BSG_KSJSON_SIZE_AUTOMATIC));
 
     if (device->time > 0) {
       char buffer[sizeof "2018-10-08T12:07:09Z"];
       bsg_time_to_simplified_iso8601_string(device->time, buffer);
-      CHECKED(JSON_LIMITED_STRING_ELEMENT("time", buffer));
+      RETURN_ERROR(JSON_LIMITED_STRING_ELEMENT("time", buffer));
     }
   }
-  CHECKED(bsg_ksjsonendContainer(json));
-  return true;
-error:
-  return false;
+  RETURN_ERROR(bsg_ksjsonendContainer(json));
+  return BSG_KSJSON_OK;
 }
 
-static bool bsg_write_breadcrumb_type(BSG_KSJSONEncodeContext *json,
-                                      enum bsg_breadcrumb_type type) {
+static int bsg_write_breadcrumb_type(BSG_KSJSONEncodeContext *json,
+                                     enum bsg_breadcrumb_type type) {
 
   switch (type) {
   case ERROR:
-    CHECKED(JSON_CONSTANT_ELEMENT("type", "error"));
+    RETURN_ERROR(JSON_CONSTANT_ELEMENT("type", "error"));
     break;
   case LOG:
-    CHECKED(JSON_CONSTANT_ELEMENT("type", "log"));
+    RETURN_ERROR(JSON_CONSTANT_ELEMENT("type", "log"));
     break;
   case MANUAL:
-    CHECKED(JSON_CONSTANT_ELEMENT("type", "manual"));
+    RETURN_ERROR(JSON_CONSTANT_ELEMENT("type", "manual"));
     break;
   case NAVIGATION:
-    CHECKED(JSON_CONSTANT_ELEMENT("type", "navigation"));
+    RETURN_ERROR(JSON_CONSTANT_ELEMENT("type", "navigation"));
     break;
   case PROCESS:
-    CHECKED(JSON_CONSTANT_ELEMENT("type", "process"));
+    RETURN_ERROR(JSON_CONSTANT_ELEMENT("type", "process"));
     break;
   case REQUEST:
-    CHECKED(JSON_CONSTANT_ELEMENT("type", "request"));
+    RETURN_ERROR(JSON_CONSTANT_ELEMENT("type", "request"));
     break;
   case STATE:
-    CHECKED(JSON_CONSTANT_ELEMENT("type", "state"));
+    RETURN_ERROR(JSON_CONSTANT_ELEMENT("type", "state"));
     break;
   case USER:
-    CHECKED(JSON_CONSTANT_ELEMENT("type", "user"));
+    RETURN_ERROR(JSON_CONSTANT_ELEMENT("type", "user"));
     break;
   }
-  return true;
-error:
-  return false;
+  return BSG_KSJSON_OK;
 }
 
-static bool bsg_write_breadcrumb(BSG_KSJSONEncodeContext *json,
-                                 bsg_breadcrumb *breadcrumb) {
+static int bsg_write_breadcrumb(BSG_KSJSONEncodeContext *json,
+                                bsg_breadcrumb *breadcrumb) {
   if (!breadcrumb) {
-    return true;
+    return BSG_KSJSON_OK;
   }
-  CHECKED(bsg_ksjsonbeginObject(json, NULL));
+  RETURN_ERROR(bsg_ksjsonbeginObject(json, NULL));
   {
     if (breadcrumb->timestamp > 0) {
       char buffer[sizeof "2018-10-08T12:07:09Z"];
       bsg_time_to_simplified_iso8601_string(breadcrumb->timestamp, buffer);
-      CHECKED(JSON_LIMITED_STRING_ELEMENT("timestamp", buffer));
+      RETURN_ERROR(JSON_LIMITED_STRING_ELEMENT("timestamp", buffer));
     }
-    CHECKED(bsg_ksjsonaddStringElement(json, "name", breadcrumb->message,
-                                       BSG_KSJSON_SIZE_AUTOMATIC));
-    if (!bsg_write_breadcrumb_type(json, breadcrumb->type)) {
-      goto error;
-    }
-    if (!bsg_write_metadata(json, breadcrumb->metadata)) {
-      goto error;
-    }
+    RETURN_ERROR(bsg_ksjsonaddStringElement(json, "name", breadcrumb->message,
+                                            BSG_KSJSON_SIZE_AUTOMATIC));
+    RETURN_ERROR(bsg_write_breadcrumb_type(json, breadcrumb->type));
+    RETURN_ERROR(bsg_write_metadata(json, breadcrumb->metadata));
   }
-  CHECKED(bsg_ksjsonendContainer(json));
-  return true;
-error:
-  return false;
+  RETURN_ERROR(bsg_ksjsonendContainer(json));
+  return BSG_KSJSON_OK;
 }
 
-static bool bsg_write_breadcrumbs(BSG_KSJSONEncodeContext *json,
-                                  bsg_breadcrumb **breadcrumbs, int crumb_count,
-                                  int max_crumb_count) {
-  CHECKED(bsg_ksjsonbeginArray(json, "breadcrumbs"));
+static int bsg_write_breadcrumbs(BSG_KSJSONEncodeContext *json,
+                                 bsg_breadcrumb **breadcrumbs, int crumb_count,
+                                 int max_crumb_count) {
+  RETURN_ERROR(bsg_ksjsonbeginArray(json, "breadcrumbs"));
   {
     for (int i = 0; i < crumb_count; ++i) {
       int crumb_index = i % max_crumb_count;
-      if (!bsg_write_breadcrumb(json, breadcrumbs[crumb_index])) {
-        goto error;
-      }
+      RETURN_ERROR(bsg_write_breadcrumb(json, breadcrumbs[crumb_index]));
     }
   }
-  CHECKED(bsg_ksjsonendContainer(json));
-  return true;
-error:
-  return false;
+  RETURN_ERROR(bsg_ksjsonendContainer(json));
+  return BSG_KSJSON_OK;
 }
 
-static bool bsg_write_feature_flags(BSG_KSJSONEncodeContext *json,
-                                    char *features) {
+static int bsg_write_feature_flags(BSG_KSJSONEncodeContext *json,
+                                   char *features) {
   if (!features) {
-    return true;
+    return BSG_KSJSON_OK;
   }
 
-  CHECKED(bsg_ksjsonaddJSONElement(json, "featureFlags", features,
-                                   strlen(features)));
-  return true;
-error:
-  return false;
+  RETURN_ERROR(bsg_ksjsonaddJSONElement(json, "featureFlags", features,
+                                        strlen(features)));
+  return BSG_KSJSON_OK;
 }

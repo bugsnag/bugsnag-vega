@@ -101,18 +101,6 @@ static size_t positive_double_to_string(const double value, char *dst,
     return 1;
   }
 
-  // isnan() is basically ((x) != (x))
-  if (isnan(value)) {
-    strlcpy(dst, "nan", 4);
-    return 3;
-  }
-
-  // isinf() is a compiler intrinsic.
-  if (isinf(value)) {
-    strlcpy(dst, "inf", 4);
-    return 3;
-  }
-
   // log10() is a compiler intrinsic.
   int exponent = (int)log10(value);
   // Values < 1.0 must subtract 1 from exponent to handle zero wraparound.

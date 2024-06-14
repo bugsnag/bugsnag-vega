@@ -22,7 +22,7 @@ end
 
 Maze.hooks.before do
   # launch the app
-  Maze::Runner.run_command("kepler run-kepler ./features/fixtures/keplertestapp/build/vega-tv2023-aarch64-release/keplertestapp_aarch64.vpkg com.bugsnag.fixtures.keplertestapp.main -s")
+  Maze::Runner.run_command("kepler device launch-app -a com.bugsnag.fixtures.keplertestapp.main")
 end
 
 Maze.hooks.after do

@@ -1,4 +1,4 @@
-import Busgnag from '@bugsnag/kepler'
+import Bugsnag from '@bugsnag/kepler'
 import { AppRegistry } from 'react-native'
 import * as Scenarios from '../scenarios'
 
@@ -15,7 +15,7 @@ export async function runScenario(rootTag: number, scenarioName: string, apiKey:
     }
 
     console.log(`[Bugsnag] Calling Bugsnag.start with config: ${JSON.stringify(config)}`)
-    Busgnag.start(config)
+    Bugsnag.start(config)
 
     const appParams = { rootTag, fabric: true, concurrentRoot: true }
     console.log(`[Bugsnag] Mounting App`)

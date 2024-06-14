@@ -15,7 +15,8 @@ const nativeBreadcrumbs = {
   register: (client) => {
     client.addOnBreadcrumb(crumb => {
       const nativeType = breadcrumbType[crumb.type]
-      const metadataStr = JSON.stringify(crumb.metadata)
+      let metadataStr = JSON.stringify(crumb.metadata)
+      metadataStr = metadataStr === undefined ? '{}' : metadataStr
       const timeSeconds = Math.floor(Date.now() / 1000)
       BugsnagKeplerNative.leaveBreadcrumb({
         type: nativeType,

@@ -45,8 +45,8 @@ Scenario: Run native crash - dereferencing nullptr
   And I restart the test fixture
   And I start bugsnag for "NativeCrashNullptrScenario"
   Then I wait to receive 1 errors
-  And the exception "errorClass" equals "SIGABRT"
-  And the exception "message" equals "Abort program"
+  And the exception "errorClass" equals "SIGSEGV"
+  And the exception "message" equals "Segmentation violation (invalid memory reference)"
   And the event "unhandled" is true
 
 # Scenario: Run native crash - throwing exception
