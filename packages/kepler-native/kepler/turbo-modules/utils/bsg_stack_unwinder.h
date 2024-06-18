@@ -10,6 +10,8 @@ extern "C" {
 
 void bsg_fill_stack_info(bsg_stackframe *error_stacktrace, int *frames_count);
 
+int get_build_id(char *buffer, void *fbase);
+
 #ifdef __cplusplus
 }
 #endif
