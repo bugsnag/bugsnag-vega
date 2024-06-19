@@ -48,8 +48,8 @@ void bsg_set_event_device(bsg_event_payload *payload,
                           const char *rn_version, const char *js_engine);
 void bsg_set_event_device_time(bsg_event_payload *payload, time_t time_arg);
 void bsg_set_event_device_id(bsg_event_payload *payload, const char *id);
-void bsg_set_event_app(bsg_event_payload *payload, const char *bundle_id,
-                       const char *stage, const char *type, const char *ver);
+void bsg_set_event_app(bsg_event_payload *payload, const char *id,
+                       const char *stage, const char *type, const char *ver, const char *binary_arch);
 void bsg_set_event_app_duration(bsg_event_payload *payload, int duration,
                                 int duration_foreground, bool in_foreground);
 void bsg_set_event_exception(bsg_event_payload *payload, const char *class_arg,

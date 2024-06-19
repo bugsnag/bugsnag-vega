@@ -56,13 +56,14 @@ typedef struct {
 } bsg_device;
 
 typedef struct {
-  char *code_bundle_id;
+  char *id;
   int duration;
   int duration_in_foreground;
   bool in_foreground;
   char *release_stage;
   char *type;
   char *version;
+  char *binary_arch;
 } bsg_app;
 
 typedef struct {

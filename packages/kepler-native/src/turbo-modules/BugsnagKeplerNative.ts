@@ -29,8 +29,9 @@ interface BugsnagUserInfo {
   email: string
 }
 
-interface BugsnagAppInfo {
+interface BugsnagAppInfo extends NativeStaticApp {
   bundleId: string
+  id: string
   releaseStage: string
   type: string
   version: string

@@ -10,7 +10,10 @@ Scenario: Calling notify() with a caught Error
   And the event "context" is null
 
   # App data
+  And the event "app.id" equals "com.bugsnag.fixtures.keplertestapp"
   And the event "app.releaseStage" equals "production"
+  And the event "app.version" equals "1.2.3"
+  And the event "app.type" equals "kepler"
   And the event "app.binaryArch" is not null
   And the event "app.duration" is not null
   

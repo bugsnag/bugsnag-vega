@@ -1,19 +1,25 @@
+import DeviceInfo from '@amzn/react-native-device-info'
+import { Event } from '@bugsnag/core'
 import { BugsnagKeplerNative } from '@bugsnag/kepler-native'
-import { Client } from '@bugsnag/core'
+
+const keplerEventFactory = (createCoreEvent, app) => (...createEventArgs) => {
+  const event = createCoreEvent(...createEventArgs)
+  Object.assign(event.app, app)
+  return event
+}
 
 const nativeAppInfo = {
-  register: () => {
-    const origConfigure = Client.prototype._configure
-    Client.prototype._configure = function (...args) {
-      origConfigure.apply(this, args)
-      const config = this._config
-
-      BugsnagKeplerNative.setApp({
-        releaseStage: config.releaseStage,
-        type: config.appType,
-        version: config.appVersion
-      })
+  register: (client, nativeStaticApp) => {
+    const app = {
+      id: DeviceInfo.getBundleId(),
+      releaseStage: client._config.releaseStage,
+      type: client._config.appType,
+      version: client._config.appVersion,
+      ...nativeStaticApp
     }
+
+    BugsnagKeplerNative.setApp(app)
+    Event.create = keplerEventFactory(Event.create, app)
   }
 }
 

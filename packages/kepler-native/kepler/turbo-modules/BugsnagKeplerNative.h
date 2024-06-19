@@ -31,7 +31,7 @@ public:
   void set_user_data(utils::json::JsonContainer user_data);
   void clear_user_data();
 
-  void set_app_data(utils::json::JsonContainer app_data);
+  void set_app_data(TM_API_NAMESPACE::JSObject app_data);
 
 private:
   Client *bugsnag;

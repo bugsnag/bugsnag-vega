@@ -203,18 +203,32 @@ void BugsnagKeplerNative::clear_user_data() {
   this->bugsnag->clear_user_data();
 }
 
-void BugsnagKeplerNative::set_app_data(utils::json::JsonContainer app_data) {
+void BugsnagKeplerNative::set_app_data(TM_API_NAMESPACE::JSObject app_data) {
   if (this->bugsnag == nullptr) {
     return;
   }
 
-  std::string empty = "";
-  auto id = app_data["bundleId"].getValue(empty);
-  auto stage = app_data["releaseStage"].getValue(empty);
-  auto type = app_data["type"].getValue(empty);
-  auto ver = app_data["version"].getValue(empty);
+  std::string id = app_data.find("id") != app_data.end()
+                       ? std::get<std::string>(app_data["id"])
+                       : "";
 
-  this->bugsnag->set_app_data(id, stage, type, ver);
+  std::string stage = app_data.find("releaseStage") != app_data.end()
+                       ? std::get<std::string>(app_data["releaseStage"])
+                       : "";
+
+  std::string type = app_data.find("type") != app_data.end()
+                       ? std::get<std::string>(app_data["type"])
+                       : "";
+
+  std::string ver = app_data.find("version") != app_data.end()
+                       ? std::get<std::string>(app_data["version"])
+                       : "";
+
+  std::string binary_arch = app_data.find("binaryArch") != app_data.end()
+                       ? std::get<std::string>(app_data["binaryArch"])
+                       : "";
+
+  this->bugsnag->set_app_data(id, stage, type, ver, binary_arch);
 }
 
 void BugsnagKeplerNative::set_device_data(utils::json::JsonContainer device_data) {
