@@ -57,6 +57,7 @@ void Event::prepare_payload(time_t app_startup, bool is_launching,
   auto now = std::chrono::system_clock::now();
   time_t now_time = std::chrono::system_clock::to_time_t(now);
   time_t time_from_start = difftime(now_time, app_startup);
+  time_from_start = time_from_start * 1000; // event needs time in ms
   // TODO Calculate time in foreground
   bsg_set_event_app_duration(this->payload, time_from_start, time_from_start,
                              true);
