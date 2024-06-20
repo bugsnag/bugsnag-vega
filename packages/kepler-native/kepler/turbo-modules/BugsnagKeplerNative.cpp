@@ -34,6 +34,15 @@ static utils::json::JsonContainer createStaticApp() {
   return app;
 }
 
+template <typename T>
+static T getJSValue(TM_API_NAMESPACE::JSObject &js_object, std::string key, T default_value) {
+    T result = js_object.find(key) != js_object.end()
+                       ? std::get<T>(js_object[key])
+                       : default_value;
+
+    return result;
+}
+
 BugsnagKeplerNative::BugsnagKeplerNative()
     : TM_API_NAMESPACE::KeplerTurboModule("BugsnagKeplerNative") {
   this->device_id = this->generate_uuid();
@@ -208,25 +217,11 @@ void BugsnagKeplerNative::set_app_data(TM_API_NAMESPACE::JSObject app_data) {
     return;
   }
 
-  std::string id = app_data.find("id") != app_data.end()
-                       ? std::get<std::string>(app_data["id"])
-                       : "";
-
-  std::string stage = app_data.find("releaseStage") != app_data.end()
-                       ? std::get<std::string>(app_data["releaseStage"])
-                       : "";
-
-  std::string type = app_data.find("type") != app_data.end()
-                       ? std::get<std::string>(app_data["type"])
-                       : "";
-
-  std::string ver = app_data.find("version") != app_data.end()
-                       ? std::get<std::string>(app_data["version"])
-                       : "";
-
-  std::string binary_arch = app_data.find("binaryArch") != app_data.end()
-                       ? std::get<std::string>(app_data["binaryArch"])
-                       : "";
+  std::string id = getJSValue<std::string>(app_data, "id", "");
+  std::string stage = getJSValue<std::string>(app_data, "releaseStage", "");
+  std::string type = getJSValue<std::string>(app_data, "type", "");
+  std::string ver = getJSValue<std::string>(app_data, "version", "");
+  std::string binary_arch = getJSValue<std::string>(app_data, "binaryArch", "");
 
   this->bugsnag->set_app_data(id, stage, type, ver, binary_arch);
 }
