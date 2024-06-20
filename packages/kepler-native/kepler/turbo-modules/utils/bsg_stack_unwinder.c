@@ -23,8 +23,8 @@ void bsg_fill_stack_info(bsg_stackframe *error_stacktrace, int *frames_count) {
     if (dladdr(stacktrace[i], &sym_info) != 0) {
       bsg_strncpy(error_stacktrace[i].filename, sym_info.dli_fname,
                   STACKFRAME_NAME);
-      error_stacktrace[i].frame_address = (uintptr_t)sym_info.dli_fbase;
-      error_stacktrace[i].load_address = (uintptr_t)stacktrace[i];
+      error_stacktrace[i].frame_address = (uintptr_t)stacktrace[i];
+      error_stacktrace[i].load_address = (uintptr_t)sym_info.dli_fbase;
       error_stacktrace[i].line_number =
           (uintptr_t)stacktrace[i] - (uintptr_t)sym_info.dli_fbase;
 
