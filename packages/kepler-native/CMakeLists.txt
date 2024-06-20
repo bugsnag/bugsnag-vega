@@ -14,6 +14,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL Android)
 endif()
 
 set(HEADERS
+  kepler/turbo-modules/external/buildid/build-id.h
   kepler/turbo-modules/utils/bsg_reference_guard.h
   kepler/turbo-modules/utils/bsg_signal_handler.h
   kepler/turbo-modules/utils/bsg_breadcrumb.h
@@ -29,6 +30,7 @@ set(HEADERS
   kepler/turbo-modules/BugsnagBreadcrumbBuffer.h
 )
 set(SOURCES
+    kepler/turbo-modules/external/buildid/build-id.c
     kepler/turbo-modules/utils/bsg_reference_guard.c
     kepler/turbo-modules/utils/bsg_signal_handler.cpp
     kepler/turbo-modules/utils/bsg_breadcrumb.c
