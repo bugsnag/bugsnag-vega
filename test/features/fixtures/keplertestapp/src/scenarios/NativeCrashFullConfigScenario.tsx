@@ -6,6 +6,9 @@ import { getStyles } from '../utils/defaultStyle'
 
 const config: Partial<KeplerConfig> = {
     apiKey: '12345678901234567890123456789012',
+    appVersion: '1.2.3',
+    appType: 'kepler',
+    releaseStage: 'test',
     user: {
         id: 'userID',
         name: 'Test User',

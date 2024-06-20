@@ -33,8 +33,8 @@ public:
   void set_user_data(std::string id, std::string email, std::string name);
   void clear_user_data();
 
-  void set_app_data(std::string bundle_id, std::string stage, std::string type,
-                    std::string ver);
+  void set_app_data(std::string id, std::string stage, std::string type,
+                    std::string ver, std::string binary_arch);
 
   void set_device_id(std::string device_id);
   void set_device_data(std::string manufacturer, std::string model, std::string os_name,

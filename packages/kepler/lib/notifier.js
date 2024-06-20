@@ -24,12 +24,6 @@ const url = 'https://github.com/bugsnag/bugsnag-kepler'
 
 Event.__type = 'reactnativejs'
 
-const keplerEventFactory = (createCoreEvent, nativeStateInfo) => (...createEventArgs) => {
-  const event = createCoreEvent(...createEventArgs)
-  Object.assign(event.app, nativeStateInfo.app)
-  return event
-}
-
 export const Bugsnag = {
   _client: null,
   createClient: (opts) => {
@@ -59,10 +53,8 @@ export const Bugsnag = {
     nativeMetadata.register()
     nativeFeatureFlags.register()
     nativeUser.register()
-    nativeApp.register()
+    nativeApp.register(bugsnag, nativeStaticInfo.app)
     nativeDevice.register(bugsnag)
-
-    Event.create = keplerEventFactory(Event.create, nativeStaticInfo)
 
     const userStore = createUserStore(bugsnag._config.persistenceDirectory, bugsnag._config.persistUser)
     const user = userStore.load(bugsnag._config.user)

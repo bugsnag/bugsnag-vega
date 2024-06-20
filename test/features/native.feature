@@ -39,6 +39,25 @@ Scenario: Run native crash - readonly memory location, with full config
   And the event "metaData.add_metadata.key" equals "value"
   # And event 0 contains the feature flag "myfeature1" with no variant
 
+  # App data
+  And the event "app.id" equals "com.bugsnag.fixtures.keplertestapp"
+  And the event "app.releaseStage" equals "test"
+  And the event "app.version" equals "1.2.3"
+  And the event "app.type" equals "kepler"
+  And the event "app.binaryArch" is not null
+
+  # Device data
+  And the event "device.id" is not null
+  And the event "device.id" matches "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+  And the event "device.manufacturer" equals "Amazon"
+  And the event "device.model" is not null
+  And the event "device.osName" equals "Kepler"
+  And the event "device.osVersion" is not null
+  And the event "device.runtimeVersions" is not null
+  And the event "device.runtimeVersions.reactNative" is not null
+  And the event "device.runtimeVersions.reactNativeJsEngine" equals "hermes"
+  And the event "device.time" is not null
+
 Scenario: Run native crash - manual calling abort func
   When I run "NativeCrashAbortScenario"
   Then I should receive no errors

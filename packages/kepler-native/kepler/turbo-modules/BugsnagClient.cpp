@@ -78,9 +78,9 @@ void Client::set_device_data(std::string manufacturer, std::string model,
                                         rn_version, js_engine);
 }
 
-void Client::set_app_data(std::string bundle_id, std::string stage,
-                          std::string type, std::string ver) {
-  this->current_event->set_app_data(bundle_id, stage, type, ver);
+void Client::set_app_data(std::string id, std::string stage,
+                          std::string type, std::string ver, std::string binary_arch) {
+  this->current_event->set_app_data(id, stage, type, ver, binary_arch);
 }
 
 void Client::set_user_data(std::string id, std::string email,

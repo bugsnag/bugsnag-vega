@@ -3,7 +3,10 @@ import React, { useEffect } from 'react'
 import { Text, View } from "react-native"
 import { getStyles } from '../utils/defaultStyle'
 
-const config = {}
+const config = {
+    appVersion: '1.2.3',
+    appType: 'kepler'
+}
 
 const App = () => {
     const styles = getStyles()

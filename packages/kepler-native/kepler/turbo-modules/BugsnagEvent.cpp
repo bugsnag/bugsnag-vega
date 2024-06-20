@@ -132,13 +132,13 @@ void Event::set_device_id(std::string device_id) {
   bsg_set_event_device_id(this->payload, device_id.c_str());
 }
 
-void Event::set_app_data(std::string bundle_id, std::string stage,
-                         std::string type, std::string ver) {
+void Event::set_app_data(std::string id, std::string stage,
+                         std::string type, std::string ver, std::string binary_arch) {
   if (!this->payload) {
     return;
   }
-  bsg_set_event_app(this->payload, bundle_id.c_str(), stage.c_str(),
-                    type.c_str(), ver.c_str());
+  bsg_set_event_app(this->payload, id.c_str(), stage.c_str(),
+                    type.c_str(), ver.c_str(), binary_arch.c_str());
 }
 
 void Event::set_device_data(std::string manufacturer, std::string model,

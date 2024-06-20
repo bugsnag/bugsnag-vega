@@ -80,16 +80,17 @@ void bsg_set_event_device_id(bsg_event_payload *payload, const char *id) {
   bsg_free_and_strdup(&(payload->event.device.id), id);
 }
 
-void bsg_set_event_app(bsg_event_payload *payload, const char *bundle_id,
-                       const char *stage, const char *type, const char *ver) {
+void bsg_set_event_app(bsg_event_payload *payload, const char *id,
+                       const char *stage, const char *type, const char *ver, const char *binary_arch) {
   if (payload == NULL) {
     return;
   }
 
-  bsg_free_and_strdup(&(payload->event.app.code_bundle_id), bundle_id);
+  bsg_free_and_strdup(&(payload->event.app.id), id);
   bsg_free_and_strdup(&(payload->event.app.release_stage), stage);
   bsg_free_and_strdup(&(payload->event.app.type), type);
   bsg_free_and_strdup(&(payload->event.app.version), ver);
+  bsg_free_and_strdup(&(payload->event.app.binary_arch), binary_arch);
 }
 
 void bsg_set_event_app_duration(bsg_event_payload *payload, int duration,
@@ -149,10 +150,11 @@ void bsg_free_event_app(bsg_app *app) {
     return;
   }
 
-  free(app->code_bundle_id);
+  free(app->id);
   free(app->release_stage);
   free(app->type);
   free(app->version);
+  free(app->binary_arch);
 }
 
 void bsg_free_event_device(bsg_device *device) {

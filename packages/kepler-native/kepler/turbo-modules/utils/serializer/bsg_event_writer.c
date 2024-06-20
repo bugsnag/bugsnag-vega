@@ -371,11 +371,10 @@ static int bsg_write_app(BSG_KSJSONEncodeContext *json, bsg_app *app,
   {
     RETURN_ERROR(bsg_ksjsonaddStringElement(json, "version", app->version,
                                             BSG_KSJSON_SIZE_AUTOMATIC));
-    RETURN_ERROR(bsg_ksjsonaddStringElement(json, "id", app->code_bundle_id,
+    RETURN_ERROR(bsg_ksjsonaddStringElement(json, "id", app->id,
                                             BSG_KSJSON_SIZE_AUTOMATIC));
     RETURN_ERROR(bsg_ksjsonaddStringElement(json, "type", app->type,
                                             BSG_KSJSON_SIZE_AUTOMATIC));
-
     RETURN_ERROR(bsg_ksjsonaddStringElement(
         json, "releaseStage", app->release_stage, BSG_KSJSON_SIZE_AUTOMATIC));
     RETURN_ERROR(bsg_ksjsonaddIntegerElement(json, "duration", app->duration));
@@ -385,6 +384,8 @@ static int bsg_write_app(BSG_KSJSONEncodeContext *json, bsg_app *app,
         bsg_ksjsonaddBooleanElement(json, "inForeground", app->in_foreground));
     RETURN_ERROR(
         bsg_ksjsonaddBooleanElement(json, "isLaunching", is_launching));
+    RETURN_ERROR(bsg_ksjsonaddStringElement(json, "binaryArch", app->binary_arch,
+                                            BSG_KSJSON_SIZE_AUTOMATIC));
   }
   RETURN_ERROR(bsg_ksjsonendContainer(json));
   return BSG_KSJSON_OK;
