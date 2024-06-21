@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
-if [[ "$VERSION_IDENTIFIER" == "" ]]; then
-  export VERSION_IDENTIFIER="0.0.0"
-fi
-
 projectRoot="`dirname $0`/.."
+
+if [[ "$VERSION_IDENTIFIER" == "" ]]; then
+  VERSION_IDENTIFIER=$(node -p -e "require('$projectRoot/lerna.json').version")
+  export VERSION_IDENTIFIER
+fi
 
 pushd "$projectRoot/packages/kepler-native"
 npm run clean
