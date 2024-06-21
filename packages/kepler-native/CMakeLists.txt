@@ -52,7 +52,7 @@ find_package(turbomoduleAPI CONFIG REQUIRED)
 
 add_library(BugsnagKeplerNative SHARED ${HEADERS} ${SOURCES})
 
-set(LIBRARIES turbomoduleAPI::turbomoduleAPI JsonContainer::JsonContainer)
+set(LIBRARIES turbomoduleAPI::turbomoduleAPI)
 
 if (CMAKE_SYSTEM_NAME STREQUAL Android)
     list(APPEND LIBRARIES
