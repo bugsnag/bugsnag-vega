@@ -14,7 +14,7 @@
     "compile": "tsc -p tsconfig-build.json",
     "build": "npm run compile",
     "release": "npm-run-all lint test compile",
-    "local-npm:publish": "npm publish --registry http://localhost:5539"
+    "local-npm:publish": "npm publish --registry http://0.0.0.0:5539"
   },
   "dependencies": {
     "@amzn/keplerscript-turbomodule-api": "^1.0.0"
@@ -61,6 +61,6 @@
     }
   },
   "publishConfig": {
-    "registry": "http://localhost:5539"
+    "registry": "http://0.0.0.0:5539"
   }
 }
