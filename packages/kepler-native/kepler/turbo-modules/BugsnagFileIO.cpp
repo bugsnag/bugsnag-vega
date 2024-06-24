@@ -15,11 +15,22 @@
 #define TM_API_NAMESPACE com::amazon::kepler::turbomodule
 
 namespace bugsnag {
-static utils::json::JsonContainer
-create_error_result(utils::json::JsonContainer container) {
-  container.insert("error", true);
-  container.insert("message", std::string(strerror(errno)));
-  container.insert("code", errno);
+
+template <typename T>
+static T get_js_value(TM_API_NAMESPACE::JSObject &js_object, std::string key,
+                      T default_value) {
+  T result = js_object.find(key) != js_object.end()
+                 ? std::get<T>(js_object[key])
+                 : default_value;
+
+  return result;
+}
+
+static TM_API_NAMESPACE::JSObject
+create_error_result(TM_API_NAMESPACE::JSObject container) {
+  container["error"] = true;
+  container["message"] = std::string(strerror(errno));
+  container["code"] = errno;
   return container;
 }
 
@@ -38,8 +49,8 @@ void BugsnagFileIO::aggregateMethods(
   methodAggregator.addMethod("sha1", &BugsnagFileIO::sha1);
 }
 
-utils::json::JsonContainer BugsnagFileIO::read_text_file(std::string path) {
-  auto result = utils::json::JsonContainer::createJsonObject();
+TM_API_NAMESPACE::JSObject BugsnagFileIO::read_text_file(std::string path) {
+  auto result = TM_API_NAMESPACE::JSObject();
   std::ifstream ifs(path);
 
   if (!ifs.is_open()) {
@@ -52,7 +63,7 @@ utils::json::JsonContainer BugsnagFileIO::read_text_file(std::string path) {
     return create_error_result(result);
   }
 
-  result.insert("content", content);
+  result["content"] = content;
   return result;
 }
 
@@ -80,9 +91,9 @@ TM_API_NAMESPACE::ArrayBuffer BugsnagFileIO::read_file(std::string path) {
   return result;
 }
 
-utils::json::JsonContainer BugsnagFileIO::write_text_file(std::string path,
+TM_API_NAMESPACE::JSObject BugsnagFileIO::write_text_file(std::string path,
                                                           std::string content) {
-  auto result = utils::json::JsonContainer::createJsonObject();
+  auto result = TM_API_NAMESPACE::JSObject();
   std::ofstream ofs(path);
   if (!ofs.is_open()) {
     return create_error_result(result);
@@ -97,16 +108,16 @@ utils::json::JsonContainer BugsnagFileIO::write_text_file(std::string path,
   return result;
 }
 
-utils::json::JsonContainer BugsnagFileIO::list_directory(std::string dir) {
-  auto entries = utils::json::JsonContainer::createJsonArray();
+TM_API_NAMESPACE::JSArray BugsnagFileIO::list_directory(std::string dir) {
+  auto entries = TM_API_NAMESPACE::JSArray();
   for (auto const &dir_entry : std::filesystem::directory_iterator{dir}) {
-    auto json_entry = utils::json::JsonContainer::createJsonObject();
+    auto json_entry = TM_API_NAMESPACE::JSObject();
     std::string filename = dir_entry.path().filename();
-    json_entry.insert("name", filename);
-    json_entry.insert("isFile", dir_entry.is_regular_file());
-    json_entry.insert("isDirectory", dir_entry.is_directory());
+    json_entry["name"] = filename;
+    json_entry["isFile"] = dir_entry.is_regular_file();
+    json_entry["isDirectory"] = dir_entry.is_directory();
 
-    entries.insert(json_entry);
+    entries.push_back(json_entry);
   }
 
   return entries;

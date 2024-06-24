@@ -15,8 +15,8 @@
 #define TM_API_NAMESPACE com::amazon::kepler::turbomodule
 
 namespace bugsnag {
-static utils::json::JsonContainer createStaticApp() {
-  auto app = utils::json::JsonContainer::createJsonObject();
+static TM_API_NAMESPACE::JSObject createStaticApp() {
+  auto app = TM_API_NAMESPACE::JSObject();
 
 #if defined(__i386__)
   const char *binary_arch = "x86";
@@ -29,18 +29,19 @@ static utils::json::JsonContainer createStaticApp() {
 #else
   const char *binary_arch = "unknown";
 #endif
-  app.insert("binaryArch", std::string(binary_arch));
+  app["binaryArch"] = std::string(binary_arch);
 
   return app;
 }
 
 template <typename T>
-static T getJSValue(TM_API_NAMESPACE::JSObject &js_object, std::string key, T default_value) {
-    T result = js_object.find(key) != js_object.end()
-                       ? std::get<T>(js_object[key])
-                       : default_value;
+static T get_js_value(TM_API_NAMESPACE::JSObject &js_object, std::string key,
+                      T default_value) {
+  T result = js_object.find(key) != js_object.end()
+                 ? std::get<T>(js_object[key])
+                 : default_value;
 
-    return result;
+  return result;
 }
 
 BugsnagKeplerNative::BugsnagKeplerNative()
@@ -75,23 +76,18 @@ void BugsnagKeplerNative::aggregateMethods(
   methodAggregator.addMethod("setDevice", &BugsnagKeplerNative::set_device_data);
 }
 
-utils::json::JsonContainer
-BugsnagKeplerNative::configure(utils::json::JsonContainer config) {
+TM_API_NAMESPACE::JSObject
+BugsnagKeplerNative::configure(TM_API_NAMESPACE::JSObject config) {
   auto bsg_config = std::make_unique<Configuration>();
 
-  std::string dummy = "lalala";
-  std::string dummy_str = config["dummyStrValue"].getValue(dummy);
-  // TMWARN("[bugsnag] got dummy string value");
-  // TMWARN(dummy_str);
-
-  std::string empty = "";
-  std::string api_key = config["apikey"].getValue(empty);
-  // TMWARN("[bugsnag] got api key");
-  // TMWARN(api_key);
+  std::string api_key = get_js_value<std::string>(config, "apikey", "");
+  TMWARN("[bugsnag] got api key " + api_key);
   bsg_config->api_key = api_key;
 
-  std::string persistence_dir = config["persistenceDirectory"].getValue(empty);
+  std::string persistence_dir = get_js_value<std::string>(
+      config, "persistenceDirectory", "/data/bugsnag");
   bsg_config->storage_dir = persistence_dir + "/errors";
+  TMWARN("[bugsnag] got persistence dir " + persistence_dir);
 
   if (bsg_config->max_breadcrumbs > BUGSNAG_CRUMBS_MAX) {
     bsg_config->max_breadcrumbs = BUGSNAG_CRUMBS_MAX;
@@ -103,8 +99,8 @@ BugsnagKeplerNative::configure(utils::json::JsonContainer config) {
 
   install_signal_handlers();
 
-  auto result = utils::json::JsonContainer::createJsonObject();
-  result.insert("app", createStaticApp());
+  auto result = TM_API_NAMESPACE::JSObject();
+  result["app"] = createStaticApp();
 
   return result;
 }
@@ -141,21 +137,20 @@ void BugsnagKeplerNative::set_device_id(std::string device_id) {
   this->bugsnag->set_device_id(device_id);
 }
 
-void BugsnagKeplerNative::leave_breadcrumb(utils::json::JsonContainer crumb) {
+void BugsnagKeplerNative::leave_breadcrumb(TM_API_NAMESPACE::JSObject crumb) {
   if (this->bugsnag == nullptr) {
     return;
   }
 
-  auto type = crumb["type"].getValue(0);
+  auto type = get_js_value<double>(crumb, "type", 0);
   bsg_breadcrumb_type casted_type = static_cast<bsg_breadcrumb_type>(type);
 
-  std::string empty = "";
-  auto msg = crumb["message"].getValue(empty);
-  auto metadata = crumb["metadata"].getValue(empty);
+  auto msg = get_js_value<std::string>(crumb, "message", "");
+  auto metadata = get_js_value<std::string>(crumb, "metadata", "");
 
   auto time_now = std::chrono::system_clock::now();
   time_t timestamp = std::chrono::system_clock::to_time_t(time_now);
-  auto crumb_time = crumb["timestamp"].getValue(0);
+  auto crumb_time = get_js_value<double>(crumb, "timestamp", 0);
   if (crumb_time != 0) {
     timestamp = static_cast<time_t>(crumb_time);
   }
@@ -193,15 +188,14 @@ void BugsnagKeplerNative::clear_features() {
   this->bugsnag->clear_features();
 }
 
-void BugsnagKeplerNative::set_user_data(utils::json::JsonContainer user_data) {
+void BugsnagKeplerNative::set_user_data(TM_API_NAMESPACE::JSObject user_data) {
   if (this->bugsnag == nullptr) {
     return;
   }
 
-  std::string empty = "";
-  auto id = user_data["id"].getValue(empty);
-  auto email = user_data["email"].getValue(empty);
-  auto name = user_data["name"].getValue(empty);
+  auto id = get_js_value<std::string>(user_data, "id", "");
+  auto email = get_js_value<std::string>(user_data, "email", "");
+  auto name = get_js_value<std::string>(user_data, "name", "");
   this->bugsnag->set_user_data(id, email, name);
 }
 
@@ -217,30 +211,34 @@ void BugsnagKeplerNative::set_app_data(TM_API_NAMESPACE::JSObject app_data) {
     return;
   }
 
-  std::string id = getJSValue<std::string>(app_data, "id", "");
-  std::string stage = getJSValue<std::string>(app_data, "releaseStage", "");
-  std::string type = getJSValue<std::string>(app_data, "type", "");
-  std::string ver = getJSValue<std::string>(app_data, "version", "");
-  std::string binary_arch = getJSValue<std::string>(app_data, "binaryArch", "");
+  std::string id = get_js_value<std::string>(app_data, "id", "");
+  std::string stage = get_js_value<std::string>(app_data, "releaseStage", "");
+  std::string type = get_js_value<std::string>(app_data, "type", "");
+  std::string ver = get_js_value<std::string>(app_data, "version", "");
+  std::string binary_arch =
+      get_js_value<std::string>(app_data, "binaryArch", "");
 
   this->bugsnag->set_app_data(id, stage, type, ver, binary_arch);
 }
 
-void BugsnagKeplerNative::set_device_data(utils::json::JsonContainer device_data) {
+void BugsnagKeplerNative::set_device_data(
+    TM_API_NAMESPACE::JSObject device_data) {
   if (this->bugsnag == nullptr) {
     return;
   }
 
-  std::string empty = "";
-  auto manufacturer = device_data["manufacturer"].getValue(empty);
-  auto model = device_data["model"].getValue(empty);
-  auto os_name = device_data["osName"].getValue(empty);
-  auto os_version = device_data["osVersion"].getValue(empty);
+  auto manufacturer =
+      get_js_value<std::string>(device_data, "manufacturer", "");
+  auto model = get_js_value<std::string>(device_data, "model", "");
+  auto os_name = get_js_value<std::string>(device_data, "osName", "");
+  auto os_version = get_js_value<std::string>(device_data, "osVersion", "");
 
-  auto empty_object = utils::json::JsonContainer::createJsonObject();
-  auto runtime_versions = device_data["runtimeVersions"].getValue(empty_object);
-  auto rn_version = runtime_versions["reactNative"].getValue(empty);
-  auto js_engine = runtime_versions["reactNativeJsEngine"].getValue(empty);
+  auto runtime_versions = get_js_value<TM_API_NAMESPACE::JSObject>(
+      device_data, "runtimeVersions", TM_API_NAMESPACE::JSObject());
+  auto rn_version =
+      get_js_value<std::string>(runtime_versions, "reactNative", "");
+  auto js_engine =
+      get_js_value<std::string>(runtime_versions, "reactNativeJsEngine", "");
 
   this->bugsnag->set_device_data(manufacturer, model, os_name, os_version,
                                  rn_version, js_engine);
