@@ -10,6 +10,7 @@ const nativeUser = {
     client.setUser = function (...args) {
       origSetUser.apply(this, args)
       const userInfo = this._user
+      userStore.save(userInfo)
 
       if (isValidUser(userInfo)) {
         BugsnagKeplerNative.setUser(userInfo)
