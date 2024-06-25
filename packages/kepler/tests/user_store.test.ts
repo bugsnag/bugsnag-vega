@@ -48,8 +48,8 @@ describe('kepler user store', () => {
 
         const userStore = createUserStore('/tmp/user', true)
 
-        const acceptedUser = userStore.load(undefined)
-        expect(acceptedUser).toEqual({ id: 'deviceId', name: undefined, email: undefined })
+        const acceptedUser = userStore.load(undefined, 'ab0c1482-2ffe-11eb-adc1-0242ac120002')
+        expect(acceptedUser).toEqual({ id: 'ab0c1482-2ffe-11eb-adc1-0242ac120002', name: undefined, email: undefined })
         const readCalls = (BugsnagFileIO.readTextFile as jest.Mock).mock.calls
         expect(readCalls).toHaveLength(1)
         const writeCalls = (BugsnagFileIO.writeTextFile as jest.Mock).mock.calls

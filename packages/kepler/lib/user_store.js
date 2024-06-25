@@ -1,5 +1,9 @@
 import { BugsnagFileIO, isErrorResult } from '@bugsnag/kepler-native'
 
+export function isValidUser (user) {
+  return !!user && (!!user.id || !!user.name || !!user.email)
+}
+
 export default (dir, persistUserConfig) => {
   const persistUser = persistUserConfig
   const userFile = `${dir}/user-info`
@@ -9,9 +13,9 @@ export default (dir, persistUserConfig) => {
   BugsnagFileIO.mkdir(dir)
 
   return {
-    load: function (initialUser) {
+    load: function (initialUser, deviceId) {
       // try to set user from the config
-      if (this.validUser(initialUser)) {
+      if (isValidUser(initialUser)) {
         this.save(initialUser)
         return initialUser
       }
@@ -21,7 +25,7 @@ export default (dir, persistUserConfig) => {
       if (!isErrorResult(result)) {
         try {
           const savedUser = JSON.parse(result.content)
-          if (this.validUser(savedUser)) {
+          if (isValidUser(savedUser)) {
             previousUser = savedUser
             return savedUser
           }
@@ -31,13 +35,9 @@ export default (dir, persistUserConfig) => {
       }
 
       // no user on disk, create a default user
-      // TODO getDeviceId
-      const defaultUser = { id: 'deviceId', name: undefined, email: undefined }
+      const defaultUser = { id: deviceId, name: undefined, email: undefined }
       this.save(defaultUser)
       return defaultUser
-    },
-    validUser: function (user) {
-      return user && user.id && user.name && user.email
     },
     save: function (user) {
       if (persistUser && user !== previousUser) {

@@ -1,6 +1,5 @@
 import { Platform } from 'react-native'
 import DeviceInfo from '@amzn/react-native-device-info'
-import createDeviceStore from './device_store'
 import { BugsnagKeplerNative } from '@bugsnag/kepler-native'
 
 const getEngine = () => global.HermesInternal ? 'hermes' : 'unknown'
@@ -11,12 +10,9 @@ const getReactNativeVersion = () => {
 }
 
 const nativeDeviceInfo = {
-  register: (client) => {
-    const deviceStore = createDeviceStore(client._config.persistenceDirectory)
-    const { id } = deviceStore.load()
-
+  register: (client, deviceId) => {
     const device = {
-      id,
+      id: deviceId,
       manufacturer: DeviceInfo.getManufacturerSync(),
       model: DeviceInfo.getModel(),
       osName: DeviceInfo.getSystemName(),

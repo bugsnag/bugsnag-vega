@@ -1,18 +1,25 @@
 import { BugsnagKeplerNative } from '@bugsnag/kepler-native'
-import { Client } from '@bugsnag/core'
+import createUserStore, { isValidUser } from './user_store'
 
 const nativeUser = {
-  register: () => {
-    const origSetUser = Client.prototype.setUser
-    Client.prototype.setUser = function (...args) {
+  register: (client, deviceId) => {
+    const userStore = createUserStore(client._config.persistenceDirectory, client._config.persistUser)
+    const initialUser = userStore.load(client._config.user, deviceId)
+
+    const origSetUser = client.setUser
+    client.setUser = function (...args) {
       origSetUser.apply(this, args)
       const userInfo = this._user
-      if (userInfo.id === undefined && userInfo.email === undefined && userInfo.name === undefined) {
-        BugsnagKeplerNative.clearUser()
-      } else {
+
+      if (isValidUser(userInfo)) {
         BugsnagKeplerNative.setUser(userInfo)
+      } else {
+        BugsnagKeplerNative.clearUser()
       }
     }
+
+    // set the initial user loaded from the store
+    client.setUser(initialUser.id, initialUser.email, initialUser.name)
   }
 }
 
