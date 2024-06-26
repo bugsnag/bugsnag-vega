@@ -2,7 +2,7 @@ import { version } from '../package.json'
 import { Client, Event } from '@bugsnag/core'
 import { schema } from './config'
 import delivery from './delivery'
-import createUserStore from './user_store'
+import createDeviceStore from './device_store'
 import BugsnagPluginReact from '@bugsnag/plugin-react'
 import createBugsnagGlobalErrorHandlerPlugin from '@bugsnag/plugin-react-native-global-error-handler'
 import { BugsnagKeplerNative } from '@bugsnag/kepler-native'
@@ -49,16 +49,15 @@ export const Bugsnag = {
       persistenceDirectory: bugsnag._config.persistenceDirectory
     })
 
+    const deviceStore = createDeviceStore(bugsnag._config.persistenceDirectory)
+    const { id: deviceId } = deviceStore.load()
+
     nativeBreadcrumbs.register(bugsnag)
     nativeMetadata.register()
     nativeFeatureFlags.register()
-    nativeUser.register()
+    nativeUser.register(bugsnag, deviceId)
     nativeApp.register(bugsnag, nativeStaticInfo.app)
-    nativeDevice.register(bugsnag)
-
-    const userStore = createUserStore(bugsnag._config.persistenceDirectory, bugsnag._config.persistUser)
-    const user = userStore.load(bugsnag._config.user)
-    bugsnag.setUser(user.id, user.email, user.name)
+    nativeDevice.register(bugsnag, deviceId)
 
     bugsnag._setDelivery(delivery)
     bugsnag.markLaunchComplete = () => {

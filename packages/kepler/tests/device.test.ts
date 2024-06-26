@@ -1,6 +1,7 @@
 import nativeDevice from '../lib/device_info_native'
 import { Client } from '@bugsnag/core'
 import { BugsnagFileIO, BugsnagKeplerNative } from "@bugsnag/kepler-native"
+import createDeviceStore from '../lib/device_store'
 
 // @ts-expect-error cannot find global
 global.HermesInternal = {}
@@ -41,7 +42,11 @@ describe('device plugin', () => {
   it('should add an onError callback which captures device information', () => {
     // @ts-expect-error client constructor is protected
     const client = new Client({ apiKey: 'API_KEY_YEAH', persistenceDirectory: '/tmp/user' }, undefined, [])
-    nativeDevice.register(client)
+
+    const deviceStore = createDeviceStore(client._config.persistenceDirectory)
+    const { id: deviceId } = deviceStore.load()
+
+    nativeDevice.register(client, deviceId)
     expect(client._cbs.e).toHaveLength(1)
 
     const payloads: EventPayload[] = []
@@ -64,7 +69,11 @@ describe('device plugin', () => {
   it('should add an onSession callback which captures device information', () => {
     // @ts-expect-error client constructor is protected
     const client = new Client({ apiKey: 'API_KEY_YEAH', persistenceDirectory: '/tmp/user' }, undefined, [])
-    nativeDevice.register(client)
+
+    const deviceStore = createDeviceStore(client._config.persistenceDirectory)
+    const { id: deviceId } = deviceStore.load()
+
+    nativeDevice.register(client, deviceId)
     expect(client._cbs.s).toHaveLength(1)
 
     const payloads: SessionWithDevice[] = []
@@ -97,7 +106,11 @@ describe('device plugin', () => {
     expect(setDevice).not.toHaveBeenCalled()
     // @ts-expect-error client constructor is protected
     const client = new Client({ apiKey: 'API_KEY_YEAH', persistenceDirectory: '/tmp/user' }, undefined, [])
-    nativeDevice.register(client)
+
+    const deviceStore = createDeviceStore(client._config.persistenceDirectory)
+    const { id: deviceId } = deviceStore.load()
+
+    nativeDevice.register(client, deviceId)
     expect(setDevice).toHaveBeenCalledTimes(1)
     expect(setDevice).toHaveBeenCalledWith({
       id: 'ab0c1482-2ffe-11eb-adc1-0242ac120002',
