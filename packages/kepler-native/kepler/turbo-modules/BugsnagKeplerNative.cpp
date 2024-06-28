@@ -124,6 +124,7 @@ std::string BugsnagKeplerNative::generate_uuid() {
   uuid_buffer[13] = '-';
   uuid_buffer[18] = '-';
   uuid_buffer[23] = '-';
+  uuid_buffer[36] = '\0';
   return std::string(uuid_buffer);
 }
 
