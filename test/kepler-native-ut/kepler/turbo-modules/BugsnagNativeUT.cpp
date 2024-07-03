@@ -75,7 +75,7 @@ void BugsnagNativeUT::manual_abort_crash() {
 
 void BugsnagNativeUT::throw_exception_crash() {
   TMWARN("[bugsnag] triggered unhandled exception crash");
-  throw std::bad_exception();
+  throw std::runtime_error("my msg");
 }
 
 } // namespace bugsnag

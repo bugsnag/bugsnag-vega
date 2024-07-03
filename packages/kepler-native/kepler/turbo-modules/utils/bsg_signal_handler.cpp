@@ -72,9 +72,6 @@ static void bsg_handle_signal(int signum, siginfo_t *info, void *user_context) {
 
   TMWARN("[bugsnag] Signal Handler Triggered!");
 
-  static const char tab[] = "\t";
-  static const char lf[] = "\n";
-
   int signal_idx = 0;
   for (signal_idx = 0; signal_idx < BSG_HANDLED_SIGNAL_COUNT; ++signal_idx) {
     if (bsg_native_signals[signal_idx] == signum) {
@@ -111,11 +108,11 @@ call_previous_handler:
   bsg_invoke_previous_signal_handler(signum, info, user_context);
 }
 
-void install_signal_handlers() {
+void bsg_install_signal_handlers() {
   static bool handlers_installed = false;
 
   if (handlers_installed) {
-    TMINFO("[bugsnag] install_signal_handlers() called more than once");
+    TMINFO("[bugsnag] bsg_install_signal_handlers() called more than once");
     return;
   }
 
