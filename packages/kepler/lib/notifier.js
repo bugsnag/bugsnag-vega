@@ -46,7 +46,8 @@ export const Bugsnag = {
     const nativeStaticInfo = BugsnagKeplerNative.configure({
       dummyStrValue: opts.apiKey,
       apikey: opts.apiKey,
-      persistenceDirectory: bugsnag._config.persistenceDirectory
+      persistenceDirectory: bugsnag._config.persistenceDirectory,
+      enabledErrorTypes: bugsnag._config.enabledErrorTypes
     })
 
     const deviceStore = createDeviceStore(bugsnag._config.persistenceDirectory)

@@ -6,6 +6,7 @@ import intRange from '@bugsnag/core/lib/validators/int-range'
 const iserror = require('iserror')
 
 const IS_PRODUCTION = typeof __DEV__ === 'undefined' || __DEV__ !== true
+const defaultErrorTypes = () => ({ unhandledExceptions: true, unhandledRejections: true, nativeCrashes: true })
 
 export const schema = {
   ...coreSchema,
@@ -38,6 +39,22 @@ export const schema = {
     defaultValue: () => true,
     message: 'should be a boolean',
     validate: (value) => typeof value === 'boolean'
+  },
+  enabledErrorTypes: {
+    defaultValue: () => defaultErrorTypes(),
+    message: 'should be an object containing the flags { unhandledExceptions:true|false, unhandledRejections:true|false, nativeCrashes: true|false }',
+    allowPartialObject: true,
+    validate: value => {
+      // ensure we have an object
+      if (typeof value !== 'object' || !value) return false
+      const providedKeys = Object.keys(value)
+      const defaultKeys = Object.keys(defaultErrorTypes())
+      // ensure it only has a subset of the allowed keys
+      if (providedKeys.filter(k => defaultKeys.includes(k)).length < providedKeys.length) return false
+      // ensure all of the values are boolean
+      if (Object.keys(value).filter(k => typeof value[k] !== 'boolean').length > 0) return false
+      return true
+    }
   }
 }
 

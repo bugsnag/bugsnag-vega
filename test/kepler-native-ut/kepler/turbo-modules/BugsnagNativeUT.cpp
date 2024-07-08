@@ -55,6 +55,7 @@ TEST_CASE("testing the factorial function") {
 static void __attribute__((used)) somefakefunc(void) {}
 
 void BugsnagNativeUT::read_only_memory_crash() {
+  TMWARN("[bugsnag] triggered read only memory crash");
   // Write to a read-only page
   volatile char *ptr = (char *)somefakefunc;
   *ptr = 0;
@@ -62,10 +63,19 @@ void BugsnagNativeUT::read_only_memory_crash() {
 
 int *global_ptr = nullptr;
 
-void BugsnagNativeUT::nullptr_dereference_crash() { *global_ptr = 1; }
+void BugsnagNativeUT::nullptr_dereference_crash() {
+  TMWARN("[bugsnag] triggered nullptr dereference crash");
+  *global_ptr = 1;
+}
 
-void BugsnagNativeUT::manual_abort_crash() { abort(); }
+void BugsnagNativeUT::manual_abort_crash() {
+  TMWARN("[bugsnag] triggered manual abort crash");
+  abort();
+}
 
-void BugsnagNativeUT::throw_exception_crash() { throw std::bad_exception(); }
+void BugsnagNativeUT::throw_exception_crash() {
+  TMWARN("[bugsnag] triggered unhandled exception crash");
+  throw std::bad_exception();
+}
 
 } // namespace bugsnag
