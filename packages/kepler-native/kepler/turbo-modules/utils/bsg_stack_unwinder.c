@@ -5,6 +5,7 @@
 #include <dlfcn.h>
 
 #include "../external/buildid/build-id.h"
+#include "./serializer/BSG_KSCrashStringConversion.h"
 #include "bsg_stack_unwinder.h"
 
 void bsg_fill_stack_info(bsg_stackframe *error_stacktrace, int *frames_count) {
@@ -51,10 +52,10 @@ int get_build_id(char *buffer, void *fbase) {
   ElfW(Word) len = build_id_length(note);
   const uint8_t *build_id = build_id_data(note);
   for (ElfW(Word) i = 0; i < len; i++) {
-    snprintf(buf, 3, "%02x", build_id[i]);
-    bsg_strncpy(buffer + length, buf, 3);
+    bsg_uint64_to_hex(build_id[i], buffer + length, 2);
     length += 2;
   }
+  buffer[length + 1] = '\0';
 
   return 0;
 }
