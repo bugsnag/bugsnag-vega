@@ -1,11 +1,16 @@
-import type {KeplerTurboModule} from '@amzn/keplerscript-turbomodule-api'
-import {TurboModuleRegistry} from '@amzn/keplerscript-turbomodule-api'
+import type { KeplerTurboModule } from '@amzn/keplerscript-turbomodule-api'
+import { TurboModuleRegistry } from '@amzn/keplerscript-turbomodule-api'
 
 interface BugsnagConfiguration {
   dummyStrValue: string
   apikey: string
   appVersion?: string
   persistenceDirectory: string
+  enabledErrorTypes: {
+    unhandledExceptions: boolean
+    unhandledRejections: boolean
+    nativeCrashes: boolean
+  }
 }
 
 interface NativeStaticApp {

@@ -6,6 +6,11 @@ interface KeplerConfig extends Config {
   maxPersistedEvents?: number
   maxPersistedSessions?: number
   persistUser?: boolean
+  enabledErrorTypes?: {
+    unhandledExceptions?: boolean
+    unhandledRejections?: boolean
+    nativeCrashes?: boolean
+  }
 }
 
 declare class KeplerClient extends Client {

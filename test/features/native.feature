@@ -91,6 +91,14 @@ Scenario: Run native crash - dereferencing nullptr
   And the exception "message" equals "Segmentation violation (invalid memory reference)"
   And the event "unhandled" is true
 
+Scenario: Run native crash - native errors disabled
+  When I run "NativeCrashDisabledScenario"
+  Then I should receive no errors
+  And I copy error file
+  And I restart the test fixture
+  And I start bugsnag for "NativeCrashDisabledScenario"
+  Then I should receive no errors
+
 # Scenario: Run native crash - throwing exception
 #   When I run "NativeCrashExceptionScenario"
 #   Then I should receive no errors

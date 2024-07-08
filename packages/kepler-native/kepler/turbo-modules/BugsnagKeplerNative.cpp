@@ -81,13 +81,11 @@ BugsnagKeplerNative::configure(TM_API_NAMESPACE::JSObject config) {
   auto bsg_config = std::make_unique<Configuration>();
 
   std::string api_key = get_js_value<std::string>(config, "apikey", "");
-  TMWARN("[bugsnag] got api key " + api_key);
   bsg_config->api_key = api_key;
 
   std::string persistence_dir = get_js_value<std::string>(
       config, "persistenceDirectory", "/data/bugsnag");
   bsg_config->storage_dir = persistence_dir + "/errors";
-  TMWARN("[bugsnag] got persistence dir " + persistence_dir);
 
   if (bsg_config->max_breadcrumbs > BUGSNAG_CRUMBS_MAX) {
     bsg_config->max_breadcrumbs = BUGSNAG_CRUMBS_MAX;
@@ -97,7 +95,14 @@ BugsnagKeplerNative::configure(TM_API_NAMESPACE::JSObject config) {
   global_client = this->bugsnag;
   this->bugsnag->set_device_id(this->device_id);
 
-  install_signal_handlers();
+  auto enabled_errors = get_js_value<TM_API_NAMESPACE::JSObject>(
+      config, "enabledErrorTypes", TM_API_NAMESPACE::JSObject());
+  auto enabled_native_error =
+      get_js_value<bool>(enabled_errors, "nativeCrashes", true);
+
+  if (enabled_native_error) {
+    install_signal_handlers();
+  }
 
   auto result = TM_API_NAMESPACE::JSObject();
   result["app"] = createStaticApp();

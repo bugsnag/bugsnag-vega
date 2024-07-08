@@ -36,3 +36,4 @@ export { default as NativeCrashFullConfigScenario } from './NativeCrashFullConfi
 export { default as NativeCrashAbortScenario } from './NativeCrashAbortScenario';
 export { default as NativeCrashNullptrScenario } from './NativeCrashNullptrScenario';
 export { default as NativeCrashExceptionScenario } from './NativeCrashExceptionScenario';
+export { default as NativeCrashDisabledScenario } from './NativeCrashDisabledScenario';
