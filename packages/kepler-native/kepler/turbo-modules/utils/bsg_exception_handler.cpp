@@ -54,7 +54,7 @@ static void bsg_handle_terminate() {
   current_event->prepare_payload(client->get_app_start_time(),
                                  client->get_is_launching(), crumb_buffer,
                                  BUGSNAG_CRUMBS_MAX);
-  current_event->set_exception("SIGABRT", "Abort program", "c",
+  current_event->set_exception("EXCEPTION", "native exception", "c",
                                stackframe_count);
   bsg_event_write(current_event->get_payload());
 
