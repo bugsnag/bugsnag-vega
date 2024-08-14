@@ -67,10 +67,14 @@ void bsg_handler_uninstall_signal() {
 }
 
 static void bsg_handle_signal(int signum, siginfo_t *info, void *user_context) {
-
-  atomic_store(&is_signal_handler_running, true);
-
   TMWARN("[bugsnag] Signal Handler Triggered!");
+
+  bool is_running = false;
+  if (!atomic_compare_exchange_strong(&is_signal_handler_running, &is_running,
+                                      true)) {
+    TMWARN("[bugsnag] An exception/signal handler is already running");
+    return;
+  }
 
   int signal_idx = 0;
   for (signal_idx = 0; signal_idx < BSG_HANDLED_SIGNAL_COUNT; ++signal_idx) {

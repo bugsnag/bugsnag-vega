@@ -33,7 +33,12 @@ void bsg_uninstall_terminate_handler() {
 static void bsg_handle_terminate() {
   TMWARN("[bugsnag] Terminate handler triggered!");
 
-  atomic_store(&is_signal_handler_running, true);
+  bool is_running = false;
+  if (!atomic_compare_exchange_strong(&is_signal_handler_running, &is_running,
+                                      true)) {
+    TMWARN("[bugsnag] An exception/signal handler is already running");
+    return;
+  }
 
   bugsnag::Event *current_event;
   bugsnag::Client *client = bugsnag::global_client;
@@ -66,7 +71,6 @@ call_previous_handler:
 }
 
 void bsg_install_terminate_handlers() {
-  TMWARN("[bugsnag] install terminate handlers!");
   terminate_handlers_installed = false;
 
   if (terminate_handlers_installed) {
