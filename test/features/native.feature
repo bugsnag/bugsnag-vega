@@ -99,13 +99,13 @@ Scenario: Run native crash - native errors disabled
   And I start bugsnag for "NativeCrashDisabledScenario"
   Then I should receive no errors
 
-# Scenario: Run native crash - throwing exception
-#   When I run "NativeCrashExceptionScenario"
-#   Then I should receive no errors
-#   And I copy error file
-#   And I restart the test fixture
-#   And I start bugsnag for "NativeCrashExceptionScenario"
-#   Then I wait to receive 1 errors
-#   And the exception "errorClass" equals "SIGABRT"
-#   And the exception "message" equals "Abort program"
-#   And the event "unhandled" is true
+Scenario: Run native crash - throwing exception
+  When I run "NativeCrashExceptionScenario"
+  Then I should receive no errors
+  And I copy error file
+  And I restart the test fixture
+  And I start bugsnag for "NativeCrashExceptionScenario"
+  Then I wait to receive 1 errors
+  And the exception "errorClass" equals "EXCEPTION"
+  And the exception "message" equals "native exception"
+  And the event "unhandled" is true

@@ -17,6 +17,7 @@ endif()
 set(HEADERS
   kepler/turbo-modules/external/buildid/build-id.h
   kepler/turbo-modules/utils/bsg_reference_guard.h
+  kepler/turbo-modules/utils/bsg_exception_handler.h
   kepler/turbo-modules/utils/bsg_signal_handler.h
   kepler/turbo-modules/utils/bsg_breadcrumb.h
   kepler/turbo-modules/utils/bsg_types.h
@@ -33,6 +34,7 @@ set(HEADERS
 set(SOURCES
     kepler/turbo-modules/external/buildid/build-id.c
     kepler/turbo-modules/utils/bsg_reference_guard.c
+    kepler/turbo-modules/utils/bsg_exception_handler.cpp
     kepler/turbo-modules/utils/bsg_signal_handler.cpp
     kepler/turbo-modules/utils/bsg_breadcrumb.c
     kepler/turbo-modules/utils/bsg_event.c

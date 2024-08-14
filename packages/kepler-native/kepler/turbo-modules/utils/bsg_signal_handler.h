@@ -1,3 +1,3 @@
 #pragma once
 
-void install_signal_handlers();
+void bsg_install_signal_handlers();

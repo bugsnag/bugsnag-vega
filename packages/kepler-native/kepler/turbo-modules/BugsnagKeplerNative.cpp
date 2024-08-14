@@ -1,6 +1,7 @@
 #include "Kepler/turbomodule/TMLog.h"
 
 #include "BugsnagKeplerNative.h"
+#include "utils/bsg_exception_handler.h"
 #include "utils/bsg_signal_handler.h"
 
 #include <chrono>
@@ -101,7 +102,8 @@ BugsnagKeplerNative::configure(TM_API_NAMESPACE::JSObject config) {
       get_js_value<bool>(enabled_errors, "nativeCrashes", true);
 
   if (enabled_native_error) {
-    install_signal_handlers();
+    bsg_install_signal_handlers();
+    bsg_install_terminate_handlers();
   }
 
   auto result = TM_API_NAMESPACE::JSObject();

@@ -2,6 +2,7 @@
 #include "BugsnagNativeUT.h"
 #include "../../../../packages/kepler-native/kepler/turbo-modules/BugsnagFileIO.h"
 #include "Kepler/turbomodule/TMLog.h"
+#include <thread>
 
 #define TM_API_NAMESPACE com::amazon::kepler::turbomodule
 
@@ -73,9 +74,13 @@ void BugsnagNativeUT::manual_abort_crash() {
   abort();
 }
 
+void helper_func_exception() { throw std::runtime_error("my msg"); }
+
 void BugsnagNativeUT::throw_exception_crash() {
   TMWARN("[bugsnag] triggered unhandled exception crash");
-  throw std::bad_exception();
+
+  std::thread exception_thread(helper_func_exception);
+  exception_thread.join();
 }
 
 } // namespace bugsnag
