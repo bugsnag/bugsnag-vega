@@ -11,7 +11,10 @@
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "compile": "tsc -p tsconfig.json",
     "build": "npm run compile",
-    "release": "npm-run-all lint compile"
+    "build:release": "react-native build-kepler --build-type Release",
+    "build:debug": "react-native build-kepler --build-type Debug",
+    "build:app": "npm-run-all build:release build:debug",
+    "release": "npm-run-all lint build build:app"
   },
   "dependencies": {
     "@amzn/keplerscript-react-native-reanimated": "~2.0.0",

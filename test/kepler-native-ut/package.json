@@ -11,9 +11,10 @@
     "test": "jest --colors",
     "lint": "eslint src tst --ext .ts,.tsx",
     "lint:fix": "eslint src tst --ext .ts,.tsx --fix",
-    "compile": "tsc -p tsconfig-build.json",
-    "build": "npm run compile",
-    "release": "npm-run-all lint test compile",
+    "build:js": "tsc -p tsconfig.json",
+    "build:native": "kepler build -b Debug -b Release",
+    "build:module": "npm-run-all build:js build:native",
+    "prepack": "npm-run-all build:module",
     "local-npm:publish": "npm publish --registry http://0.0.0.0:5539"
   },
   "dependencies": {
