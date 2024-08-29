@@ -25,7 +25,7 @@ rm -rf build package-lock.json
 npm i --force --registry 'http://0.0.0.0:5539'
 
 # build the test fixture
-kepler build
+npm run build:app
 
 # stop the verdaccio server
 lsof -t -i:5539 | xargs kill -9

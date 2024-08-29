@@ -10,9 +10,10 @@
     "clean": "rm -rf node_modules buildinfo.json dist",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
-    "compile": "tsc -p tsconfig-build.json",
-    "build": "npm run compile",
-    "release": "npm-run-all lint test compile"
+    "build:js": "tsc -p tsconfig.json",
+    "build:native": "kepler build -b Debug -b Release",
+    "build:module": "npm-run-all build:js build:native",
+    "prepack": "npm-run-all build:module"
   },
   "dependencies": {
     "@amzn/keplerscript-turbomodule-api": "^1.0.0"
