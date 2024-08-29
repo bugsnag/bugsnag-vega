@@ -1,3 +1,4 @@
+@native_unit_tests
 Feature: Native Side unit tests
 
 Scenario: Run unit tests scenario on simulator
