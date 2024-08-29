@@ -36,13 +36,12 @@ Maze.hooks.before do
   Maze::Runner.run_command("kepler device launch-app -a com.bugsnag.fixtures.keplertestapp.main")
 end
 
-Maze.hooks.after do
+After do
   # Terminate the app
   Maze::Runner.run_command("kepler device terminate-app --appName com.bugsnag.fixtures.keplertestapp.main")
 
   # Only copy files from the simulator
   if $simulator
-    Maze::Runner.run_command("kepler device copy-from --source /home/app_user/packages/com.bugsnag.fixtures.keplertestapp/data/bugsnag/utOutput.txt --destination maze_output/")
     Maze::Runner.run_command("kepler device run-cmd --command 'rm -r /home/app_user/packages/com.bugsnag.fixtures.keplertestapp/data/bugsnag'")
   end
 
@@ -52,4 +51,11 @@ end
 
 Before do
   $address = nil
+end
+
+After('@native_unit_tests') do
+  # Only copy files from the simulator
+  if $simulator
+    Maze::Runner.run_command("kepler device copy-from --source /home/app_user/packages/com.bugsnag.fixtures.keplertestapp/data/bugsnag/utOutput.txt --destination maze_output/")
+  end
 end
