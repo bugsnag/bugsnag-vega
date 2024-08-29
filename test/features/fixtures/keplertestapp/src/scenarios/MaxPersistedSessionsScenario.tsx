@@ -21,9 +21,9 @@ const App = () => {
             })
             for (let i = 0; i < 10; i++) {
                 Bugsnag.startSession();
-                let message = `MaxPersistedSessionsError${i}`
                 await delay(100)
-                Bugsnag.notify(new Error(message))
+                Bugsnag.notify(new Error(`MaxPersistedSessionsError${i}`))
+                await delay(100)
             }
         })()
     }, [])
