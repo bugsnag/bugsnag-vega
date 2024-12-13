@@ -65,3 +65,4 @@ verdaccio-config.yml
 
 # maze runner output
 maze_output
+test/Gemfile.lock
