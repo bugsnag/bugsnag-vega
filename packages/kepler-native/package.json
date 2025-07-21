@@ -31,17 +31,6 @@
       "tv"
     ],
     "api": 0.1,
-    "keplerInitializationSharedLibrary": "BugsnagKeplerNative",
-    "autolink": {
-      "BugsnagKeplerNative": {
-        "libraryName": "libBugsnagKeplerNative.so",
-        "linkDynamic": true,
-        "provider": "application",
-        "components": [],
-        "turbomodules": [
-          "BugsnagKeplerNative"
-        ]
-      }
-    }
+    "keplerInitializationSharedLibrary": "BugsnagKeplerNative"
   }
 }

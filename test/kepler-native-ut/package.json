@@ -43,18 +43,7 @@
       "tv"
     ],
     "api": 0.1,
-    "keplerInitializationSharedLibrary": "BugsnagNativeUT",
-    "autolink": {
-      "BugsnagNativeUT": {
-        "libraryName": "libBugsnagNativeUT.so",
-        "linkDynamic": true,
-        "provider": "application",
-        "components": [],
-        "turbomodules": [
-          "BugsnagNativeUT"
-        ]
-      }
-    }
+    "keplerInitializationSharedLibrary": "BugsnagNativeUT"
   },
   "publishConfig": {
     "registry": "http://0.0.0.0:5539"
