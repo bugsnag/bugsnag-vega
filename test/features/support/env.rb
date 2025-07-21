@@ -25,7 +25,10 @@ end
 
 Maze.hooks.before do
   # reset the app, then launch it
-  Maze::Runner.run_command("kepler device uninstall-app --appName com.bugsnag.fixtures.keplertestapp.main")
+  output = Maze::Runner.run_command("kepler device installed-apps")
+  if output.include?("com.bugsnag.fixtures.keplertestapp.main")
+    Maze::Runner.run_command("kepler device uninstall-app --appName com.bugsnag.fixtures.keplertestapp.main")
+  end
 
   if $simulator
     Maze::Runner.run_command("kepler device install-app -p ./features/fixtures/keplertestapp/build/aarch64-release/keplertestapp_aarch64.vpkg -d Simulator")
@@ -41,9 +44,9 @@ After do
   Maze::Runner.run_command("kepler device terminate-app --appName com.bugsnag.fixtures.keplertestapp.main")
 
   # Only copy files from the simulator
-  if $simulator
-    Maze::Runner.run_command("kepler device run-cmd --command 'rm -r /home/app_user/packages/com.bugsnag.fixtures.keplertestapp/data/bugsnag'")
-  end
+  # if $simulator
+  #   Maze::Runner.run_command("kepler device run-cmd --command 'rm -r /home/app_user/packages/com.bugsnag.fixtures.keplertestapp/data/bugsnag'")
+  # end
 
   # Uninstall the app
   Maze::Runner.run_command("kepler device uninstall-app --appName com.bugsnag.fixtures.keplertestapp.main")
