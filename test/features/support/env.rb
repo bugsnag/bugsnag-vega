@@ -28,9 +28,9 @@ Maze.hooks.before do
   Maze::Runner.run_command("kepler device uninstall-app --appName com.bugsnag.fixtures.keplertestapp.main")
 
   if $simulator
-    Maze::Runner.run_command("kepler device install-app -p ./features/fixtures/keplertestapp/build/vega-tv2023-aarch64-release/keplertestapp_aarch64.vpkg -d Simulator")
+    Maze::Runner.run_command("kepler device install-app -p ./features/fixtures/keplertestapp/build/aarch64-release/keplertestapp_aarch64.vpkg -d Simulator")
   else
-    Maze::Runner.run_command("kepler device install-app -p ./features/fixtures/keplertestapp/build/vega-tv2023-armv7-release/keplertestapp_armv7.vpkg")
+    Maze::Runner.run_command("kepler device install-app -p ./features/fixtures/keplertestapp/build/armv7-release/keplertestapp_armv7.vpkg")
   end
 
   Maze::Runner.run_command("kepler device launch-app -a com.bugsnag.fixtures.keplertestapp.main")
