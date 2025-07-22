@@ -4,16 +4,23 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "react-native.config.js"
   ],
   "scripts": {
     "clean": "rm -rf node_modules buildinfo.json dist",
+    "kepler-codegen": "keplerscript-turbomodule-api codegen src/turbo-modules/BugsnagKeplerNative.ts -o kepler/turbo-modules/ --new -s BugsnagKeplerNativeTurboModule && npm-run-all clean-codegen-backups",
+    "clean-codegen-backups": "rm -rf kepler/turbo-modules/BugsnagKeplerNative.cpp.bak kepler/turbo-modules/BugsnagKeplerNative.h.bak",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "build:js": "tsc -p tsconfig.json",
-    "build:native": "kepler build -b Debug -b Release",
-    "build:module": "npm-run-all build:js build:native",
-    "prepack": "npm-run-all build:module"
+    "build:native:debug": "kepler build -b Debug",
+    "build:native:release": "kepler build -b Release",
+    "build": "npm-run-all build:js build:native:release",
+    "build:debug": "npm-run-all build:js build:native:debug",
+    "prepack": "npm-run-all build:module",
+    "build:native": "npm-run-all build:native:debug build:native:release",
+    "build:module": "npm-run-all build:js build:native"
   },
   "dependencies": {
     "@amzn/keplerscript-turbomodule-api": "^1.0.0"
@@ -30,7 +37,10 @@
     "targets": [
       "tv"
     ],
-    "api": 0.1,
-    "keplerInitializationSharedLibrary": "BugsnagKeplerNative"
-  }
+    "features": [
+      "vega"
+    ],
+    "api": 0.1
+  },
+  "gitHead": "38613a0a00f00b5ffcd2c03f4b5453aa4c0551f5"
 }

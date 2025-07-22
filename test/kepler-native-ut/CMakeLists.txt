@@ -15,13 +15,15 @@ if (CMAKE_SYSTEM_NAME STREQUAL Android)
 endif()
 
 set(HEADERS
+  kepler/turbo-modules/generated/BugsnagNativeUTSpec.h
   kepler/turbo-modules/doctest.h
   kepler/turbo-modules/BugsnagNativeUT.h
 )
 
 set(SOURCES
-    kepler/turbo-modules/BugsnagNativeUT.cpp
-    kepler/AutoLinkInit.cpp
+  kepler/turbo-modules/generated/BugsnagNativeUTSpec.cpp
+  kepler/turbo-modules/BugsnagNativeUT.cpp
+  kepler/AutoLinkInit.cpp
 )
 
 set(NATIVE_DIR ${CMAKE_SOURCE_DIR}/../../packages/kepler-native)

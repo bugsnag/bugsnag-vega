@@ -32,8 +32,8 @@ const delivery = (client, fetch = global.fetch) => {
           'Content-Type': 'application/json',
           'Bugsnag-Api-Key': queueEntry.apiKey,
           'Bugsnag-Payload-Version': '4',
-          'Bugsnag-Sent-At': (new Date()).toISOString(),
-          'Bugsnag-Integrity': `sha1 ${BugsnagFileIO.sha1(queueEntry.valueString)}`
+          'Bugsnag-Sent-At': (new Date()).toISOString()
+          // 'Bugsnag-Integrity': `sha1 ${BugsnagFileIO.sha1(new TextEncoder().encode(queueEntry.valueString))}`
         },
         body: queueEntry.valueString
       }).then(response => {
@@ -66,8 +66,8 @@ const delivery = (client, fetch = global.fetch) => {
           'Content-Type': 'application/json',
           'Bugsnag-Api-Key': queueEntry.apiKey,
           'Bugsnag-Payload-Version': '1',
-          'Bugsnag-Sent-At': (new Date()).toISOString(),
-          'Bugsnag-Integrity': `sha1 ${BugsnagFileIO.sha1(queueEntry.valueString)}`
+          'Bugsnag-Sent-At': (new Date()).toISOString()
+          // 'Bugsnag-Integrity': `sha1 ${BugsnagFileIO.sha1(new TextEncoder().encode(queueEntry.valueString))}`
         },
         body: queueEntry.valueString
       }).then(response => {
