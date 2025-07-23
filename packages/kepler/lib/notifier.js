@@ -27,12 +27,10 @@ Event.__type = 'reactnativejs'
 export const Bugsnag = {
   _client: null,
   createClient: (opts) => {
-    console.log('[Bugsnag] create client started with options:', opts)
     // handle very simple use case where user supplies just the api key as a string
     if (typeof opts === 'string') opts = { apiKey: opts }
     if (!opts) opts = {}
 
-    console.log('[Bugsnag] starting plugins')
     const internalPlugins = [
       createBugsnagGlobalErrorHandlerPlugin(),
       unhandledRejectionPlugin,
@@ -42,23 +40,18 @@ export const Bugsnag = {
       pluginAppDuration,
       new BugsnagPluginReact(React)
     ]
-    console.log('[Bugsnag] finished starting plugins')
 
     // configure a client with user supplied options
     const bugsnag = new Client(opts, schema, internalPlugins, { name, version, url })
-    console.log('[Bugsnag] client created with options:', opts)
     const nativeStaticInfo = BugsnagKeplerNative.configure({
       dummyStrValue: opts.apiKey,
       apikey: opts.apiKey,
       persistenceDirectory: bugsnag._config.persistenceDirectory,
       enabledErrorTypes: bugsnag._config.enabledErrorTypes
     })
-    console.log('[Bugsnag] native static info:', nativeStaticInfo)
 
     const deviceStore = createDeviceStore(bugsnag._config.persistenceDirectory)
     const { id: deviceId } = deviceStore.load()
-
-    console.log('[Bugsnag] device id:', deviceId)
 
     nativeBreadcrumbs.register(bugsnag)
     nativeMetadata.register()
@@ -67,36 +60,25 @@ export const Bugsnag = {
     nativeApp.register(bugsnag, nativeStaticInfo.app)
     nativeDevice.register(bugsnag, deviceId)
 
-    console.log('[Bugsnag] native modules registered')
-
     bugsnag._setDelivery(delivery)
     bugsnag.markLaunchComplete = () => {
       BugsnagKeplerNative.markLaunchCompleted()
     }
 
-    console.log('[Bugsnag] client configured with delivery and launch complete handler')
-
     bugsnag._logger.debug('Loaded!')
     bugsnag.leaveBreadcrumb('Bugsnag loaded', {}, 'state')
-
-    console.log('[Bugsnag] loaded')
 
     return bugsnag._config.autoTrackSessions
       ? bugsnag.startSession()
       : bugsnag
   },
   start: (opts) => {
-    console.log('[Bugsnag] start() called with options:', opts)
     if (Bugsnag._client) {
-      console.log('[Bugsnag] start() was called more than once. Ignoring.')
       Bugsnag._client._logger.warn('Bugsnag.start() was called more than once. Ignoring.')
       return Bugsnag._client
     }
-    console.log('[Bugsnag] starting client')
     Bugsnag._client = Bugsnag.createClient(opts)
-    console.log('[Bugsnag] client created')
     Bugsnag._client.markLaunchComplete()
-    console.log('[Bugsnag] launch complete marked')
     return Bugsnag._client
   },
   isStarted: () => {
