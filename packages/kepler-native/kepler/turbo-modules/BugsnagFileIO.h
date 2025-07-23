@@ -21,7 +21,7 @@ public:
   com::amazon::kepler::turbomodule::JSArray listDirectory(std::string dir) override;
   bool mkdir(std::string dir) override;
   bool deleteFile(std::string path) override;
-  std::string sha1(com::amazon::kepler::turbomodule::ArrayBuffer data) override;
+  std::string sha1(std::string data) override;
 };
 
 } // namespace bugsnag

@@ -28,8 +28,7 @@ BugsnagNativeUT::~BugsnagNativeUT() noexcept {};
 void BugsnagNativeUT::configure(std::string path) {
   // TODO REMOVE FILE IO usage - placeholder for testing the linking
   auto item = BugsnagFileIO();
-  auto result = ArrayBuffer("akakka");
-  item.sha1(result);
+  item.sha1("akakka");
 
   this->utOutput.open(path);
   this->context.setOption("no-breaks", true);

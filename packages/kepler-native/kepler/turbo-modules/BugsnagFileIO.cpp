@@ -126,10 +126,9 @@ bool BugsnagFileIO::deleteFile(std::string path) {
   return !ec;
 }
 
-std::string BugsnagFileIO::sha1(ArrayBuffer data) {
+std::string BugsnagFileIO::sha1(std::string data) {
   SHA1 digest;
-  std::string dataStr = data.toString();
-  digest.update(dataStr);
+  digest.update(data);
   return digest.final();
 }
 

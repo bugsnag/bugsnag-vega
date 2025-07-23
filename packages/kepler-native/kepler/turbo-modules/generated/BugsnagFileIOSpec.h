@@ -38,7 +38,7 @@ public:
   virtual com::amazon::kepler::turbomodule::JSArray listDirectory(std::string dir) = 0;
   virtual bool mkdir(std::string dir) = 0;
   virtual bool deleteFile(std::string path) = 0;
-  virtual std::string sha1(com::amazon::kepler::turbomodule::ArrayBuffer data) = 0;
+  virtual std::string sha1(std::string data) = 0;
 };
 
 } // namespace bugsnag

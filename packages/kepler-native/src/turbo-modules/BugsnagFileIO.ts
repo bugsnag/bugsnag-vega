@@ -24,7 +24,7 @@ export interface BugsnagFileIO extends KeplerTurboModule {
   mkdir: (dir: string) => boolean
   deleteFile: (path: string) => boolean
 
-  sha1: (data: ArrayBuffer) => string
+  sha1: (data: string) => string
 }
 
 // prettier-ignore
