@@ -27,8 +27,14 @@ set(SOURCES
 )
 
 set(NATIVE_DIR ${CMAKE_SOURCE_DIR}/../../packages/kepler-native)
-set(KEPLER_NATIVE_H ${NATIVE_DIR}/kepler/turbo-modules/BugsnagFileIO.h)
-set(KEPLER_NATIVE_S ${NATIVE_DIR}/kepler/turbo-modules/BugsnagFileIO.cpp)
+set(KEPLER_NATIVE_H
+  ${NATIVE_DIR}/kepler/turbo-modules/BugsnagFileIO.h
+  ${NATIVE_DIR}/kepler/turbo-modules/generated/BugsnagFileIOSpec.h
+)
+set(KEPLER_NATIVE_S
+  ${NATIVE_DIR}/kepler/turbo-modules/BugsnagFileIO.cpp
+  ${NATIVE_DIR}/kepler/turbo-modules/generated/BugsnagFileIOSpec.cpp
+)
 
 find_package(turbomoduleAPI CONFIG REQUIRED)
 

@@ -4,7 +4,7 @@
 
 extern "C"
 {
-    __attribute__((visibility("default"))) void
+__attribute__((visibility("default"))) void
     autoLinkKeplerTurboModulesV1() noexcept
     {
       KEPLER_REGISTER_TURBO_MODULE(bugsnag, BugsnagNativeUT);
