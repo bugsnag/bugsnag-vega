@@ -1,32 +1,25 @@
-#ifndef BUGSNAG_NATIVE_UT_H
-#define BUGSNAG_NATIVE_UT_H
-
-#include "Kepler/turbomodule/KeplerTurboModule.h"
+#include "generated/BugsnagNativeUTSpec.h"
 #include "doctest.h"
 
 #include <fstream>
 
-#define TM_API_NAMESPACE com::amazon::kepler::turbomodule
+namespace bugsnag {
 
-namespace bugsnag
-{
-    class BugsnagNativeUT : public TM_API_NAMESPACE::KeplerTurboModule
-    {
-    public:
-        BugsnagNativeUT();
+class BugsnagNativeUT : public BugsnagNativeUTSpec {
+public:
+  BugsnagNativeUT();
+  ~BugsnagNativeUT() noexcept;
 
-        void aggregateMethods(TM_API_NAMESPACE::MethodAggregator<TM_API_NAMESPACE::KeplerTurboModule> &methodAggregator) const noexcept;
+  void configure(std::string path) override;
+  double runUnitTests() override;
+  void readOnlyMemoryCrash() override;
+  void nullptrCrash() override;
+  void manualAbortCrash() override;
+  void throwExceptionCrash() override;
 
-        void configure(std::string path);
-        int runUnitTests();
-        void read_only_memory_crash();
-        void nullptr_dereference_crash();
-        void manual_abort_crash();
-        void throw_exception_crash();
+private:
+  doctest::Context context;
+  std::ofstream utOutput;
+};
 
-      private:
-        doctest::Context context;
-        std::ofstream utOutput;
-    };
-}
-#endif // BUGSNAG_NATIVE_UT_H
+} // namespace bugsnag

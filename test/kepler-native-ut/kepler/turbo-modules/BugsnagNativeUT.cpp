@@ -4,31 +4,18 @@
 #include "Kepler/turbomodule/TMLog.h"
 #include <thread>
 
-#define TM_API_NAMESPACE com::amazon::kepler::turbomodule
+
+using namespace com::amazon::kepler::turbomodule;
 
 namespace bugsnag {
+
 // TODO REMOVE factorial tests - placeholder for unit testing
 int factorial(int number) {
   return number > 1 ? factorial(number - 1) * number : 1;
 }
 
-BugsnagNativeUT::BugsnagNativeUT()
-    : TM_API_NAMESPACE::KeplerTurboModule("BugsnagNativeUT") {}
-
-void BugsnagNativeUT::aggregateMethods(
-    TM_API_NAMESPACE::MethodAggregator<TM_API_NAMESPACE::KeplerTurboModule>
-        &methodAggregator) const noexcept {
-  methodAggregator.addMethod("configure", &BugsnagNativeUT::configure);
-  methodAggregator.addMethod("runUnitTests", &BugsnagNativeUT::runUnitTests);
-  methodAggregator.addMethod("readOnlyMemoryCrash",
-                             &BugsnagNativeUT::read_only_memory_crash);
-  methodAggregator.addMethod("nullptrCrash",
-                             &BugsnagNativeUT::nullptr_dereference_crash);
-  methodAggregator.addMethod("manualAbortCrash",
-                             &BugsnagNativeUT::manual_abort_crash);
-  methodAggregator.addMethod("throwExceptionCrash",
-                             &BugsnagNativeUT::throw_exception_crash);
-}
+BugsnagNativeUT::BugsnagNativeUT() {}
+BugsnagNativeUT::~BugsnagNativeUT() noexcept {};
 
 void BugsnagNativeUT::configure(std::string path) {
   // TODO REMOVE FILE IO usage - placeholder for testing the linking
@@ -40,7 +27,7 @@ void BugsnagNativeUT::configure(std::string path) {
   this->context.setCout(&(this->utOutput));
 }
 
-int BugsnagNativeUT::runUnitTests() {
+double BugsnagNativeUT::runUnitTests() {
   int res = context.run();
   this->utOutput.close();
   return res;
@@ -55,7 +42,7 @@ TEST_CASE("testing the factorial function") {
 
 static void __attribute__((used)) somefakefunc(void) {}
 
-void BugsnagNativeUT::read_only_memory_crash() {
+void BugsnagNativeUT::readOnlyMemoryCrash() {
   TMWARN("[bugsnag] triggered read only memory crash");
   // Write to a read-only page
   volatile char *ptr = (char *)somefakefunc;
@@ -64,19 +51,19 @@ void BugsnagNativeUT::read_only_memory_crash() {
 
 int *global_ptr = nullptr;
 
-void BugsnagNativeUT::nullptr_dereference_crash() {
+void BugsnagNativeUT::nullptrCrash() {
   TMWARN("[bugsnag] triggered nullptr dereference crash");
   *global_ptr = 1;
 }
 
-void BugsnagNativeUT::manual_abort_crash() {
+void BugsnagNativeUT::manualAbortCrash() {
   TMWARN("[bugsnag] triggered manual abort crash");
   abort();
 }
 
 void helper_func_exception() { throw std::runtime_error("my msg"); }
 
-void BugsnagNativeUT::throw_exception_crash() {
+void BugsnagNativeUT::throwExceptionCrash() {
   TMWARN("[bugsnag] triggered unhandled exception crash");
 
   std::thread exception_thread(helper_func_exception);

@@ -15,18 +15,26 @@ if (CMAKE_SYSTEM_NAME STREQUAL Android)
 endif()
 
 set(HEADERS
+  kepler/turbo-modules/generated/BugsnagNativeUTSpec.h
   kepler/turbo-modules/doctest.h
   kepler/turbo-modules/BugsnagNativeUT.h
 )
 
 set(SOURCES
-    kepler/turbo-modules/BugsnagNativeUT.cpp
-    kepler/AutoLinkInit.cpp
+  kepler/turbo-modules/generated/BugsnagNativeUTSpec.cpp
+  kepler/turbo-modules/BugsnagNativeUT.cpp
+  kepler/AutoLinkInit.cpp
 )
 
 set(NATIVE_DIR ${CMAKE_SOURCE_DIR}/../../packages/kepler-native)
-set(KEPLER_NATIVE_H ${NATIVE_DIR}/kepler/turbo-modules/BugsnagFileIO.h)
-set(KEPLER_NATIVE_S ${NATIVE_DIR}/kepler/turbo-modules/BugsnagFileIO.cpp)
+set(KEPLER_NATIVE_H
+  ${NATIVE_DIR}/kepler/turbo-modules/BugsnagFileIO.h
+  ${NATIVE_DIR}/kepler/turbo-modules/generated/BugsnagFileIOSpec.h
+)
+set(KEPLER_NATIVE_S
+  ${NATIVE_DIR}/kepler/turbo-modules/BugsnagFileIO.cpp
+  ${NATIVE_DIR}/kepler/turbo-modules/generated/BugsnagFileIOSpec.cpp
+)
 
 find_package(turbomoduleAPI CONFIG REQUIRED)
 
