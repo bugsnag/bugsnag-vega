@@ -1,6 +1,6 @@
 {
   "name": "@bugsnag/kepler",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "BugSnag error reporter for Kepler applications",
   "author": "BugSnag",
   "homepage": "https://www.bugsnag.com/",
@@ -21,7 +21,7 @@
   ],
   "dependencies": {
     "@bugsnag/core": "^7.19.0",
-    "@bugsnag/kepler-native": "^0.2.1",
+    "@bugsnag/kepler-native": "^0.3.0",
     "@bugsnag/plugin-app-duration": "^7.19.0",
     "@bugsnag/plugin-browser-session": "^7.22.3",
     "@bugsnag/plugin-console-breadcrumbs": "^7.22.3",

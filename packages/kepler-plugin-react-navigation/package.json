@@ -1,6 +1,6 @@
 {
   "name": "@bugsnag/kepler-plugin-react-navigation",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "main": "react-navigation.js",
   "description": "@bugsnag/kepler plugin to update context and leave breadcrumb when the screen changes",
   "publishConfig": {
