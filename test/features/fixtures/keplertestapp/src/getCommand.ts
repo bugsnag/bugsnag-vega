@@ -1,5 +1,6 @@
 import type { Command } from "../types"
 import delay from './utils/delay'
+import { mazeRunnerBaseAddress } from "./utils/config"
 
 const INTERVAL = 500
 
@@ -8,9 +9,9 @@ function getErrorMessage(error: unknown) {
     return String(error)
 }
 
-export async function getCommand (mazeAddress = '10.0.2.2:9339'): Promise<Command> {
+export async function getCommand (): Promise<Command> {
     // poll the server for the next command to run
-    const mazeUrl = `http://${mazeAddress}/command`
+    const mazeUrl = `http://${mazeRunnerBaseAddress}/command`
 
     console.log('[Bugsnag] getCommand entered!')
 
