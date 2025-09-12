@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { Text, View } from "react-native"
 import { BreadcrumbType } from '@bugsnag/core/types'
 import { getStyles } from '../utils/defaultStyle'
+import { mazeRunnerBaseAddress } from '../utils/config'
 
 
 const config = {
@@ -15,7 +16,7 @@ const App = () => {
     useEffect(() => {
       (async () => {
             try {
-                const response = await fetch("https://postman-echo.com/get")
+                const response = await fetch(`http://${mazeRunnerBaseAddress}/reflect`)
                 if (response.ok) {
                     Bugsnag.notify(new Error("NetworkBreadcrumbError"))
                 }
