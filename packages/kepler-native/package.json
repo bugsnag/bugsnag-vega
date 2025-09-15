@@ -16,17 +16,14 @@
     "build:js": "tsc -p tsconfig.json",
     "build:native:debug": "kepler build -b Debug",
     "build:native:release": "kepler build -b Release",
-    "build": "npm-run-all build:js build:native:release",
-    "build:debug": "npm-run-all build:js build:native:debug",
-    "prepack": "npm-run-all build:module",
-    "build:native": "npm-run-all build:native:debug build:native:release",
-    "build:module": "npm-run-all build:js build:native"
+    "build": "npm run build:js && npm run build:native:release",
+    "build:debug": "npm run build:js && npm run build:native:debug",
+    "prepack": "npm run build:module",
+    "build:native": "npm run build:native:debug && npm run build:native:release",
+    "build:module": "npm run build:js && npm run build:native"
   },
   "dependencies": {
     "@amzn/keplerscript-turbomodule-api": "^1.0.0"
-  },
-  "devDependencies": {
-    "npm-run-all": "^4.1.5"
   },
   "peerDependencies": {
     "react": "*",
@@ -41,6 +38,5 @@
       "vega"
     ],
     "api": 0.1
-  },
-  "gitHead": "38613a0a00f00b5ffcd2c03f4b5453aa4c0551f5"
+  }
 }
