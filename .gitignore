@@ -57,8 +57,9 @@ verdaccio-config.yml
 #Jest
 .jest
 
-#rbenv
+#ruby
 .ruby-version
+Gemfile.lock
 
 # vscode
 .vscode
