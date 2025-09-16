@@ -8,7 +8,7 @@
     "react-native.config.js"
   ],
   "scripts": {
-    "clean": "rm -rf node_modules buildinfo.json dist",
+    "clean": "rm -rf node_modules dist build buildinfo.json CMakeUserPresets.json ./*.tgz",
     "test": "jest --colors",
     "lint": "eslint src tst --ext .ts,.tsx",
     "lint:fix": "eslint src tst --ext .ts,.tsx --fix",

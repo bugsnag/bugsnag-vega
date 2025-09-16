@@ -8,7 +8,7 @@
     "react-native.config.js"
   ],
   "scripts": {
-    "clean": "rm -rf node_modules buildinfo.json dist",
+    "clean": "rm -rf node_modules dist build buildinfo.json CMakeUserPresets.json ./*.tgz",
     "kepler-codegen": "keplerscript-turbomodule-api codegen src/turbo-modules/BugsnagKeplerNative.ts -o kepler/turbo-modules/ --new -s BugsnagKeplerNativeTurboModule && npm-run-all clean-codegen-backups",
     "clean-codegen-backups": "rm -rf kepler/turbo-modules/BugsnagKeplerNative.cpp.bak kepler/turbo-modules/BugsnagKeplerNative.h.bak",
     "lint": "eslint src --ext .ts,.tsx",
