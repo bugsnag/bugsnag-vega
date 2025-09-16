@@ -1,0 +1,15 @@
+services:
+  release:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.release
+    environment:
+      GITHUB_USER:
+      GITHUB_ACCESS_TOKEN:
+      RELEASE_BRANCH:
+      VERSION:
+      DIST_TAG:
+      RETRY_PUBLISH:
+    volumes:
+      - ~/.gitconfig:/home/releaser/.gitconfig
+      - ~/.npmrc:/home/releaser/.npmrc
