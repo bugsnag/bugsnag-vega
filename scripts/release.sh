@@ -29,6 +29,8 @@ if [ -z "${RETRY_PUBLISH:-}" ]; then
   npm_config_legacy_peer_deps=false npx lerna version "$VERSION"  --no-push --no-private
 fi
 
+npm run build
+
 # push version bump commit and tags
 git push --follow-tags
 

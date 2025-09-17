@@ -10,6 +10,7 @@ fi
 
 pushd "$projectRoot/packages/kepler-native"
 npm run clean
+npm run build
 popd
 npm run local-npm:publish
 
