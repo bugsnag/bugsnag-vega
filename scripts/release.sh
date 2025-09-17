@@ -42,24 +42,9 @@ npm run build
 git push --follow-tags
 
 # publish
-if [ -z "${RETRY_PUBLISH:-}" ]; then
-  case $VERSION in
-    "prerelease" | "prepatch" | "preminor" | "premajor")
-      npx lerna publish from-git --dist-tag next
-      ;;
-
-    *)
-      npx lerna publish from-git
-      ;;
-  esac
+# publish
+if [ -v RETRY_PUBLISH ]; then
+  npx lerna publish from-package --dist-tag "$DIST_TAG"
 else
-  case $VERSION in
-    "prerelease" | "prepatch" | "preminor" | "premajor")
-      npx lerna publish from-package --dist-tag next
-      ;;
-
-    *)
-      npx lerna publish from-package
-      ;;
-  esac
+  npx lerna publish from-git --dist-tag "$DIST_TAG"
 fi

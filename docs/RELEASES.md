@@ -86,6 +86,6 @@ DIST_TAG=next \
   ./scripts/release.sh
 ```
 
-Prereleases will automatically be published to npm with the dist tag `next`.
+**Note**: Prereleases should be published to npm with the dist tag `next`.
 
 The dist tag ensures that prereleases are not installed by unsuspecting users who do not specify a version – npm automatically adds the `latest` tag to a published module unless one is specified.
