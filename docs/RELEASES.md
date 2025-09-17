@@ -22,18 +22,12 @@ Once the pull request has been approved:
 
 - merge the pull request
 
-You are now ready to make the release. Releases are done using Docker and Docker compose. You do not need to have the release branch checked out on your local machine to make a release – the container pulls a fresh clone of the repo down from GitHub. Prerequisites:
+You are now ready to make the release. Releases are done by running the `./scripts/release.sh` script. You MUST ensure that you have the release branch checked out on your local machine and that your working tree is clean or the script will fail. Prerequisites:
 
-- You will need to clone the repository and have Docker running on your local machine
+- You will need to clone the repository and check out the release branch (usually `main`)
 - Ensure you are logged in to npm and that you have access to publish any packages in the `@bugsnag` namespace
 - Ensure your `.gitconfig` file in your home directory is configured to contain your name and email address
 - Generate a [personal access token](https://github.com/settings/tokens/new) on GitHub and store it somewhere secure
-
-Build the release container:
-
-```sh
-docker compose build release
-```
 
 Ensure the following environment variables are set:
 
@@ -49,7 +43,7 @@ Then make the release:
 VERSION=patch \
 RELEASE_BRANCH=main \
 DIST_TAG=latest
-  docker compose run release
+  ./scripts/release.sh
 ```
 
 This process is interactive and will require you to confirm that you want to publish the changed packages. It will also prompt for 2FA.
@@ -88,7 +82,8 @@ For example:
 ```sh
 VERSION=preminor \
 RELEASE_BRANCH=main \
-  docker compose run release
+DIST_TAG=next \
+  ./scripts/release.sh
 ```
 
 Prereleases will automatically be published to npm with the dist tag `next`.

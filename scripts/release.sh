@@ -14,11 +14,18 @@ if [[ -z ${RELEASE_BRANCH:-} ]]; then error_missing_field "RELEASE_BRANCH"; fi
 if [[ -z ${VERSION:-} ]]; then error_missing_field "VERSION"; fi
 if [[ -z ${DIST_TAG:-} ]]; then error_missing_field "DIST_TAG"; fi
 
-git clone --single-branch --recursive \
-  --branch "$RELEASE_BRANCH" \
-  https://"$GITHUB_USER":"$GITHUB_ACCESS_TOKEN"@github.com/bugsnag/bugsnag-js.git
+# Ensure current branch mathches the expected release branch
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+if [[ "$current_branch" != "$RELEASE_BRANCH" ]]; then
+  echo "Current branch '$current_branch' does not match expected release branch '$RELEASE_BRANCH'"
+  exit 1
+fi
 
-cd /app/bugsnag-kepler
+# Ensure git working tree is clean
+if [[ -n $(git status --porcelain) ]]; then
+  echo "Git working tree is not clean, please commit or stash any changes before running this script"
+  exit 1
+fi
 
 # "ci" rather than "install" ensures the process doesn't make the work tree dirty by modifying lockfiles
 npm ci
