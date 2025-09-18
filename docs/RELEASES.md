@@ -52,16 +52,11 @@ This process is interactive and will require you to confirm that you want to pub
 
 Finally:
 
-- create a release on GitHub https://github.com/bugsnag/bugsnag-js-performance/releases/new
+- create a release on GitHub https://github.com/bugsnag/bugsnag-kepler/releases/new
 - use the tag vX.Y.Z as the name of the release
 - copy the release notes for this version from `CHANGELOG.md`
 - publish the release
-- update and push `next`:
-  ```sh
-    git checkout next
-    git merge main
-    git push
-  ```
+- raise a PR from `main` to `next` to sync changes
 
 ### Prereleases
 
