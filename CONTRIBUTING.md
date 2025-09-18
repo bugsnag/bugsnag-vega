@@ -1,18 +1,18 @@
 Contributing
 ============
 
--   [Fork](https://help.github.com/articles/fork-a-repo) the [SDK on github](https://github.com/bugsnag/bugsnag-kepler)
--   Build and test your changes
--   Commit and push until you are happy with your contribution
--   [Make a pull request](https://help.github.com/articles/using-pull-requests)
--   Thanks!
+Thanks for stopping by! This document should cover most topics surrounding contributing to this repo.
+
+* [Reporting issues](#reporting-issues)
+* [Fixing issues](#fixing-issues)
+* [Adding features](#adding-features)
 
 ## Reporting issues
 
 Are you having trouble getting started? Please [contact us directly](mailto:support@bugsnag.com?subject=%5BGitHub%5D%20bugsnag-kepler%20-%20having%20trouble%20getting%20started%20with%20Bugsnag) for assistance with integrating ~~BugSnag~~ into your application.
 If you have spotted a problem with this module, feel free to open a [new issue](https://github.com/bugsnag/bugsnag-kepler/issues/new). Here are a few things to check before doing so:
 
-* Are you using the latest version of `bugsnag-kepler`? If not, does updating to the latest version fix your issue?
+* Are you using the latest version of `@bugsnag/kepler`? If not, does updating to the latest version fix your issue?
 * Has somebody else [already reported](https://github.com/bugsnag/bugsnag-kepler/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen) your issue? Feel free to add additional context to or check-in on an existing issue that matches your own.
 * Is your issue caused by this module? Only things related to the `bugsnag-kepler` module should be reported here. For anything else, please [contact us directly](mailto:support@bugsnag.com) and we'd be happy to help you out.
 
