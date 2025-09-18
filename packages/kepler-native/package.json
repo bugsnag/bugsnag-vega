@@ -8,19 +8,18 @@
     "react-native.config.js"
   ],
   "scripts": {
-    "clean": "rm -rf node_modules buildinfo.json dist",
+    "clean": "rm -rf node_modules dist build buildinfo.json CMakeUserPresets.json ./*.tgz",
     "kepler-codegen": "keplerscript-turbomodule-api codegen src/turbo-modules/BugsnagKeplerNative.ts -o kepler/turbo-modules/ --new -s BugsnagKeplerNativeTurboModule && npm-run-all clean-codegen-backups",
     "clean-codegen-backups": "rm -rf kepler/turbo-modules/BugsnagKeplerNative.cpp.bak kepler/turbo-modules/BugsnagKeplerNative.h.bak",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
-    "build:js": "tsc -p tsconfig.json",
-    "build:native:debug": "kepler build -b Debug",
-    "build:native:release": "kepler build -b Release",
-    "build": "npm run build:js && npm run build:native:release",
+    "build": "npm run build:js && npm run build:native",
+    "build:release": "npm run build:js && npm run build:native:release",
     "build:debug": "npm run build:js && npm run build:native:debug",
-    "prepack": "npm run build:module",
+    "build:js": "tsc -p tsconfig.json",
     "build:native": "npm run build:native:debug && npm run build:native:release",
-    "build:module": "npm run build:js && npm run build:native"
+    "build:native:debug": "kepler build -b Debug",
+    "build:native:release": "kepler build -b Release"
   },
   "dependencies": {
     "@amzn/keplerscript-turbomodule-api": "^1.0.0"

@@ -5,6 +5,7 @@
     "packages/*"
   ],
   "scripts": {
+    "build": "lerna run build",
     "test:lint": "eslint --max-warnings=0 .",
     "test:unit": "jest",
     "local-npm:publish": "lerna publish \"$VERSION_IDENTIFIER\" --yes --force-publish --exact --no-push --no-git-reset --no-git-tag-version --registry 'http://0.0.0.0:5539'",
