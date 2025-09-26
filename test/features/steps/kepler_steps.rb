@@ -19,21 +19,21 @@ When('I configure the endpoints to default') do
 end
 
 When('I restart the test fixture') do
-  Maze::Runner.run_command("kepler device terminate-app -a com.bugsnag.fixtures.keplertestapp.main")
-  Maze::Runner.run_command("kepler device launch-app -a com.bugsnag.fixtures.keplertestapp.main")
+  Maze::Runner.run_command("kepler device terminate-app -a com.bugsnag.fixtures.vegatestapp.main")
+  Maze::Runner.run_command("kepler device launch-app -a com.bugsnag.fixtures.vegatestapp.main")
 end
 
 When('I print error folder contents') do
   # Only on the simulator
   if $simulator
-    Maze::Runner.run_command("kepler device run-cmd --command 'ls -la /home/app_user/packages/com.bugsnag.fixtures.keplertestapp/data/bugsnag/errors'")
+    Maze::Runner.run_command("kepler device run-cmd --command 'ls -la /home/app_user/packages/com.bugsnag.fixtures.vegatestapp/data/bugsnag/errors'")
   end
 end
 
 When('I copy error file') do
   # Only on the simulator
   if $simulator
-    Maze::Runner.run_command("kepler device copy-from -d Simulator --source /home/app_user/packages/com.bugsnag.fixtures.keplertestapp/data/bugsnag/errors/* --destination maze_output/")
+    Maze::Runner.run_command("kepler device copy-from -d Simulator --source /home/app_user/packages/com.bugsnag.fixtures.vegatestapp/data/bugsnag/errors/* --destination maze_output/")
   end
 end
 

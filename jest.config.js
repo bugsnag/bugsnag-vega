@@ -9,9 +9,9 @@ module.exports = {
   ],
   projects: [
     {
-      displayName: 'kepler',
-      roots: ['<rootDir>/packages/kepler', '<rootDir>/packages/kepler-plugin-react-navigation'],
-      testMatch: ['<rootDir>/packages/kepler/**/*.test.ts', '<rootDir>/packages/kepler-plugin-react-navigation/**/*.test.tsx'],
+      displayName: 'vega',
+      roots: ['<rootDir>/packages/vega', '<rootDir>/packages/vega-plugin-react-navigation'],
+      testMatch: ['<rootDir>/packages/vega/**/*.test.ts', '<rootDir>/packages/vega-plugin-react-navigation/**/*.test.tsx'],
       preset: 'react-native',
       transformIgnorePatterns: [
         'node_modules/(?!(jest-)?react-native|@bugsnag/delivery-fetch)/'

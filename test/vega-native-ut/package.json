@@ -1,0 +1,52 @@
+{
+  "name": "@bugsnag/vega-native-ut",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "react-native.config.js"
+  ],
+  "scripts": {
+    "clean": "rm -rf node_modules dist build buildinfo.json CMakeUserPresets.json ./*.tgz",
+    "test": "jest --colors",
+    "lint": "eslint src tst --ext .ts,.tsx",
+    "lint:fix": "eslint src tst --ext .ts,.tsx --fix",
+    "build:js": "tsc -p tsconfig.json",
+    "build:native:debug": "kepler build -b Debug",
+    "build:native:release": "kepler build -b Release",
+    "build": "npm run build:js && npm run build:native:release",
+    "build:debug": "npm run build:js && npm run build:native:debug",
+    "build:native": "npm run build:native:debug && npm run build:native:release",
+    "build:module": "npm run build:js && npm run build:native",
+    "prepack": "npm run build:module",
+    "local-npm:publish": "npm publish --registry http://0.0.0.0:5539"
+  },
+  "dependencies": {
+    "@amzn/keplerscript-turbomodule-api": "^1.0.0"
+  },
+  "devDependencies": {
+    "@react-native/eslint-config": "0.72.2",
+    "@types/jest": "^28.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.0",
+    "babel-jest": "^28.0.0",
+    "eslint": "^8.12.0",
+    "jest": "^28.0.0",
+    "metro-react-native-babel-preset": "^0.76.5",
+    "prettier": "^2.6.2",
+    "ts-jest": "^28.0.0",
+    "typescript": "4.8.4"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "kepler": {
+    "projectType": "turbomodule",
+    "targets": [
+      "tv"
+    ],
+    "features": ["vega"],
+    "api": 0.1
+  }
+}

@@ -18,7 +18,7 @@ npm run local-npm:start &
 
 # Install packages into the test fixture
 popd
-fixtureDir="`dirname $0`/../fixtures/keplertestapp"
+fixtureDir="`dirname $0`/../fixtures/vegatestapp"
 pushd "$fixtureDir"
 npm run clean
 rm -rf build package-lock.json

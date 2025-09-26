@@ -1,0 +1,38 @@
+{
+  "name": "@bugsnag/vega",
+  "version": "0.3.0",
+  "description": "BugSnag error reporter for Vega applications",
+  "author": "BugSnag",
+  "homepage": "https://www.bugsnag.com/",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bugsnag/bugsnag-vega.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bugsnag/bugsnag-vega/issues"
+  },
+  "type": "module",
+  "main": "lib/notifier.js",
+  "types": "types/bugsnag.d.ts",
+  "files": [
+    "lib",
+    "types"
+  ],
+  "dependencies": {
+    "@bugsnag/core": "^7.19.0",
+    "@bugsnag/plugin-app-duration": "^7.19.0",
+    "@bugsnag/plugin-browser-session": "^7.22.3",
+    "@bugsnag/plugin-console-breadcrumbs": "^7.22.3",
+    "@bugsnag/plugin-network-breadcrumbs": "^7.22.3",
+    "@bugsnag/plugin-react": "^7.19.0",
+    "@bugsnag/plugin-react-native-global-error-handler": "^7.22.3",
+    "@bugsnag/plugin-react-native-unhandled-rejection": "^7.19.0",
+    "@bugsnag/vega-native": "0.3.0",
+    "iserror": "^0.0.2"
+  },
+  "peerDependencies": {
+    "@amzn/react-native-device-info": "~2.0.0"
+  },
+  "gitHead": "5bcd80e6a9928f8a7e16db1424c5f3f7354e176a"
+}

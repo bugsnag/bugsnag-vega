@@ -1,0 +1,46 @@
+{
+  "name": "@bugsnag/vega-plugin-react-navigation",
+  "version": "0.3.0",
+  "main": "react-navigation.js",
+  "description": "@bugsnag/vega plugin to update context and leave breadcrumb when the screen changes",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "*.js",
+    "types"
+  ],
+  "scripts": {
+    "test:types": "tsc -p tsconfig.json"
+  },
+  "types": "types/bugsnag-plugin-react-navigation.d.ts",
+  "author": "Bugsnag",
+  "license": "MIT",
+  "devDependencies": {
+    "@amzn/keplerscript-react-native-reanimated": "~2.0.0",
+    "@amzn/react-native-safe-area-context": "~2.0.0",
+    "@amzn/react-native-screens": "~2.0.0",
+    "@amzn/react-navigation__core": "~2.0.0",
+    "@amzn/react-navigation__drawer": "~2.0.0",
+    "@amzn/react-navigation__native": "~2.0.0",
+    "@amzn/react-navigation__routers": "~2.0.0",
+    "@amzn/react-navigation__stack": "~2.0.0",
+    "@bugsnag/core": "^7.19.0",
+    "@react-navigation/native": "^6.1.17",
+    "@types/react": "^16.9.49",
+    "@types/react-native": "^0.63.20",
+    "@types/react-test-renderer": "^16.9.3",
+    "react": "18.2.0",
+    "react-native": "0.72.0"
+  },
+  "peerDependencies": {
+    "@bugsnag/core": "^7.0.0",
+    "@react-navigation/native": "^5.0 || ^6.0"
+  },
+  "peerDependenciesMeta": {
+    "@bugsnag/core": {
+      "optional": true
+    }
+  },
+  "gitHead": "5bcd80e6a9928f8a7e16db1424c5f3f7354e176a"
+}

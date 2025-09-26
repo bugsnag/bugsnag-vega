@@ -24,7 +24,7 @@ Scenario: Run native crash - readonly memory location
   And the event "device.time" is not null
 
   # App data
-  And the event "app.id" equals "com.bugsnag.fixtures.keplertestapp"
+  And the event "app.id" equals "com.bugsnag.fixtures.vegatestapp"
   And the event "app.releaseStage" equals "production"
   And the event "app.binaryArch" is not null
 
@@ -51,7 +51,7 @@ Scenario: Run native crash - readonly memory location, with full config
   And the event "user.email" equals "abcd"
 
   # App data
-  And the event "app.id" equals "com.bugsnag.fixtures.keplertestapp"
+  And the event "app.id" equals "com.bugsnag.fixtures.vegatestapp"
   And the event "app.releaseStage" equals "test"
   And the event "app.version" equals "1.2.3"
   And the event "app.type" equals "kepler"

@@ -3,7 +3,7 @@ Feature: Sessions
 Scenario: Automatic sessions enabled by default
   When I run "HandledJsErrorScenario"
   And I wait to receive a session
-  Then the session is valid for the session reporting API version "1" for the "Bugsnag Kepler" notifier
+  Then the session is valid for the session reporting API version "1" for the "Bugsnag Vega" notifier
   And the session payload has a valid sessions array
 
   # Device data
@@ -25,7 +25,7 @@ Scenario: Manual sessions
   And I wait to receive 4 errors
 
   # Initial session
-  Then the session is valid for the session reporting API version "1" for the "Bugsnag Kepler" notifier
+  Then the session is valid for the session reporting API version "1" for the "Bugsnag Vega" notifier
   And the session payload has a valid sessions array
   And the session payload field "sessions.0.id" is stored as the value "initial_session_id"
 
@@ -75,7 +75,7 @@ Scenario: Manual sessions
 Scenario: Modifying sessions via onSession callbacks
   When I run "OnSessionCallbackScenario"
   And I wait to receive a session
-  Then the session is valid for the session reporting API version "1" for the "Bugsnag Kepler" notifier
+  Then the session is valid for the session reporting API version "1" for the "Bugsnag Vega" notifier
   And the session payload has a valid sessions array
   And the session payload field "app.releaseStage" equals "test"
   And the session payload field "sessions.0.user.id" equals "123"

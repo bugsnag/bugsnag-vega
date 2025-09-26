@@ -1,5 +1,5 @@
 {
-  "name": "bugsnag-kepler",
+  "name": "bugsnag-vega",
   "private": true,
   "workspaces": [
     "packages/*"
