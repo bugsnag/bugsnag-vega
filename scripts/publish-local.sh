@@ -8,13 +8,13 @@ if [[ "$VERSION_IDENTIFIER" == "" ]]; then
   export VERSION_IDENTIFIER
 fi
 
-pushd "$projectRoot/packages/kepler-native"
+pushd "$projectRoot/packages/vega-native"
 npm run clean
 npm run build
 popd
 npm run local-npm:publish
 
-pushd "$projectRoot/test/kepler-native-ut"
+pushd "$projectRoot/test/vega-native-ut"
 npm run clean
 npm install
 npm run local-npm:publish

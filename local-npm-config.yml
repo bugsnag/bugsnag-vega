@@ -20,10 +20,10 @@ packages:
   '@bugsnag/cuid':
     access: $anonymous
     proxy: npmjs
-  '@bugsnag/kepler':
+  '@bugsnag/vega':
     access: $anonymous
     publish: $anonymous
-  '@bugsnag/kepler-*':
+  '@bugsnag/vega-*':
     access: $anonymous
     publish: $anonymous
   '@bugsnag/*':

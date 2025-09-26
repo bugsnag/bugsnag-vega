@@ -64,9 +64,9 @@
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
   },
   "include": [
-    "packages/kepler",
-    "packages/kepler-native",
-    "packages/kepler-plugin-react-navigation"
+    "packages/vega",
+    "packages/vega-native",
+    "packages/vega-plugin-react-navigation"
   ],
   "exclude": [
     "node_modules", "babel.config.js", "metro.config.js", "jest.config.js"

@@ -1,0 +1,42 @@
+{
+  "name": "@bugsnag/vega-native",
+  "version": "0.3.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "react-native.config.js"
+  ],
+  "scripts": {
+    "clean": "rm -rf node_modules dist build buildinfo.json CMakeUserPresets.json ./*.tgz",
+    "kepler-codegen": "keplerscript-turbomodule-api codegen src/turbo-modules/BugsnagVegaNative.ts -o kepler/turbo-modules/ --new -s BugsnagVegaNativeTurboModule && npm-run-all clean-codegen-backups",
+    "clean-codegen-backups": "rm -rf kepler/turbo-modules/BugsnagVegaNative.cpp.bak kepler/turbo-modules/BugsnagVegaNative.h.bak",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "build": "npm run build:js && npm run build:native",
+    "build:release": "npm run build:js && npm run build:native:release",
+    "build:debug": "npm run build:js && npm run build:native:debug",
+    "build:js": "tsc -p tsconfig.json",
+    "build:native": "npm run build:native:debug && npm run build:native:release",
+    "build:native:debug": "kepler build -b Debug",
+    "build:native:release": "kepler build -b Release"
+  },
+  "dependencies": {
+    "@amzn/keplerscript-turbomodule-api": "^1.0.0"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "kepler": {
+    "projectType": "turbomodule",
+    "targets": [
+      "tv"
+    ],
+    "features": [
+      "vega"
+    ],
+    "api": 0.1
+  },
+  "gitHead": "5bcd80e6a9928f8a7e16db1424c5f3f7354e176a"
+}

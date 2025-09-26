@@ -52,7 +52,7 @@ This process is interactive and will require you to confirm that you want to pub
 
 Finally:
 
-- create a release on GitHub https://github.com/bugsnag/bugsnag-kepler/releases/new
+- create a release on GitHub https://github.com/bugsnag/bugsnag-vega/releases/new
 - use the tag vX.Y.Z as the name of the release
 - copy the release notes for this version from `CHANGELOG.md`
 - publish the release
