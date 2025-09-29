@@ -1,5 +1,5 @@
 import { Platform } from 'react-native'
-import DeviceInfo from '@amzn/react-native-device-info'
+import DeviceInfo from '@amazon-devices/react-native-device-info'
 import { BugsnagVegaNative } from '@bugsnag/vega-native'
 
 const getEngine = () => global.HermesInternal ? 'hermes' : 'unknown'

@@ -1,5 +1,5 @@
 import { Plugin, Client } from '@bugsnag/core'
-import { NavigationContainer } from "@amzn/react-navigation__native"
+import { NavigationContainer } from "@amazon-devices/react-navigation__native"
 
 declare class BugsnagPluginReactNavigation implements Plugin {
   constructor()

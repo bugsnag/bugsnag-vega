@@ -1,4 +1,4 @@
-import { AsyncStorage } from "@amzn/react-native-kepler"
+import { AsyncStorage } from "@amazon-devices/react-native-kepler"
 
 const LAST_COMMAND_KEY = "lastCommandUUID"
 

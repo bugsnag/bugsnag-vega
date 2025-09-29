@@ -22,7 +22,7 @@
     "build:native:release": "kepler build -b Release"
   },
   "dependencies": {
-    "@amzn/keplerscript-turbomodule-api": "^1.0.0"
+    "@amazon-devices/keplerscript-turbomodule-api": "^1.0.0"
   },
   "peerDependencies": {
     "react": "*",
@@ -37,6 +37,5 @@
       "vega"
     ],
     "api": 0.1
-  },
-  "gitHead": "5bcd80e6a9928f8a7e16db1424c5f3f7354e176a"
+  }
 }

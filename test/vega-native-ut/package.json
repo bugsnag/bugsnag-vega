@@ -23,7 +23,7 @@
     "local-npm:publish": "npm publish --registry http://0.0.0.0:5539"
   },
   "dependencies": {
-    "@amzn/keplerscript-turbomodule-api": "^1.0.0"
+    "@amazon-devices/keplerscript-turbomodule-api": "^1.0.0"
   },
   "devDependencies": {
     "@react-native/eslint-config": "0.72.2",
