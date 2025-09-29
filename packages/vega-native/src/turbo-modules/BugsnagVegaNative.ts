@@ -1,5 +1,5 @@
-import type { KeplerTurboModule } from '@amzn/keplerscript-turbomodule-api'
-import { TurboModuleRegistry } from '@amzn/keplerscript-turbomodule-api'
+import type { KeplerTurboModule } from '@amazon-devices/keplerscript-turbomodule-api'
+import { TurboModuleRegistry } from '@amazon-devices/keplerscript-turbomodule-api'
 
 interface BugsnagConfiguration {
   dummyStrValue: string

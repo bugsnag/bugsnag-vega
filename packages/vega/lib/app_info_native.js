@@ -1,4 +1,4 @@
-import DeviceInfo from '@amzn/react-native-device-info'
+import DeviceInfo from '@amazon-devices/react-native-device-info'
 import { Event } from '@bugsnag/core'
 import { BugsnagVegaNative } from '@bugsnag/vega-native'
 

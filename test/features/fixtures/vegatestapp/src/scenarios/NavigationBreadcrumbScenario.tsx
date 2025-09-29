@@ -1,6 +1,6 @@
 import Bugsnag, { type VegaConfig } from '@bugsnag/vega'
-import { NavigationContainer } from "@amzn/react-navigation__native"
-import { createStackNavigator } from "@amzn/react-navigation__stack"
+import { NavigationContainer } from "@amazon-devices/react-navigation__native"
+import { createStackNavigator } from "@amazon-devices/react-navigation__stack"
 import BugsnagPluginReactNavigation from "@bugsnag/vega-plugin-react-navigation"
 import React, { useEffect } from 'react'
 import { Text, View } from 'react-native'

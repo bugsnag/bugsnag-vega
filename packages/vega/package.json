@@ -32,7 +32,6 @@
     "iserror": "^0.0.2"
   },
   "peerDependencies": {
-    "@amzn/react-native-device-info": "~2.0.0"
-  },
-  "gitHead": "5bcd80e6a9928f8a7e16db1424c5f3f7354e176a"
+    "@amazon-devices/react-native-device-info": "~2.0.0"
+  }
 }

@@ -2,9 +2,9 @@ import Plugin from '..'
 import Client from '@bugsnag/core/client'
 import TestRenderer from 'react-test-renderer'
 import * as React from 'react'
-import { NavigationContainer, NavigationContainerRef } from "@amzn/react-navigation__native"
+import { NavigationContainer, NavigationContainerRef } from "@amazon-devices/react-navigation__native"
 
-jest.mock('@amzn/react-navigation__native')
+jest.mock('@amazon-devices/react-navigation__native')
 
 afterEach(() => jest.clearAllMocks())
 
