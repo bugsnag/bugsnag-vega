@@ -5,11 +5,6 @@ auth:
 uplinks:
   npmjs:
     url: https://registry.npmjs.org/
-  amzn:
-    url: https://k-artifactory-external.labcollab.net/artifactory/api/npm/kepler-npm-rc-local/
-    auth:
-      type: bearer
-      token_env: AMZN_AUTHENTICATION
 log:
   level: trace
 max_body_size: 100mb
@@ -29,9 +24,6 @@ packages:
   '@bugsnag/*':
     access: $anonymous
     proxy: npmjs
-  '@amazon-devices/*':
-    access: $anonymous
-    proxy: amzn
   '@*/*':
     access: $anonymous
     proxy: npmjs

@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-if [[ "$AMZN_AUTHENTICATION" == "" ]]; then
-  echo "Missing required env var AMZN_AUTHENTICATION"
-  exit 1
-fi
-
 projectRoot="`dirname $0`/../../.."
 rm -rf "$projectRoot/.verdaccio/@bugsnag"
 pushd "$projectRoot"

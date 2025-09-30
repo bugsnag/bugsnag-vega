@@ -5,9 +5,6 @@ name: Node CI
 
 on: [push]
 
-env:
-  AMZN_AUTHENTICATION: ${{ secrets.AMZN_AUTHENTICATION }}
-
 jobs:
   linting:
     runs-on: ubuntu-latest

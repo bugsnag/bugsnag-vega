@@ -6,7 +6,7 @@ You will need to ensure that the kepler platform tools are installed and set up 
 
 ## Building the test fixture
 
-To build the test fixture, ensure the `AMZN_AUTHENTICATION` environment variable is set and run `features/scripts/build-fixture.sh`. This script will:
+To build the test fixture, run `features/scripts/build-fixture.sh`. This script will:
 - Start the verdaccio server
 - Build and publish the latest packages
 - Install packages into the test fixture
