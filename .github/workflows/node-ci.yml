@@ -5,9 +5,6 @@ name: Node CI
 
 on: [push]
 
-env:
-  AMZN_AUTHENTICATION: ${{ secrets.AMZN_AUTHENTICATION }}
-
 jobs:
   linting:
     runs-on: ubuntu-latest
@@ -18,9 +15,7 @@ jobs:
           node-version: 22
           cache: 'npm'
 
-      - run: npm install -g verdaccio@5.29.0
-      - run: npm run local-npm:start &
-      - run: rm -f package-lock.json && npm install --registry 'http://0.0.0.0:5539' --legacy-peer-deps
+      - run: npm ci
       - run: npm run test:lint
 
   unit_tests:
@@ -32,7 +27,5 @@ jobs:
           node-version: 22
           cache: 'npm'
 
-      - run: npm install -g verdaccio@5.29.0
-      - run: npm run local-npm:start &
-      - run: rm -f package-lock.json && npm install --registry 'http://0.0.0.0:5539' --legacy-peer-deps
+      - run: npm ci
       - run: npm run test:unit
