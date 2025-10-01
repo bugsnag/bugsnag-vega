@@ -1,6 +1,6 @@
 {
   "name": "@bugsnag/vega-plugin-react-navigation",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "main": "react-navigation.js",
   "description": "@bugsnag/vega plugin to update context and leave breadcrumb when the screen changes",
   "publishConfig": {

@@ -1,8 +1,11 @@
 {
   "name": "@bugsnag/vega-native",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "dist",
     "react-native.config.js"
