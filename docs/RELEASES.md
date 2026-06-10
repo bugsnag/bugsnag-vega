@@ -26,7 +26,7 @@ You are now ready to make the release. Releases are done by running the `./scrip
 
 - You will need to clone the repository and check out the release branch (usually `main`)
 - Ensure you are logged in to npm and that you have access to publish any packages in the `@bugsnag` namespace
-- Generate a [granular access token](https://www.npmjs.com/settings/{username}/tokens/granular-access-tokens/new) on  NPM to bypass 2FA and store it somewhere secure
+- Generate a [granular access token](https://www.npmjs.com/settings/{username}/tokens/granular-access-tokens/new) on NPM as a fallback mechanism when 2FA is not feasible and store it somewhere secure
 - Ensure your `.gitconfig` file in your home directory is configured to contain your name and email address
 - Generate a [personal access token](https://github.com/settings/tokens/new) on GitHub and store it somewhere secure
 
