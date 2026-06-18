@@ -26,6 +26,7 @@ You are now ready to make the release. Releases are done by running the `./scrip
 
 - You will need to clone the repository and check out the release branch (usually `main`)
 - Ensure you are logged in to npm and that you have access to publish any packages in the `@bugsnag` namespace
+- Generate a [granular access token](https://www.npmjs.com/settings/{username}/tokens/granular-access-tokens/new) on NPM as a fallback mechanism when 2FA is not feasible and store it somewhere secure
 - Ensure your `.gitconfig` file in your home directory is configured to contain your name and email address
 - Generate a [personal access token](https://github.com/settings/tokens/new) on GitHub and store it somewhere secure
 
@@ -33,6 +34,7 @@ Ensure the following environment variables are set:
 
 - GITHUB_USER
 - GITHUB_ACCESS_TOKEN
+- NPM_TOKEN
 - RELEASE_BRANCH
 - VERSION
 - DIST_TAG
@@ -46,7 +48,7 @@ DIST_TAG=latest
   ./scripts/release.sh
 ```
 
-This process is interactive and will require you to confirm that you want to publish the changed packages. It will also prompt for 2FA.
+This process is interactive and will require you to confirm that you want to publish the changed packages.
 
 <small>Note: if a prerelease was made, to graduate it into a normal release you will want to use `patch` as the version.</small>
 
