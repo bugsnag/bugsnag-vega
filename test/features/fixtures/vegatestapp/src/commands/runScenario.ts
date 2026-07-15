@@ -13,8 +13,16 @@ export async function runScenario(rootTag: number, scenarioName: string, apiKey:
         endpoints: { notify, sessions },
         ...scenario.config
     }
+    const sanitizedConfig = {
+        ...config,
+        apiKey: '[REDACTED]',
+        endpoints: {
+            notify: '[REDACTED]',
+            sessions: '[REDACTED]'
+        }
+    }
 
-    console.log(`[Bugsnag] Calling Bugsnag.start with config: ${JSON.stringify(config)}`)
+    console.log(`[Bugsnag] Calling Bugsnag.start with config: ${JSON.stringify(sanitizedConfig)}`)
     Bugsnag.start(config)
 
     const appParams = { rootTag, fabric: true, concurrentRoot: true }
