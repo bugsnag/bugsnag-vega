@@ -19,5 +19,6 @@ export async function startBugsnag(scenarioName: string, apiKey: string, notify:
       sessions: '[REDACTED]'
     }
   }
+  console.log(`[Bugsnag] Calling Bugsnag.start with config: ${JSON.stringify(sanitizedConfig)}`)
   Bugsnag.start(config)
 }
