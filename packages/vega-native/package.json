@@ -28,8 +28,8 @@
     "@amazon-devices/keplerscript-turbomodule-api": "^1.0.0"
   },
   "peerDependencies": {
-    "react": "*",
-    "react-native": "*"
+    "react": ">=18.2.0",
+    "react-native": ">=0.72.0"
   },
   "kepler": {
     "projectType": "turbomodule",
