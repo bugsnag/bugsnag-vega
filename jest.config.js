@@ -23,7 +23,7 @@ module.exports = {
         '^.+\\.[jt]sx?$': ['babel-jest', { configFile: './babel.config.js' }]
       },
       transformIgnorePatterns: [
-        'node_modules/(?!(react-native|@react-native|@bugsnag/delivery-fetch)/)'
+        'node_modules/(?!(react-native|@react-native|@amazon-devices|@bugsnag/delivery-fetch)/)'
       ],
       moduleNameMapper: {
         '^react-native$': '<rootDir>/node_modules/react-native/index.js'
