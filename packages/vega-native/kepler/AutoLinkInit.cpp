@@ -6,7 +6,7 @@
 extern "C" {
 __attribute__((visibility("default"))) void
 autoLinkKeplerTurboModulesV1() noexcept {
-  KEPLER_REGISTER_TURBO_MODULE(bugsnag, BugsnagVegaNative);
+  KEPLER_REGISTER_TURBO_MODULE(BugsnagVegaNativeTurboModule, BugsnagVegaNative);
   KEPLER_REGISTER_TURBO_MODULE(bugsnag, BugsnagFileIO);
 }
 }

@@ -40,5 +40,8 @@
       "vega"
     ],
     "api": 0.1
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
   }
 }
