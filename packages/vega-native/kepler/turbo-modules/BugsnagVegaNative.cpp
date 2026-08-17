@@ -12,6 +12,7 @@
 #include <unistd.h>
 
 using namespace com::amazon::kepler::turbomodule;
+using namespace bugsnag;
 
 namespace BugsnagVegaNativeTurboModule {
 

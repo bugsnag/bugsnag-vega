@@ -30,7 +30,7 @@ public:
   void nativeCrash() override;
 
 private:
-  Client *bugsnag;
+  bugsnag::Client *bugsnag;
   std::string device_id;
 };
 
