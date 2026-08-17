@@ -15,6 +15,7 @@ describe('vega config', () => {
     jest.spyOn(console, 'debug').mockImplementation(() => {})
     jest.spyOn(console, 'warn').mockImplementation(() => {})
     jest.isolateModules(() => {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       Bugsnag = require('../lib/notifier').default
     })
   })
@@ -45,6 +46,7 @@ describe('vega config', () => {
 
       // @ts-expect-error __DEV__ is a const
       __DEV__ = false
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       let config = require('../lib/config').default
       expect(config.releaseStage.defaultValue()).toBe('production')
 
@@ -52,6 +54,7 @@ describe('vega config', () => {
 
       // @ts-expect-error __DEV__ is a const
       __DEV__ = true
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       config = require('../lib/config').default
       expect(config.releaseStage.defaultValue()).toBe('development')
     })

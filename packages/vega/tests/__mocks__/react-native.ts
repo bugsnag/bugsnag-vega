@@ -16,7 +16,7 @@ export const Platform = new class {
     return {
       reactNativeVersion: {
         major: 0,
-        minor: 72,
+        minor: 83,
         patch: 0
       }
     }

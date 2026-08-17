@@ -10,12 +10,24 @@ module.exports = {
   projects: [
     {
       displayName: 'vega',
-      roots: ['<rootDir>/packages/vega', '<rootDir>/packages/vega-plugin-react-navigation'],
-      testMatch: ['<rootDir>/packages/vega/**/*.test.ts', '<rootDir>/packages/vega-plugin-react-navigation/**/*.test.tsx'],
-      preset: 'react-native',
+      roots: [
+        '<rootDir>/packages/vega',
+        '<rootDir>/packages/vega-plugin-react-navigation'
+      ],
+      testMatch: [
+        '<rootDir>/packages/vega/**/*.test.ts',
+        '<rootDir>/packages/vega-plugin-react-navigation/**/*.test.tsx'
+      ],
+      testEnvironment: 'jsdom',
+      transform: {
+        '^.+\\.[jt]sx?$': ['babel-jest', { configFile: './babel.config.js' }]
+      },
       transformIgnorePatterns: [
-        'node_modules/(?!(jest-)?react-native|@bugsnag/delivery-fetch)/'
-      ]
+        'node_modules/(?!(react-native|@react-native|@amazon-devices|@bugsnag/delivery-fetch)/)'
+      ],
+      moduleNameMapper: {
+        '^react-native$': '<rootDir>/node_modules/react-native/index.js'
+      }
     }
   ]
 }
