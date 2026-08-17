@@ -61,7 +61,7 @@ describe('device plugin', () => {
     expect(payloads[0].events[0].device.osName).toBe('Kepler')
     expect(payloads[0].events[0].device.osVersion).toBe('1.1')
     expect(payloads[0].events[0].device.runtimeVersions).toBeDefined()
-    expect(payloads[0].events[0].device.runtimeVersions.reactNative).toBe('0.72.0')
+    expect(payloads[0].events[0].device.runtimeVersions.reactNative).toBe('0.83.0')
     expect(payloads[0].events[0].device.runtimeVersions.reactNativeJsEngine).toBe('hermes')
     expect(payloads[0].events[0].device.time instanceof Date).toBe(true)
   })
@@ -96,7 +96,7 @@ describe('device plugin', () => {
     expect(payloads[0].device.osName).toBe('Kepler')
     expect(payloads[0].device.osVersion).toBe('1.1')
     expect(payloads[0].device.runtimeVersions).toBeDefined()
-    expect(payloads[0].device.runtimeVersions.reactNative).toBe('0.72.0')
+    expect(payloads[0].device.runtimeVersions.reactNative).toBe('0.83.0')
     expect(payloads[0].device.runtimeVersions.reactNativeJsEngine).toBe('hermes')
   })
 
@@ -119,7 +119,7 @@ describe('device plugin', () => {
       osName: 'Kepler',
       osVersion: '1.1',
       runtimeVersions: {
-        reactNative: '0.72.0',
+        reactNative: '0.83.0',
         reactNativeJsEngine: 'hermes'
       }
     })

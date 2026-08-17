@@ -21,7 +21,9 @@ describe('vega notifier', () => {
 
   beforeEach(() => {
     jest.isolateModules(() => {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       Bugsnag = require('../lib/notifier').default
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       BugsnagFileIO = require('@bugsnag/vega-native').BugsnagFileIO
     })
   })

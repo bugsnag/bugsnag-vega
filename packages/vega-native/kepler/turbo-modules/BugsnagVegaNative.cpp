@@ -12,6 +12,7 @@
 #include <unistd.h>
 
 using namespace com::amazon::kepler::turbomodule;
+using namespace bugsnag;
 
 namespace bugsnag {
 
@@ -52,8 +53,8 @@ BugsnagVegaNative::~BugsnagVegaNative() noexcept {};
 JSObject BugsnagVegaNative::configure(JSObject configuration) {
   auto bsg_config = std::make_unique<Configuration>();
 
-  std::string api_key = get_js_value<std::string>(configuration, "apikey", "");
-  bsg_config->api_key = api_key;
+  std::string api_key = get_js_value<std::string>(configuration, "apikey", ""); // gitleaks:allow
+  bsg_config->api_key = api_key; // gitleaks:allow
 
   std::string persistence_dir = get_js_value<std::string>(
       configuration, "persistenceDirectory", "/data/bugsnag");
