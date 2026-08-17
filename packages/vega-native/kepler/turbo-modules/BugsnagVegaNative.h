@@ -1,7 +1,7 @@
 #include "BugsnagClient.h"
 #include "generated/BugsnagVegaNativeSpec.h"
 
-namespace BugsnagVegaNativeTurboModule {
+namespace bugsnag {
 
 class BugsnagVegaNative : public BugsnagVegaNativeSpec {
 public:
@@ -34,4 +34,4 @@ private:
   std::string device_id;
 };
 
-} // namespace BugsnagVegaNativeTurboModule
+} // namespace bugsnag

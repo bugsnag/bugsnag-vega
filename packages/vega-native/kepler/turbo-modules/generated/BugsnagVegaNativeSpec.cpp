@@ -11,7 +11,7 @@
 
 using namespace com::amazon::kepler::turbomodule;
 
-namespace BugsnagVegaNativeTurboModule {
+namespace bugsnag {
 
 BugsnagVegaNativeSpec::BugsnagVegaNativeSpec() : KeplerTurboModule("BugsnagVegaNative") {}
 
@@ -35,4 +35,4 @@ void BugsnagVegaNativeSpec::aggregateMethods(MethodAggregator<KeplerTurboModule>
   methodAggregator.addMethod("nativeCrash", &BugsnagVegaNativeSpec::nativeCrash);
 }
 
-} // namespace BugsnagVegaNativeTurboModule
+} // namespace bugsnag

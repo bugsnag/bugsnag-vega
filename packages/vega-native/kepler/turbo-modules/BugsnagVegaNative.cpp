@@ -14,7 +14,7 @@
 using namespace com::amazon::kepler::turbomodule;
 using namespace bugsnag;
 
-namespace BugsnagVegaNativeTurboModule {
+namespace bugsnag {
 
 static JSObject createStaticApp() {
   auto app = JSObject();
@@ -224,4 +224,4 @@ void BugsnagVegaNative::setDevice(JSObject deviceInfo) {
 
 void BugsnagVegaNative::nativeCrash() { return; }
 
-} // namespace BugsnagVegaNativeTurboModule
+} // namespace bugsnag

@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "clean": "rm -rf node_modules dist build buildinfo.json CMakeUserPresets.json ./*.tgz",
-    "kepler-codegen": "keplerscript-turbomodule-api codegen src/turbo-modules/BugsnagVegaNative.ts -o kepler/turbo-modules/ --new -s BugsnagVegaNativeTurboModule && npm-run-all clean-codegen-backups",
+    "kepler-codegen": "keplerscript-turbomodule-api codegen src/turbo-modules/BugsnagVegaNative.ts -o kepler/turbo-modules/ --new -s bugsnag && npm-run-all clean-codegen-backups",
     "clean-codegen-backups": "rm -rf kepler/turbo-modules/BugsnagVegaNative.cpp.bak kepler/turbo-modules/BugsnagVegaNative.h.bak",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",

@@ -22,7 +22,7 @@
 #include <string>
 #include <vector>
 
-namespace BugsnagVegaNativeTurboModule {
+namespace bugsnag {
 
 class BugsnagVegaNativeSpec : public com::amazon::kepler::turbomodule::KeplerTurboModule {
 protected:
@@ -49,4 +49,4 @@ public:
   virtual void nativeCrash() = 0;
 };
 
-} // namespace BugsnagVegaNativeTurboModule
+} // namespace bugsnag
