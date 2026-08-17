@@ -25,7 +25,7 @@
     "build:native:release": "kepler build -b Release"
   },
   "dependencies": {
-    "@amazon-devices/keplerscript-turbomodule-api": "^1.0.0"
+    "@amazon-devices/keplerscript-turbomodule-api": "^2.0.0"
   },
   "peerDependencies": {
     "react": ">=18.2.0",
