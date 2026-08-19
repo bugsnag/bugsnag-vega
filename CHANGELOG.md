@@ -1,6 +1,6 @@
 # Changelog
 
-## [v2.0.0] (2026-08-17)
+## [v2.0.0] (2026-08-19)
 
 - React Native 0.83 compatibility update for Vega SDK 0.24
 - Updated `@amazon-devices/keplerscript-turbomodule-api` to SDK 0.24
