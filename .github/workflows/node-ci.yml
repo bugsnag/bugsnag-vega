@@ -6,6 +6,9 @@ name: Node CI
 
 on: [push]
 
+permissions:
+  contents: read
+
 jobs:
   linting:
     runs-on: ubuntu-latest
