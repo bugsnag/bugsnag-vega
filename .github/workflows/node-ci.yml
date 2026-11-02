@@ -19,7 +19,7 @@ jobs:
           node-version: 22
           cache: 'npm'
 
-      - run: npm ci --legacy-peer-deps
+      - run: npm ci
       - run: npm run test:lint
 
   unit_tests:
@@ -31,5 +31,5 @@ jobs:
           node-version: 22
           cache: 'npm'
 
-      - run: npm ci --legacy-peer-deps
+      - run: npm ci
       - run: npm run test:unit
