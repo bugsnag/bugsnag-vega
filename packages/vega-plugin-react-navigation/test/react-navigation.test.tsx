@@ -4,7 +4,10 @@ import TestRenderer from 'react-test-renderer'
 import * as React from 'react'
 import { NavigationContainer, NavigationContainerRef } from "@amazon-devices/react-navigation__native"
 
-jest.mock('@amazon-devices/react-navigation__native')
+jest.mock('@amazon-devices/react-navigation__native', () => {
+  const React = jest.requireActual('react')
+  return { NavigationContainer: React.forwardRef(jest.fn(() => null)) }
+})
 
 afterEach(() => jest.clearAllMocks())
 
